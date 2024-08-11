@@ -7,9 +7,9 @@ export default function TopStories() {
   const cards = data.map((card, index) => (
     <Card key={card.src} card={card} index={index} />
   ));
-
+ 
   return (
-    <div className="w-full relative">
+    <div className="w-full relative bg-muted/40 py-1 mt-1 md:mt-2 pl-1">
       <Carousel items={cards} />
     </div>
   );

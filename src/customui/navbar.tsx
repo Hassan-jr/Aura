@@ -1,15 +1,14 @@
 "use client";
 
-import * as React from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import SparklesText from "@/components/magicui/sparkles-text";
-
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -17,23 +16,82 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ModeToggle } from "@/customui/themebtn";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
+
+const pages = [
+  {
+    path: "/shots",
+    name: "Shots",
+  },
+  {
+    path: "/text2img",
+    name: "Gen",
+  },
+  {
+    path: "/train",
+    name: "Train",
+  },
+];
 
 export function NavigationMenuDemo() {
+  const [currentPage, setCurrentPage] = useState(0);
+  const [direction, setDirection] = useState(0);
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push(pages[currentPage].path);
+  }, [currentPage, router]);
+
+  const paginate = (newDirection: number) => {
+    setDirection(newDirection);
+    if (currentPage === 0 && newDirection === -1) {
+      setCurrentPage(0);
+      return;
+    }
+    setCurrentPage((prevPage) => {
+      let nextPage = prevPage + newDirection;
+      if (nextPage < 0) nextPage = 1;
+      if (nextPage >= pages.length) nextPage = pages.length - 1;
+      return nextPage;
+    });
+  };
+
+  const variants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 1000 : -1000,
+      opacity: 0,
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction: number) => ({
+      zIndex: 0,
+      x: direction < 0 ? 1000 : -1000,
+      opacity: 0,
+    }),
+  };
+
+  const swipeConfidenceThreshold = 10000;
+  const swipePower = (offset: number, velocity: number) =>
+    Math.abs(offset) * velocity;
+
   return (
     <div className="bg-muted/40">
       {/* NAV BAR */}
-      <Card  className="p-3 pb-0">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-        <SparklesText text="MyAi Shots" className="text-lg" />
-          <div className="relative ml-auto flex-1 md:grow-0">
+      {/* <Card className="p-0"> */}
+        <header className="sticky flex h-14 items-center gap-1 md:gap-4 sm:static sm:h-auto">
+          
+          <SparklesText text="MyAi Shots" className="text-lg" />
+          <div className="relative ml-auto flex-1 md:grow-0 md:mt-2">
             <MagnifyingGlassIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              type="MagnifyingGlassIcon"
+              type="search"
               placeholder="Search..."
               className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
             />
@@ -46,7 +104,7 @@ export function NavigationMenuDemo() {
                 className="overflow-hidden rounded-full"
               >
                 <Image
-                  src="/placeholder-user.jpg"
+                  src="https://nomapos.com/model/hassanjr001%20(5).jpg"
                   width={36}
                   height={36}
                   alt="Avatar"
@@ -66,32 +124,63 @@ export function NavigationMenuDemo() {
 
           <ModeToggle />
         </header>
-        <Tabs defaultValue="shots" className="w-[400px] mt-3 mx-auto">
-          <TabsList>
-            <Link href="/shots" legacyBehavior passHref>
-              <TabsTrigger value="shots">Shots</TabsTrigger>
-            </Link>
 
-            <Link href="/train" legacyBehavior passHref>
-              <TabsTrigger value="train">Train</TabsTrigger>
-            </Link>
+        <Tabs value={pages[currentPage].name} className="w-full md:w-[400px]  my-1 mx-auto">
+          <TabsList>
+            {pages.map((page, i) => (
+              <Link href={page.path} key={i} legacyBehavior passHref>
+                <TabsTrigger
+                  value={page.name}
+                  onClick={() => {
+                    setDirection(i > currentPage ? 1 : -1);
+                    setCurrentPage(i);
+                  }}
+                  className={
+                    currentPage === i
+                      ? "bg-primary text-primary-foreground"
+                      : ""
+                  }
+                >
+                  {page.name}
+                </TabsTrigger>
+              </Link>
+            ))}
           </TabsList>
         </Tabs>
-      </Card>
+      {/* </Card> */}
 
-      {/* <Card className="p-2 mt-3 w-[400px] align-middle mx-auto">
-        <Tabs defaultValue="shots" className="">
-          <TabsList>
-            <Link href="/shots" legacyBehavior passHref>
-              <TabsTrigger value="shots">Shots</TabsTrigger>
-            </Link>
+      <div className="flex-grow overflow-hidden">
+        <AnimatePresence initial={false} custom={direction}>
+          <motion.div
+            key={currentPage}
+            custom={direction}
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 },
+            }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={1}
+            onDragEnd={(
+              event: MouseEvent | TouchEvent | PointerEvent,
+              { offset, velocity }: PanInfo
+            ) => {
+              const swipe = swipePower(offset.x, velocity.x);
 
-            <Link href="/train" legacyBehavior passHref>
-              <TabsTrigger value="train">Train</TabsTrigger>
-            </Link>
-          </TabsList>
-        </Tabs>
-      </Card> */}
+              if (swipe < -swipeConfidenceThreshold) {
+                paginate(1);
+              } else if (swipe > swipeConfidenceThreshold) {
+                paginate(-1);
+              }
+            }}
+            className="absolute w-full h-full"
+          />
+        </AnimatePresence>
+      </div>
     </div>
   );
 }

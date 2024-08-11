@@ -30,8 +30,8 @@ export default function BlurFadeDemo() {
   };
 
   return (
-    <section id="photos" className="container mx-auto px-4 mt-2">
-      <div className="columns-3 gap-4 sm:columns-3 md:columns-4 [&>div]:mb-4">
+    <section id="" className="container pt-3 px-1 md:px-0 bg-muted/40 p-0">
+      <div className="columns-3 gap-1 md:gap-2 sm:columns-3 md:columns-4 [&>div]:mb-2">
         {images.map((imageUrl, idx) => {
           const ratio = getRandomAspectRatio();
           return (

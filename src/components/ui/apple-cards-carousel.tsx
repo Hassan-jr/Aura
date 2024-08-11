@@ -104,7 +104,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
 
           <div
             className={cn(
-              "flex flex-row justify-start gap-4 pl-0",
+              "flex flex-row justify-start gap-1 md:gap-2",
               "" // remove max-w-4xl if you want the carousel to span the full width of its container
             )}
           >
@@ -132,6 +132,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
             ))}
           </div>
         </div>
+        {/* arrows */}
         <div className="flex justify-end gap-2 mr-10 my-1 ">
           <button
             className="hidden sm:block z-40 h-10 w-10 rounded-full bg-gray-100 items-center justify-center disabled:opacity-50"
@@ -239,10 +240,10 @@ export const Card = ({
       <motion.button
         layoutId={layout ? `card-${card.title}` : undefined}
         onClick={handleOpen}
-        className="rounded-3xl bg-gray-100 dark:bg-neutral-900 w-28 h-48 md:w-36 md:h-60 overflow-hidden flex flex-col items-start justify-start relative z-10"
+        className="rounded-3xl bg-gray-100 dark:bg-neutral-900 w-24 h-48 md:w-36 md:h-60 overflow-hidden flex flex-col items-start justify-start relative z-10"
       >
         <div className="absolute top-0 inset-x-0 bg-gradient-to-b from-black/50 via-transparent to-transparent z-30 pointer-events-none" />
-        <div className="relative z-40 p-8">
+        <div className="relative z-40 p-0">
           <motion.p
             layoutId={layout ? `category-${card.category}` : undefined}
             className="text-white text-sm md:text-base font-medium font-sans text-left"
@@ -256,6 +257,7 @@ export const Card = ({
             {card.title}
           </motion.p>
         </div>
+        {/* image */}
         <BlurImage
           src={card.src}
           alt={card.title}
