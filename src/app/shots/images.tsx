@@ -30,22 +30,25 @@ export default function BlurFadeDemo() {
   };
 
   return (
-    <section id="" className="container pt-3 px-1 md:px-0 bg-muted/40 p-0">
-      <div className="columns-3 gap-1 md:gap-2 sm:columns-3 md:columns-4 [&>div]:mb-2">
+    <section id="" className="container pt-3 md:px-0  bg-card/100 rounded-lg">
+      <div className="columns-3 gap-0.5 mx-1 md:gap-1 sm:columns-3 md:columns-4 [&>div]:mb-1">
         {images.map((imageUrl, idx) => {
           const ratio = getRandomAspectRatio();
           return (
             <BlurFade key={idx} delay={0.25 + idx * 0.05} inView>
               <div className="w-full">
-                <AspectRatio ratio={ratio} className="bg-muted">
+                {/* <AspectRatio ratio={ratio} className="bg-muted"> */}
                   <Image
                     src={imageUrl}
                     alt={`myaishots ${idx + 1}`}
-                    sizes='auto'
-                    fill
+                    width={100}
+                    height={100}
+                    // sizes='auto'
+                    // fill
+                    style={{ width: "100%", height: "auto" }}
                     className="rounded-md object-cover"
                   />
-                </AspectRatio>
+                {/* </AspectRatio> */}
               </div>
             </BlurFade>
           );

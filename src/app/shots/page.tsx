@@ -1,23 +1,13 @@
 import * as React from "react";
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-
 import BlurFadeDemo from "./images";
 import TopStories from "./stories";
 
 export default function Home() {
   return (
     <div className="flex min-h-screen w-full flex-col">
-      <div className="">
-        <main className="">
+      <div>
+        <main>
           {/* Stories and Posts */}
           <div className="flex flex-col items-center justify-center gap-1 w-full md:gap-3">
             {/* Stories */}

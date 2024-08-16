@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import React from "react";
 import { Carousel, Card } from "@/components/ui/apple-cards-carousel";
 
@@ -9,7 +8,7 @@ export default function TopStories() {
   ));
  
   return (
-    <div className="w-full relative bg-muted/40 py-1 mt-1 md:mt-2 pl-1">
+    <div className="w-full relative py-1 mt-1 md:mt-2 px-1 bg-card/100 rounded-lg">
       <Carousel items={cards} />
     </div>
   );

@@ -133,22 +133,22 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
           </div>
         </div>
         {/* arrows */}
-        <div className="flex justify-end gap-2 mr-10 my-1 ">
+        {/* <div className="flex justify-end gap-2 mr-10 my-1 ">
           <button
-            className="hidden sm:block z-40 h-10 w-10 rounded-full bg-gray-100 items-center justify-center disabled:opacity-50"
+            className="hidden sm:block z-40 h-10 w-10 rounded-full bg-secondary-foreground/100 items-center justify-center disabled:opacity-50"
             onClick={scrollLeft}
             disabled={!canScrollLeft}
           >
-            <IconArrowNarrowLeft className="h-6 w-6 text-gray-500 m-auto" />
+            <IconArrowNarrowLeft className="h-6 w-6 text-white dark:text-black m-auto" />
           </button>
           <button
-            className="hidden sm:block z-40 h-10 w-10 rounded-full bg-gray-100 items-center justify-center disabled:opacity-50"
+            className="hidden sm:block z-40 h-10 w-10 rounded-full bg-secondary-foreground items-center justify-center disabled:opacity-50"
             onClick={scrollRight}
             disabled={!canScrollRight}
           >
-            <IconArrowNarrowRight className="h-6 w-6 text-gray-500 m-auto" />
+            <IconArrowNarrowRight className="h-6 w-6 text-white dark:text-black m-auto" />
           </button>
-        </div>
+        </div> */}
       </div>
     </CarouselContext.Provider>
   );
