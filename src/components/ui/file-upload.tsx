@@ -90,7 +90,7 @@ export const FileUpload = ({
                 Upload file
               </p>
               <p className="font-sans font-normal text-neutral-400 dark:text-neutral-400 text-sm">
-                Drag 'n' drop your files here or click to upload
+                Drag &apos;n&apos; drop your files here or click to upload
               </p>
             </div>
 
