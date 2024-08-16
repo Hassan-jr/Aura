@@ -290,10 +290,11 @@ export const BlurImage = ({
       src={src}
       width={width}
       height={height}
-      loading="lazy"
+      // loading="lazy"
       decoding="async"
+      priority
       blurDataURL={typeof src === "string" ? src : undefined}
-      alt={alt ? alt : "Background of a beautiful view"}
+      alt={alt ? alt : "My ai Shots"}
       {...rest}
     />
   );

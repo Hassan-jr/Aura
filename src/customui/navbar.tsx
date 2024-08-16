@@ -41,7 +41,6 @@ export function NavigationMenuDemo() {
   const [direction, setDirection] = useState(0);
   const router = useRouter();
   const pathname = usePathname();
-  console.log("Path Name:", pathname);
 
   useEffect(() => {
     if (pages[currentPage]?.path) {

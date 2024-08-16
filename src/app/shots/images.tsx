@@ -1,6 +1,6 @@
 import React from 'react';
 import BlurFade from "@/components/magicui/blur-fade";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+// import { AspectRatio } from "@/components/ui/aspect-ratio";
 import Image from "next/image";
 
 export default function BlurFadeDemo() {
@@ -30,7 +30,7 @@ export default function BlurFadeDemo() {
   };
 
   return (
-    <section id="" className="container pt-3 md:px-0  bg-card/100 rounded-lg">
+    <section className="container pt-3 px-0 bg-card/100 rounded-lg">
       <div className="columns-3 gap-0.5 mx-1 md:gap-1 sm:columns-3 md:columns-4 [&>div]:mb-1">
         {images.map((imageUrl, idx) => {
           const ratio = getRandomAspectRatio();
@@ -43,6 +43,8 @@ export default function BlurFadeDemo() {
                     alt={`myaishots ${idx + 1}`}
                     width={100}
                     height={100}
+                    priority
+                    decoding="async"
                     // sizes='auto'
                     // fill
                     style={{ width: "100%", height: "auto" }}
