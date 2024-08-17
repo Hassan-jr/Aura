@@ -43,8 +43,8 @@ export default function BlurFadeDemo() {
                     alt={`myaishots ${idx + 1}`}
                     width={100}
                     height={100}
-                    priority
-                    decoding="async"
+                    // loading='lazy'
+                    // decoding="async"
                     // sizes='auto'
                     // fill
                     style={{ width: "100%", height: "auto" }}

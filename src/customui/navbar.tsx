@@ -31,8 +31,16 @@ const pages = [
     name: "Gen",
   },
   {
+    path: "/img2img",
+    name: "Img2Img",
+  },
+  {
     path: "/train",
     name: "Train",
+  },
+  {
+    path: "/profile",
+    name: "Profile",
   },
 ];
 
@@ -42,12 +50,24 @@ export function NavigationMenuDemo() {
   const router = useRouter();
   const pathname = usePathname();
 
+
+  // prefetch routes
+  useEffect(()=>{
+    router.prefetch("/shots")
+    router.prefetch("/text2img")
+    router.prefetch("/img2img")
+    router.prefetch("/train")
+    router.prefetch("/profile")
+  },[router])
+
+  // navigate on swipte
   useEffect(() => {
     if (pages[currentPage]?.path) {
       router.push(pages[currentPage]?.path);
     }
   }, [currentPage, router]);
 
+  // remain in the same url when refreshed
   useEffect(() => {
     const index = pages.findIndex((page) => page.path === pathname);
     if (index) {
@@ -91,62 +111,92 @@ export function NavigationMenuDemo() {
     Math.abs(offset) * velocity;
 
   return (
-    <Card className=" w-full m-0 px-1">
+    <Card className="w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto">
       <div>
-        {/* NAV BAR */}
-        {/* <Card className="p-0"> */}
-
-        {/* {pathname === "/shots" ? ( */}
-        <header className="sticky flex h-14 items-center gap-1 md:gap-4 sm:static sm:h-auto">
+        <header className="sticky flex flex-row items-center justify-between gap-1 md:gap-4 sm:static sm:h-auto p-0.5 pb-0">
           {/* logo */}
           <div>
-            <p className="text-xl">My Ai Shots</p>
+            <p className="text-xl font-bold">
+              myai
+              <span className="bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
+                shots
+              </span>
+            </p>
           </div>
-          <div className="relative ml-auto flex-1 md:grow-0 md:mt-2">
-            <MagnifyingGlassIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search..."
-              className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
-            />
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="overflow-hidden rounded-full"
-              >
-                <Image
-                  src="https://nomapos.com/model/hassanjr001%20(5).jpg"
-                  width={36}
-                  height={36}
-                  alt="Avatar"
-                  className="overflow-hidden rounded-full"
-                />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>GearIcon</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
 
-          <ModeToggle />
+          {/* search and credits */}
+          <div className=" flex flex-row gap-1">
+            {/* search */}
+            <div>
+              <MagnifyingGlassIcon className="h-9 w-9 text-white   bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full p-0.5" />
+            </div>
+            {/* credits */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="flex flex-row gap-1 overflow-hidden rounded-full w-20 bg-gradient-to-r from-indigo-500 to-purple-500"
+                >
+                  <Image
+                    src="./coins.svg"
+                    width={20}
+                    height={20}
+                    alt="Avatar"
+                    className="overflow-hidden rounded-full"
+                  />
+                  <p>200</p>
+                  {/* 200 Credits */}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>GearIcon</DropdownMenuItem>
+                <DropdownMenuItem>Support</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Logout</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Profile */}
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="flex flex-row gap-1 overflow-hidden rounded-full"
+                >
+                  <Image
+                    src="https://nomapos.com/model/hassanjr001%20(7).jpg"
+                    width={36}
+                    height={36}
+                    alt="Avatar"
+                    className="overflow-hidden rounded-full"
+                  />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>GearIcon</DropdownMenuItem>
+                <DropdownMenuItem>Support</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Logout</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* theme */}
+            <ModeToggle />
+          </div>
         </header>
-        {/* ) : ( */}
-        {/* "" */}
-        {/* )} */}
 
         <Tabs
           value={pages[currentPage]?.name}
           className="w-full md:w-[400px]  my-1 mx-auto"
         >
-          <TabsList className="bg-slate-300 dark:bg-slate-600 rounded-lg">
+          <TabsList className="rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500">
             {pages.map((page, i) => (
               <Link href={page?.path} key={i} legacyBehavior passHref>
                 <TabsTrigger
@@ -158,7 +208,7 @@ export function NavigationMenuDemo() {
                   className={
                     currentPage === i
                       ? "bg-primary text-primary-foreground font-bold"
-                      : "font-bold text-black dark:text-primary"
+                      : "font-bold text-white m-0"
                   }
                 >
                   {page?.name}

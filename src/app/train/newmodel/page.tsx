@@ -1,21 +1,21 @@
-import { Input } from "@/components/ui/input";
+"use client";
 import TrainImgUpload from "../uploadImgs";
-import { Card } from "@/components/ui/card";
+import React from "react";
+import { Wizard } from "react-use-wizard";
+import DataFormat from "../data";
+import Caption from "../caption";
+import SubmitTrain from "../submitTrain";
+import StepperFooter from "../Footer";
 
-
-export default function Home() {
+const Home = () => {
   return (
-    <main className="flex flex-col items-center justify-center mt-1">
-     <Card className=" w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl flex flex-col items-start justify-center">
-        {/* character name */}
-        <Input type="text" placeholder="Character Name" className="max-w-sm" />
-        {/* character gender */}
-        <Input type="text" placeholder="Gender" className="max-w-sm"  />
-        {/* token */}
-     </Card>
-      <div className="w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl">
-       <TrainImgUpload />
-      </div>
-    </main>
+    <Wizard footer={<StepperFooter />}>
+      <DataFormat />
+      <TrainImgUpload />
+      <Caption />
+      <SubmitTrain />
+    </Wizard>
   );
-}
+};
+
+export default Home;
