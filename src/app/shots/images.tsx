@@ -1,7 +1,8 @@
-import React from 'react';
+import React from "react";
 import BlurFade from "@/components/magicui/blur-fade";
 // import { AspectRatio } from "@/components/ui/aspect-ratio";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 export default function BlurFadeDemo() {
   const images = [
@@ -18,11 +19,11 @@ export default function BlurFadeDemo() {
 
   const aspectRatios = [
     1, // 1:1
-    16/9, // 16:9
-    4/3, // 4:3
-    3/2, // 3:2
-    9/16, // 9:16 (vertical)
-    2/3, // 2:3 (vertical)
+    16 / 9, // 16:9
+    4 / 3, // 4:3
+    3 / 2, // 3:2
+    9 / 16, // 9:16 (vertical)
+    2 / 3, // 2:3 (vertical)
   ];
 
   const getRandomAspectRatio = () => {
@@ -36,20 +37,21 @@ export default function BlurFadeDemo() {
           const ratio = getRandomAspectRatio();
           return (
             <BlurFade key={idx} delay={0.25 + idx * 0.05} inView>
-              <div className="w-full">
+              <div className="h-auto">
                 {/* <AspectRatio ratio={ratio} className="bg-muted"> */}
-                  <Image
-                    src={imageUrl}
-                    alt={`myaishots ${idx + 1}`}
-                    width={100}
-                    height={100}
-                    // loading='lazy'
-                    // decoding="async"
-                    // sizes='auto'
-                    // fill
-                    style={{ width: "100%", height: "auto" }}
-                    className="rounded-md object-cover"
-                  />
+                <Image
+                  src={imageUrl}
+                  width={500}
+                  height={100}
+                  loading="lazy"
+                  decoding="async"
+                  // priority
+                  blurDataURL={
+                    typeof imageUrl === "string" ? imageUrl : undefined
+                  }
+                  alt={`myaishots ${idx + 1}`}
+                  className="w-full h-auto rounded-md cover"
+                />
                 {/* </AspectRatio> */}
               </div>
             </BlurFade>

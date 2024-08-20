@@ -12,34 +12,50 @@
 //     </main>
 //   );
 // }
-import Stepper from './stepper';
+import Stepper from "./stepper";
 
 const steps = [
   {
-    title: 'Step 1',
-    description: 'Description',
-    content: <div className="flex items-center justify-center text-3xl font-semibold text-gray-900">Step 1 Content</div>,
+    title: "Get Training Images Right",
+    description: " ",
+    content: (
+      <div className="flex items-center justify-center text-3xl font-semibold text-gray-900">
+        Step 1 Content
+      </div>
+    ),
   },
   {
-    title: 'Step 2',
-    description: 'Description',
-    content: <div className="flex items-center justify-center text-3xl font-semibold text-gray-900">Step 2 Content</div>,
+    title: "Ai Character Details",
+    description: "",
+    content: (
+      <div className="flex items-center justify-center text-3xl font-semibold text-gray-900">
+        Step 2 Content
+      </div>
+    ),
   },
   {
-    title: 'Step 3',
-    description: 'Description',
-    content: <div className="flex items-center justify-center text-3xl font-semibold text-gray-900">Step 3 Content</div>,
+    title: "Upload Training Images",
+    description: "",
+    content: (
+      <div className="flex items-center justify-center text-3xl font-semibold text-gray-900">
+        Step 3 Content
+      </div>
+    ),
   },
   {
-    title: 'Step 4',
-    description: 'Description',
-    content: <div className="flex items-center justify-center text-3xl font-semibold text-gray-900">Step 4 Content</div>,
+    title: "Start Training",
+    description: "",
+    content: (
+      <div className="flex items-center justify-center text-3xl font-semibold text-gray-900">
+        Step 4 Content
+      </div>
+    ),
   },
 ];
 
 const MyPage = () => {
   return (
-    <div>
+    <div className="w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto">
       <h1>My Stepper Page</h1>
       <Stepper steps={steps} />
     </div>
