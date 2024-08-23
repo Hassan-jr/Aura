@@ -7,11 +7,10 @@ export function NavigationMenuDemo() {
 
   return (
     <Card className="w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto">
-      <div>
+      {/* <div> */}
         <Navheader/>
         <Navtabs/>
-       
-      </div>
+      {/* </div> */}
     </Card>
   );
 }
