@@ -1,7 +1,17 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { toast } from "@/components/ui/use-toast";
+import { useAppSelector } from "@/redux/hooks";
+
+import { selectTrainLoraParams } from "@/redux/slices/trainlora";
+import { uploadImages } from "@/actions/uploadImages.action";
+import { storeLoraData, updateLoraCaptions } from "@/actions/lora.action";
+import { sendToChatGPT } from "@/actions/caption.action";
+
+// import { auth, currentUser } from "@clerk/nextjs/server";
+import { useUser } from "@clerk/nextjs";
 
 interface Step {
   title: string;
@@ -15,8 +25,134 @@ interface StepperProps {
 
 const Stepper: React.FC<StepperProps> = ({ steps }) => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { user } = useUser();
+
+  const fileMap = useRef(new Map<string, File>());
+  const params = useAppSelector(selectTrainLoraParams);
+
+  useEffect(() => {
+    // Clean up function to revoke object URLs
+    return () => {
+      [...params.closeUp, ...params.halfbody, ...params.fullbody].forEach(
+        (url) => {
+          URL.revokeObjectURL(url);
+        }
+      );
+    };
+  }, [params.closeUp, params.halfbody, params.fullbody]);
 
   const handleNext = () => {
+    //  check character Details
+    // if (currentStep == 1) {
+    //   if (
+    //     !params.characterName ||
+    //     params.characterName === undefined ||
+    //     !params.characterName.trim()
+    //   ) {
+    //     toast({
+    //       variant: "destructive",
+    //       title: "Please Provide Character Name",
+    //       description: `Add a Unique Character Name to Continue`,
+    //     });
+    //     return;
+    //   }
+    //   if (!params.token || params.token === undefined || !params.token.trim()) {
+    //     toast({
+    //       variant: "destructive",
+    //       title: "Please Provide Token Name (Triger Word)",
+    //       description: `Add a Unique Token Name to Continue`,
+    //     });
+    //     return;
+    //   }
+    //   if (
+    //     !params.gender ||
+    //     params.gender === undefined ||
+    //     !params.gender.trim()
+    //   ) {
+    //     toast({
+    //       variant: "destructive",
+    //       title: "Please Select Gender Type",
+    //       description: `Select Gender Type to Continue`,
+    //     });
+    //     return;
+    //   }
+    // }
+
+    // check image upload
+    // if (currentStep == 2) {
+    //   // close up
+    //   if (params.closeUp.length < 12) {
+    //     toast({
+    //       variant: "destructive",
+    //       title: "You Need More Close-Up Photos",
+    //       description: `Add ${
+    //         12 - params.closeUp.length
+    //       } More Close-Up Photos to Continue`,
+    //     });
+    //     return;
+    //   }
+
+    //   if (params.closeUp.length > 12) {
+    //     toast({
+    //       variant: "destructive",
+    //       title: "You Only Need 12 Close-Up Photos",
+    //       description: `Remove ${
+    //         params.closeUp.length - 12
+    //       } Close-Up Photos  to Continue`,
+    //     });
+    //     return;
+    //   }
+
+    //   // half body shots up
+    //   if (params.halfbody.length < 5) {
+    //     toast({
+    //       variant: "destructive",
+    //       title: "You Need More Half-Body Shot Photos",
+    //       description: `Add ${
+    //         5 - params.halfbody.length
+    //       } More Half-Body Shot Photos to Continue`,
+    //     });
+    //     return;
+    //   }
+
+    //   if (params.halfbody.length > 5) {
+    //     toast({
+    //       variant: "destructive",
+    //       title: "You Only Need 5 Half-Body Shot Photos",
+    //       description: `Remove ${
+    //         params.halfbody.length - 5
+    //       } Half-Body Shot Photos  to Continue`,
+    //     });
+    //     return;
+    //   }
+
+    //   // full body shots
+    //   if (params.fullbody.length < 3) {
+    //     toast({
+    //       variant: "destructive",
+    //       title: "You Need More Full-Body Shot Photos",
+    //       description: `Add ${
+    //         3 - params.fullbody.length
+    //       } More Full-Body Shot Photos to Continue`,
+    //     });
+    //     return;
+    //   }
+
+    //   if (params.fullbody.length > 3) {
+    //     toast({
+    //       variant: "destructive",
+    //       title: "You Only Need 3 Full-Body Shot Photos",
+    //       description: `Remove ${
+    //         params.fullbody.length - 3
+    //       } Full-Body Shot Photos  to Continue`,
+    //     });
+    //     return;
+    //   }
+    // }
+
+    // proceed
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     }
@@ -28,8 +164,78 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
     }
   };
 
-  const handleSubmit = () => {
-    console.log("Form submitted!");
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    setError(null);
+    // ensure user is logged in
+
+    if (!user?.id || !user?.publicMetadata?.userId) {
+      toast({
+        variant: "destructive",
+        title: "Unable To Authenticate",
+        description: `Please Make Sure You are Logged In`,
+      });
+      return;
+    }
+    console.log("USER ID FUNC", user?.publicMetadata?.userId);
+
+    // start
+    try {
+      const allUrls = [
+        ...params.closeUp,
+        ...params.halfbody,
+        ...params.fullbody,
+      ];
+
+      console.log("Uploading");
+
+      // upload images
+      const imageUrls = await uploadImages(
+        allUrls,
+        user?.publicMetadata?.userId as string,
+        params.characterName
+      );
+
+      console.log("Upload done, creating document");
+      // save lora
+      const mongoDbId = await storeLoraData({
+        clerkId: user?.id,
+        userId: user?.publicMetadata?.userId as string,
+        characterName: params.characterName,
+        tokenName: params.token,
+        gender: params.gender,
+        trainImgs: imageUrls,
+      });
+
+      console.log("doc created captioning");
+      // caption
+      const captions = await sendToChatGPT(imageUrls);
+      console.log("Captioning completed successfully. Captions:", captions);
+
+      console.log("caption done edit doc");
+
+      // update lora
+      const result = await updateLoraCaptions(mongoDbId, captions);
+      console.log("update id", result);
+      
+
+      if (result) {
+        toast({
+          variant: "destructive",
+          title: "Everythin is done",
+          description: `Done`,
+        });
+      }
+
+      // Show success message or redirect
+    } catch (error) {
+      console.error("Error in handleSubmit:", error);
+      setError(
+        "An error occurred while processing your request. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -49,7 +255,9 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
                 {/* Progress line */}
                 {index > 0 && index < steps.length && (
                   <div
-                    className="absolute top-6 h-0.5 bg-gray-200"
+                    className={`absolute top-6 h-0.5  ${
+                      index == 3 ? "bg-transparent" : "bg-gray-200"
+                    }`}
                     style={{
                       left: `calc(${
                         (index - 0.5) * (100 / (steps.length - 1))
@@ -61,19 +269,21 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
                       zIndex: 0,
                     }}
                   >
-                    <div
+                    {/* transition line stepper */}
+                    {/* <div
                       className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500 ease-in-out"
                       style={{
                         width:
                           currentStep > index
                             ? "100%"
                             : currentStep === index
-                            ? `${20/index}%`
+                            ? `${15 / index}%`
                             : "0%",
                       }}
-                    />
+                    /> */}
                   </div>
                 )}
+
                 {/* step index or icon */}
                 <div
                   className={`rounded-full mr-0 md:mr-1 size-10 flex items-center justify-center text-md font-semibold z-10 ${
@@ -151,10 +361,10 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
               ) : (
                 <Button
                   type="button"
-                  className="btn btn-primary"
+                  className="btn btn-primary bg-gradient-to-r from-indigo-500 to-purple-500"
                   onClick={handleSubmit}
                 >
-                  Submit
+                  Start Training
                 </Button>
               )}
             </div>

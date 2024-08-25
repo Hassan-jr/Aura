@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 // Import your reducers here
 import exampleReducer from './slices/example';
+import trainloraSlice from './slices/trainlora'
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       // Add your reducers here
       example: exampleReducer,
+      trainlora: trainloraSlice
     },
     devTools: process.env.NODE_ENV !== 'production',
   });

@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import Navheader from "./navheader";
 import { Navtabs } from "./navtabs";
 
-export function NavigationMenuDemo() {
+export function NavigationMenu() {
  
 
   return (

@@ -122,6 +122,7 @@ export const FileUpload = ({
                 >
                   <button
                     onClick={() => handleDelete(idx)}
+                    type="button"
                     className="absolute top-0 right-0  z-30 p-0.5 text-white bg-red-500 rounded-full cursor-pointer text-3xl"
                   >
                     <TrashIcon className="w-6 h-6" />

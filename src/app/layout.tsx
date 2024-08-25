@@ -3,7 +3,7 @@ import { Roboto } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
-import { NavigationMenuDemo } from "@/customui/navbar";
+import { NavigationMenu } from "@/customui/navbar";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ReduxProvider } from '@/redux/provider';
 
@@ -38,7 +38,7 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <Toaster />
-              {/* <NavigationMenuDemo /> */}
+              {/* <NavigationMenu/> */}
               {children}
             </ThemeProvider>
           </body>

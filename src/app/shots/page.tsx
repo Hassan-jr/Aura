@@ -3,12 +3,14 @@ import * as React from "react";
 import BlurFadeDemo from "./images";
 import TopStories from "./stories";
 import Counter from "./test";
-import { NavigationMenuDemo } from "@/customui/navbar";
+import { NavigationMenu } from "@/customui/navbar";
 
 export default function Home() {
   return (
     <>
-      <NavigationMenuDemo />
+      <div>
+        <NavigationMenu />
+      </div>
 
       <div className="flex min-h-screen w-full flex-col">
         <div>
