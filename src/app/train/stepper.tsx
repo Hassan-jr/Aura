@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
@@ -12,6 +12,7 @@ import { sendToChatGPT } from "@/actions/caption.action";
 
 // import { auth, currentUser } from "@clerk/nextjs/server";
 import { useUser } from "@clerk/nextjs";
+import { SkeletonSpinner } from "@/customui/skeletonspinner";
 
 interface Step {
   title: string;
@@ -25,11 +26,13 @@ interface StepperProps {
 
 const Stepper: React.FC<StepperProps> = ({ steps }) => {
   const [currentStep, setCurrentStep] = useState(0);
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { user } = useUser();
+  const [text1, setText1] = useState<string>(" ");
+  const [text2, setText2] = useState<string>("Please DO NOT Close This Window");
 
-  const fileMap = useRef(new Map<string, File>());
+  const { user } = useUser();
   const params = useAppSelector(selectTrainLoraParams);
 
   useEffect(() => {
@@ -45,112 +48,112 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
 
   const handleNext = () => {
     //  check character Details
-    // if (currentStep == 1) {
-    //   if (
-    //     !params.characterName ||
-    //     params.characterName === undefined ||
-    //     !params.characterName.trim()
-    //   ) {
-    //     toast({
-    //       variant: "destructive",
-    //       title: "Please Provide Character Name",
-    //       description: `Add a Unique Character Name to Continue`,
-    //     });
-    //     return;
-    //   }
-    //   if (!params.token || params.token === undefined || !params.token.trim()) {
-    //     toast({
-    //       variant: "destructive",
-    //       title: "Please Provide Token Name (Triger Word)",
-    //       description: `Add a Unique Token Name to Continue`,
-    //     });
-    //     return;
-    //   }
-    //   if (
-    //     !params.gender ||
-    //     params.gender === undefined ||
-    //     !params.gender.trim()
-    //   ) {
-    //     toast({
-    //       variant: "destructive",
-    //       title: "Please Select Gender Type",
-    //       description: `Select Gender Type to Continue`,
-    //     });
-    //     return;
-    //   }
-    // }
+    if (currentStep == 1) {
+      if (
+        !params.characterName ||
+        params.characterName === undefined ||
+        !params.characterName.trim()
+      ) {
+        toast({
+          variant: "destructive",
+          title: "Please Provide Character Name",
+          description: `Add a Unique Character Name to Continue`,
+        });
+        return;
+      }
+      if (!params.token || params.token === undefined || !params.token.trim()) {
+        toast({
+          variant: "destructive",
+          title: "Please Provide Token Name (Triger Word)",
+          description: `Add a Unique Token Name to Continue`,
+        });
+        return;
+      }
+      if (
+        !params.gender ||
+        params.gender === undefined ||
+        !params.gender.trim()
+      ) {
+        toast({
+          variant: "destructive",
+          title: "Please Select Gender Type",
+          description: `Select Gender Type to Continue`,
+        });
+        return;
+      }
+    }
 
     // check image upload
-    // if (currentStep == 2) {
-    //   // close up
-    //   if (params.closeUp.length < 12) {
-    //     toast({
-    //       variant: "destructive",
-    //       title: "You Need More Close-Up Photos",
-    //       description: `Add ${
-    //         12 - params.closeUp.length
-    //       } More Close-Up Photos to Continue`,
-    //     });
-    //     return;
-    //   }
+    if (currentStep == 2) {
+      // close up
+      if (params.closeUp.length < 12) {
+        toast({
+          variant: "destructive",
+          title: "You Need More Close-Up Photos",
+          description: `Add ${
+            12 - params.closeUp.length
+          } More Close-Up Photos to Continue`,
+        });
+        return;
+      }
 
-    //   if (params.closeUp.length > 12) {
-    //     toast({
-    //       variant: "destructive",
-    //       title: "You Only Need 12 Close-Up Photos",
-    //       description: `Remove ${
-    //         params.closeUp.length - 12
-    //       } Close-Up Photos  to Continue`,
-    //     });
-    //     return;
-    //   }
+      if (params.closeUp.length > 12) {
+        toast({
+          variant: "destructive",
+          title: "You Only Need 12 Close-Up Photos",
+          description: `Remove ${
+            params.closeUp.length - 12
+          } Close-Up Photos  to Continue`,
+        });
+        return;
+      }
 
-    //   // half body shots up
-    //   if (params.halfbody.length < 5) {
-    //     toast({
-    //       variant: "destructive",
-    //       title: "You Need More Half-Body Shot Photos",
-    //       description: `Add ${
-    //         5 - params.halfbody.length
-    //       } More Half-Body Shot Photos to Continue`,
-    //     });
-    //     return;
-    //   }
+      // half body shots up
+      if (params.halfbody.length < 5) {
+        toast({
+          variant: "destructive",
+          title: "You Need More Half-Body Shot Photos",
+          description: `Add ${
+            5 - params.halfbody.length
+          } More Half-Body Shot Photos to Continue`,
+        });
+        return;
+      }
 
-    //   if (params.halfbody.length > 5) {
-    //     toast({
-    //       variant: "destructive",
-    //       title: "You Only Need 5 Half-Body Shot Photos",
-    //       description: `Remove ${
-    //         params.halfbody.length - 5
-    //       } Half-Body Shot Photos  to Continue`,
-    //     });
-    //     return;
-    //   }
+      if (params.halfbody.length > 5) {
+        toast({
+          variant: "destructive",
+          title: "You Only Need 5 Half-Body Shot Photos",
+          description: `Remove ${
+            params.halfbody.length - 5
+          } Half-Body Shot Photos  to Continue`,
+        });
+        return;
+      }
 
-    //   // full body shots
-    //   if (params.fullbody.length < 3) {
-    //     toast({
-    //       variant: "destructive",
-    //       title: "You Need More Full-Body Shot Photos",
-    //       description: `Add ${
-    //         3 - params.fullbody.length
-    //       } More Full-Body Shot Photos to Continue`,
-    //     });
-    //     return;
-    //   }
+      // full body shots
+      if (params.fullbody.length < 3) {
+        toast({
+          variant: "destructive",
+          title: "You Need More Full-Body Shot Photos",
+          description: `Add ${
+            3 - params.fullbody.length
+          } More Full-Body Shot Photos to Continue`,
+        });
+        return;
+      }
 
-    //   if (params.fullbody.length > 3) {
-    //     toast({
-    //       variant: "destructive",
-    //       title: "You Only Need 3 Full-Body Shot Photos",
-    //       description: `Remove ${
-    //         params.fullbody.length - 3
-    //       } Full-Body Shot Photos  to Continue`,
-    //     });
-    //     return;
-    //   }
-    // }
+      if (params.fullbody.length > 3) {
+        toast({
+          variant: "destructive",
+          title: "You Only Need 3 Full-Body Shot Photos",
+          description: `Remove ${
+            params.fullbody.length - 3
+          } Full-Body Shot Photos  to Continue`,
+        });
+        return;
+      }
+    }
 
     // proceed
     if (currentStep < steps.length - 1) {
@@ -175,9 +178,9 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
         title: "Unable To Authenticate",
         description: `Please Make Sure You are Logged In`,
       });
+      setIsLoading(false);
       return;
     }
-    console.log("USER ID FUNC", user?.publicMetadata?.userId);
 
     // start
     try {
@@ -186,9 +189,7 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
         ...params.halfbody,
         ...params.fullbody,
       ];
-
-      console.log("Uploading");
-
+      setText1("Uploading Images...");
       // upload images
       const imageUrls = await uploadImages(
         allUrls,
@@ -196,7 +197,7 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
         params.characterName
       );
 
-      console.log("Upload done, creating document");
+      setText2("Almost Done Uploading...");
       // save lora
       const mongoDbId = await storeLoraData({
         clerkId: user?.id,
@@ -207,23 +208,19 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
         trainImgs: imageUrls,
       });
 
-      console.log("doc created captioning");
+      setText2("Processing Images...");
       // caption
       const captions = await sendToChatGPT(imageUrls);
-      console.log("Captioning completed successfully. Captions:", captions);
-
-      console.log("caption done edit doc");
+      setText2("Almost Done...");
 
       // update lora
       const result = await updateLoraCaptions(mongoDbId, captions);
-      console.log("update id", result);
-      
+      setText2("Done...");
 
       if (result) {
         toast({
-          variant: "destructive",
-          title: "Everythin is done",
-          description: `Done`,
+          title: "Training Your AI Character Started",
+          description: `We will notify you when its done training`,
         });
       }
 
@@ -233,6 +230,11 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
       setError(
         "An error occurred while processing your request. Please try again."
       );
+      toast({
+        variant: "destructive",
+        title: "An Error Occurred",
+        description: `n error occurred while processing your request. Please try again.`,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -371,6 +373,11 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
           </div>
         </div>
       </Card>
+      {isLoading && (
+        <div>
+          <SkeletonSpinner text1={text1} text2={text2} />
+        </div>
+      )}
     </form>
   );
 };

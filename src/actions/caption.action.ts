@@ -35,7 +35,7 @@ export async function sendToChatGPT(
       content: [
         {
           type: "text",
-          text: "Create a concise caption for this image of a character. Begin with a phrase (eg A photo of a young man/woman, A portrait of a handsome boy/girl etc.) with the character's gender and appearance. Specify the shot type (full body or half body or close-up photo etc) and camera angle (front view, side view, from above etc). Describe the character's pose, gestures, expressions, physical features, clothing, background, any unique attributes and the overall mood of the image. Lastly avoid lengthy captions, aim for around 70 words per caption.",
+          text: "Create a concise caption for this image of a man named w3r4jman. Begin with a phrase (eg A photo of a young man/woman, A portrait of a handsome boy/girl etc.) with the character's gender and appearance. Specify the shot type (full body or half body or close-up photo etc) and camera angle (front view, side view, from above etc). Describe the character's pose, gestures, expressions, physical features, clothing, background, any unique attributes and the overall mood of the image. Lastly avoid lengthy captions, aim for around 70 words per caption.",
         },
         ...images,
       ],

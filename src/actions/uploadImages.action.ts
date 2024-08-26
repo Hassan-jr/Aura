@@ -1,6 +1,5 @@
 // "use server";
 // import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-// import { Readable } from 'stream';
 
 // const R2_ACCOUNT_ID = process.env.R2_ACCOUNT_ID;
 // const R2_ACCESS_KEY_ID = process.env.R2_ACCESS_KEY_ID;
@@ -16,23 +15,30 @@
 //   },
 // });
 
-// export async function uploadImages(files: File[], userId: string, characterName: string) {
-//   const uploadPromises = files.map(async (file, index) => {
-//     const fileExtension = file.name.split('.').pop();
+// export async function uploadImages(base64Images: string[], userId: string, characterName: string) {
+//   const uploadPromises = base64Images.map(async (base64Image, index) => {
+//     // Extract the content type and base64 data
+//     const matches = base64Image.match(/^data:(.*?);base64,(.*)$/);
+//     if (!matches) {
+//       throw new Error('Invalid base64 string');
+//     }
+
+//     const contentType = matches[1];
+//     const base64Data = matches[2];
+
+//     // Determine file extension from content type
+//     const fileExtension = contentType.split('/').pop();
 //     const key = `users/${userId}/${characterName}/trainImgs/${Date.now()}-${index}.${fileExtension}`;
-    
-//     const arrayBuffer = await file.arrayBuffer();
-//     const buffer = Buffer.from(arrayBuffer);
-//     const readable = new Readable();
-//     readable._read = () => {}; // _read is required but you can noop it
-//     readable.push(buffer);
-//     readable.push(null);
+
+//     // Convert base64 to buffer
+//     const buffer = Buffer.from(base64Data, 'base64');
 
 //     const command = new PutObjectCommand({
 //       Bucket: R2_BUCKET_NAME,
 //       Key: key,
-//       Body: readable,
-//       ContentType: file.type,
+//       Body: buffer,
+//       ContentType: contentType,
+//       ContentLength: buffer.length, // Provide Content-Length
 //     });
 
 //     await s3Client.send(command);
@@ -41,8 +47,10 @@
 
 //   return Promise.all(uploadPromises);
 // }
+
 "use server";
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import pLimit from "p-limit";
 
 const R2_ACCOUNT_ID = process.env.R2_ACCOUNT_ID;
 const R2_ACCESS_KEY_ID = process.env.R2_ACCESS_KEY_ID;
@@ -50,7 +58,7 @@ const R2_SECRET_ACCESS_KEY = process.env.R2_SECRET_ACCESS_KEY;
 const R2_BUCKET_NAME = process.env.R2_BUCKET_NAME;
 
 const s3Client = new S3Client({
-  region: 'auto',
+  region: "auto",
   endpoint: `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
   credentials: {
     accessKeyId: R2_ACCESS_KEY_ID!,
@@ -58,35 +66,47 @@ const s3Client = new S3Client({
   },
 });
 
-export async function uploadImages(base64Images: string[], userId: string, characterName: string) {
-  const uploadPromises = base64Images.map(async (base64Image, index) => {
-    // Extract the content type and base64 data
-    const matches = base64Image.match(/^data:(.*?);base64,(.*)$/);
-    if (!matches) {
-      throw new Error('Invalid base64 string');
-    }
+const limit = pLimit(10); // Limit concurrent uploads
 
-    const contentType = matches[1];
-    const base64Data = matches[2];
+async function uploadSingleImage(
+  base64Image: string,
+  userId: string,
+  characterName: string,
+  index: number
+) {
+  const matches = base64Image.match(/^data:(.*?);base64,(.*)$/);
+  if (!matches) {
+    throw new Error("Invalid base64 string");
+  }
 
-    // Determine file extension from content type
-    const fileExtension = contentType.split('/').pop();
-    const key = `users/${userId}/${characterName}/trainImgs/${Date.now()}-${index}.${fileExtension}`;
-    
-    // Convert base64 to buffer
-    const buffer = Buffer.from(base64Data, 'base64');
+  const contentType = matches[1];
+  const base64Data = matches[2];
 
-    const command = new PutObjectCommand({
-      Bucket: R2_BUCKET_NAME,
-      Key: key,
-      Body: buffer,
-      ContentType: contentType,
-      ContentLength: buffer.length, // Provide Content-Length
-    });
+  const fileExtension = contentType.split("/").pop();
+  const key = `users/${userId}/${characterName}/trainImgs/${Date.now()}-${index}.${fileExtension}`;
 
-    await s3Client.send(command);
-    return `https://nomapos.com/${key}`;
+  const buffer = Buffer.from(base64Data, "base64");
+
+  const command = new PutObjectCommand({
+    Bucket: R2_BUCKET_NAME,
+    Key: key,
+    Body: buffer,
+    ContentType: contentType,
+    ContentLength: buffer.length,
   });
+
+  await s3Client.send(command);
+  return `https://nomapos.com/${key}`;
+}
+
+export async function uploadImages(
+  base64Images: string[],
+  userId: string,
+  characterName: string
+) {
+  const uploadPromises = base64Images.map((base64Image, index) =>
+    limit(() => uploadSingleImage(base64Image, userId, characterName, index))
+  );
 
   return Promise.all(uploadPromises);
 }
