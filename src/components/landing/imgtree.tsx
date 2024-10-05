@@ -264,10 +264,10 @@ export function ImageTree({ className }: { className?: string }) {
         curvature={-100}
         startYOffset={0}
         startXOffset={0}
-        duration={1}
+        duration={3}
         endYOffset={0}
         endXOffset={-83}
-        reverse={true}
+        reverse={false}
       />
       <AnimatedBeam
         containerRef={containerRef}
@@ -276,10 +276,10 @@ export function ImageTree({ className }: { className?: string }) {
         curvature={-150}
         startYOffset={0}
         startXOffset={0}
-        duration={1}
+        duration={3}
         endYOffset={-30}
         endXOffset={-50}
-        reverse={true}
+        reverse={false}
       />
       <AnimatedBeam
         containerRef={containerRef}
@@ -288,7 +288,7 @@ export function ImageTree({ className }: { className?: string }) {
         curvature={0}
         startYOffset={0}
         startXOffset={0}
-        duration={1}
+        duration={3}
         endYOffset={-35}
         endXOffset={0}
         reverse={true}
@@ -300,7 +300,7 @@ export function ImageTree({ className }: { className?: string }) {
         curvature={-150}
         startYOffset={0}
         startXOffset={0}
-        duration={1}
+        duration={3}
         endYOffset={-25}
         endXOffset={60}
         reverse={true}
@@ -312,7 +312,7 @@ export function ImageTree({ className }: { className?: string }) {
         curvature={-100}
         startYOffset={0}
         startXOffset={0}
-        duration={1}
+        duration={3}
         endYOffset={-10}
         endXOffset={83}
         reverse={true}
@@ -323,7 +323,7 @@ export function ImageTree({ className }: { className?: string }) {
         containerRef={containerRef}
         fromRef={div6Ref}
         toRef={div7Ref}
-        duration={1}
+        duration={3}
         curvature={0}
         startYOffset={0}
         startXOffset={0}
@@ -337,21 +337,25 @@ export function ImageTree({ className }: { className?: string }) {
         containerRef={containerRef}
         fromRef={div7Ref}
         toRef={div8Ref}
-        curvature={0}
+        curvature={50}
         startYOffset={0}
-        duration={1}
+        startXOffset={-25}
+        duration={3}
         endYOffset={-80}
+        endXOffset={10}
         reverse={true}
       />
       <AnimatedBeam
         containerRef={containerRef}
         fromRef={div7Ref}
         toRef={div9Ref}
-        curvature={0}
+        curvature={50}
         startYOffset={0}
-        duration={1}
+        startXOffset={25}
+        duration={3}
         endYOffset={-100}
-        reverse={true}
+        endXOffset={-10}
+        reverse={false}
       />
       <AnimatedBeam
         containerRef={containerRef}
@@ -359,7 +363,7 @@ export function ImageTree({ className }: { className?: string }) {
         toRef={div10Ref}
         curvature={50}
         startYOffset={15}
-        duration={1}
+        duration={3}
         endYOffset={-124}
         reverse={true}
       />
@@ -369,7 +373,7 @@ export function ImageTree({ className }: { className?: string }) {
         toRef={div11Ref}
         curvature={0}
         startYOffset={0}
-        duration={1}
+        duration={3}
         endYOffset={-110}
         reverse={true}
       />
@@ -379,9 +383,9 @@ export function ImageTree({ className }: { className?: string }) {
         toRef={div12Ref}
         curvature={50}
         startYOffset={15}
-        duration={1}
+        duration={3}
         endYOffset={-124}
-        reverse={true}
+        reverse={false}
       />
     </div>
   );
