@@ -75,42 +75,45 @@ export function ImageTree({ className }: { className?: string }) {
       ref={containerRef}
     >
       <div className="flex size-full flex-col items-stretch align-middle justify-center gap-10 w-full h-auto">
-          {/* selfies 1 */}
-          <div className="flex flex-row justify-evenly w-full">
+        {/* selfies 1 */}
+        <div className="container z-50">
+          <div className="columns-2 md:columns-2 justify-evenly w-full">
             <Circle ref={div2Ref}>
               <Image
                 src={images[1]}
-                width={100}
+                width={500}
                 height={100}
                 loading="lazy"
                 decoding="async"
-                className="h-auto rounded-md cover"
+                className="w-24 md:w-32 h-auto rounded-md object-contain"
                 alt="img"
               />
             </Circle>
             <Circle ref={div4Ref}>
               <Image
                 src={images[3]}
-                width={100}
+                width={500}
                 height={100}
                 loading="lazy"
                 decoding="async"
-                className="h-auto rounded-md cover"
+                className="w-24 md:w-32 h-auto rounded-md object-contain"
                 alt="img"
               />
             </Circle>
           </div>
+        </div>
 
-          {/* selfies 2 */}
-          <div className="flex flex-row justify-between w-full mb-10 mt-[-100px]">
+        {/* selfies 2 */}
+        <div className="container z-50 p-0">
+          <div className="columns-3 md:columns-3 flex justify-between w-full mt-[-100px] md:mt-[-150px]">
             <Circle ref={div1Ref}>
               <Image
                 src={images[0]}
-                width={100}
+                width={500}
                 height={100}
                 loading="lazy"
                 decoding="async"
-                className="h-auto rounded-md cover"
+                className="w-24 md:w-32 h-auto rounded-md object-cover"
                 alt="img"
               />
             </Circle>
@@ -118,11 +121,11 @@ export function ImageTree({ className }: { className?: string }) {
             <Circle ref={div3Ref}>
               <Image
                 src={images[2]}
-                width={100}
+                width={500}
                 height={100}
                 loading="lazy"
                 decoding="async"
-                className="h-auto rounded-md cover"
+                className="w-24 md:w-32 h-auto rounded-md object-cover"
                 alt="img"
               />
             </Circle>
@@ -130,15 +133,16 @@ export function ImageTree({ className }: { className?: string }) {
             <Circle ref={div5Ref}>
               <Image
                 src={images[4]}
-                width={100}
+                width={500}
                 height={100}
                 loading="lazy"
                 decoding="async"
-                className="h-auto rounded-md cover"
+                className="w-24 md:w-32 h-auto rounded-md object-cover"
                 alt="img"
               />
             </Circle>
           </div>
+        </div>
 
         {/* Inprime  */}
         <div className="flex flex-row justify-center align-middle">
@@ -156,7 +160,7 @@ export function ImageTree({ className }: { className?: string }) {
                 >
                   Inprime AI
                 </span>
-                <ChevronRight className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
+                {/* <ChevronRight className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" /> */}
               </AnimatedGradientText>
             </div>
           </Circle>
@@ -183,68 +187,72 @@ export function ImageTree({ className }: { className?: string }) {
         </div>
 
         {/* Result 1 */}
-        <div className="flex flex-row justify-between w-full mt-[0px] mb-10">
-          <Circle ref={div10Ref}>
-            <Image
-              src={results[0]}
-              width={100}
-              height={100}
-              loading="lazy"
-              decoding="async"
-              className="h-auto rounded-md cover"
-              alt="img"
-            />
-          </Circle>
+        <div className="container z-50 p-0 mt-5">
+          <div className="columns-3 md:columns-3 flex justify-between w-full">
+            <Circle ref={div10Ref}>
+              <Image
+                src={results[1]}
+                width={500}
+                height={100}
+                loading="lazy"
+                decoding="async"
+                className="w-24 md:w-32 h-auto rounded-md object-cover mt-[-50px]  md:mt-[0px]"
+                alt="img"
+              />
+            </Circle>
 
-          <Circle ref={div11Ref}>
-            <Image
-              src={results[2]}
-              width={100}
-              height={100}
-              loading="lazy"
-              decoding="async"
-              className="w-full h-auto rounded-md cover"
-              alt="img"
-            />
-          </Circle>
+            <Circle ref={div11Ref}>
+              <Image
+                src={results[2]}
+                width={500}
+                height={100}
+                loading="lazy"
+                decoding="async"
+                className="w-24 md:w-32 h-auto rounded-md object-cover  md:mt-[36px]"
+                alt="img"
+              />
+            </Circle>
 
-          <Circle ref={div12Ref}>
-            <Image
-              src={results[4]}
-              width={100}
-              height={100}
-              loading="lazy"
-              decoding="async"
-              className="h-auto rounded-md cover"
-              alt="img"
-            />
-          </Circle>
+            <Circle ref={div12Ref}>
+              <Image
+                src={results[4]}
+                width={500}
+                height={100}
+                loading="lazy"
+                decoding="async"
+                className="w-24 md:w-32 h-auto rounded-md object-cover mt-[-50px]  md:mt-[0px]"
+                alt="img"
+              />
+            </Circle>
+          </div>
         </div>
 
         {/* Result 2 */}
-        <div className="flex flex-row justify-evenly w-full mt-[-100px]">
-          <Circle ref={div8Ref}>
-            <Image
-              src={results[1]}
-              width={100}
-              height={100}
-              loading="lazy"
-              decoding="async"
-              className="w-full h-auto rounded-md cover"
-              alt="img"
-            />
-          </Circle>
-          <Circle ref={div9Ref}>
-            <Image
-              src={results[3]}
-              width={100}
-              height={100}
-              loading="lazy"
-              decoding="async"
-              className="h-auto rounded-md cover"
-              alt="img"
-            />
-          </Circle>
+        <div className="container z-50 p-0 mt-5 md:mt-[-100px]">
+          <div className="columns-2 md:columns-2 flex justify-evenly w-full mt-[-55px]">
+            <Circle ref={div8Ref}>
+              <Image
+                src={results[0]}
+                width={500}
+                height={100}
+                loading="lazy"
+                decoding="async"
+                className="w-24 md:w-32 h-auto rounded-md object-cover"
+                alt="img"
+              />
+            </Circle>
+            <Circle ref={div9Ref}>
+              <Image
+                src={results[3]}
+                width={500}
+                height={100}
+                loading="lazy"
+                decoding="async"
+                className="w-24 md:w-32 h-auto rounded-md object-cover"
+                alt="img"
+              />
+            </Circle>
+          </div>
         </div>
       </div>
 
@@ -253,43 +261,60 @@ export function ImageTree({ className }: { className?: string }) {
         containerRef={containerRef}
         fromRef={div1Ref}
         toRef={div6Ref}
-        curvature={-150}
+        curvature={-100}
+        startYOffset={0}
+        startXOffset={0}
         duration={1}
+        endYOffset={0}
+        endXOffset={-83}
+        reverse={true}
       />
       <AnimatedBeam
         containerRef={containerRef}
         fromRef={div2Ref}
         toRef={div6Ref}
-        curvature={-250}
-        duration={2}
+        curvature={-150}
+        startYOffset={0}
+        startXOffset={0}
+        duration={1}
+        endYOffset={-30}
+        endXOffset={-50}
+        reverse={true}
       />
       <AnimatedBeam
         containerRef={containerRef}
         fromRef={div3Ref}
         toRef={div6Ref}
-        curvature={-250}
+        curvature={0}
         startYOffset={0}
+        startXOffset={0}
         duration={1}
-        endYOffset={0}
+        endYOffset={-35}
+        endXOffset={0}
+        reverse={true}
       />
       <AnimatedBeam
         containerRef={containerRef}
         fromRef={div4Ref}
         toRef={div6Ref}
-        curvature={-250}
+        curvature={-150}
         startYOffset={0}
+        startXOffset={0}
         duration={1}
-        endYOffset={0}
+        endYOffset={-25}
+        endXOffset={60}
         reverse={true}
       />
       <AnimatedBeam
         containerRef={containerRef}
         fromRef={div5Ref}
         toRef={div6Ref}
-        curvature={-150}
+        curvature={-100}
         startYOffset={0}
+        startXOffset={0}
         duration={1}
-        endYOffset={0}
+        endYOffset={-10}
+        endXOffset={83}
         reverse={true}
       />
 
@@ -299,6 +324,12 @@ export function ImageTree({ className }: { className?: string }) {
         fromRef={div6Ref}
         toRef={div7Ref}
         duration={1}
+        curvature={0}
+        startYOffset={0}
+        startXOffset={0}
+        endYOffset={-35}
+        endXOffset={0}
+        reverse={true}
       />
 
       {/* From Character to Results */}
@@ -309,7 +340,7 @@ export function ImageTree({ className }: { className?: string }) {
         curvature={0}
         startYOffset={0}
         duration={1}
-        endYOffset={0}
+        endYOffset={-80}
         reverse={true}
       />
       <AnimatedBeam
@@ -319,17 +350,17 @@ export function ImageTree({ className }: { className?: string }) {
         curvature={0}
         startYOffset={0}
         duration={1}
-        endYOffset={0}
+        endYOffset={-100}
         reverse={true}
       />
       <AnimatedBeam
         containerRef={containerRef}
         fromRef={div7Ref}
         toRef={div10Ref}
-        curvature={0}
-        startYOffset={0}
+        curvature={50}
+        startYOffset={15}
         duration={1}
-        endYOffset={0}
+        endYOffset={-124}
         reverse={true}
       />
       <AnimatedBeam
@@ -339,17 +370,17 @@ export function ImageTree({ className }: { className?: string }) {
         curvature={0}
         startYOffset={0}
         duration={1}
-        endYOffset={0}
+        endYOffset={-110}
         reverse={true}
       />
       <AnimatedBeam
         containerRef={containerRef}
         fromRef={div7Ref}
         toRef={div12Ref}
-        curvature={0}
-        startYOffset={0}
+        curvature={50}
+        startYOffset={15}
         duration={1}
-        endYOffset={0}
+        endYOffset={-124}
         reverse={true}
       />
     </div>

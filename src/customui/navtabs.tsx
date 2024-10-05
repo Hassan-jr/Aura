@@ -184,7 +184,7 @@ export function Navtabs() {
   const pathname = usePathname();
 
   useEffect(() => {
-    pages.forEach(page => router.prefetch(page.path));
+    pages.forEach((page) => router.prefetch(page.path));
   }, []);
 
   useEffect(() => {
@@ -228,7 +228,8 @@ export function Navtabs() {
   };
 
   const swipeConfidenceThreshold = 10000;
-  const swipePower = (offset: number, velocity: number) => Math.abs(offset) * velocity;
+  const swipePower = (offset: number, velocity: number) =>
+    Math.abs(offset) * velocity;
 
   return (
     <div>
@@ -274,7 +275,10 @@ export function Navtabs() {
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={1}
-            onDragEnd={(e: MouseEvent | TouchEvent | PointerEvent, { offset, velocity }: PanInfo) => {
+            onDragEnd={(
+              e: MouseEvent | TouchEvent | PointerEvent,
+              { offset, velocity }: PanInfo
+            ) => {
               const swipe = swipePower(offset.x, velocity.x);
 
               if (swipe < -swipeConfidenceThreshold) {
