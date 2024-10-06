@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { Button } from "@/components/ui/button";
 import BoxReveal from "@/components/ui/box-reveal";
 import ShimmerButton from "../ui/shimmer-button";
 
