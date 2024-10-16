@@ -1,5 +1,4 @@
 import Stepper from "./stepper";
-import { NavigationMenu } from "@/customui/navbar";
 import DataFormat from "./data";
 import LoraDetails from "./loradetails";
 import TrainImgUpload from "./uploadImgs";
