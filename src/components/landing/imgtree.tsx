@@ -107,8 +107,11 @@ export function ImageTree({ className }: { className?: string }) {
               }}
               className=""
             >
-              <Highlight className="text-sm text-black dark:text-white">
-                1. Upload Your Selfies
+              <Highlight className="text-sm bg-gradient-to-r from-indigo-500 to-purple-500 text-white dark:text-white">
+              <span className="bg-gradient-to-r from-pink-500 to-indigo-500 text-white dark:text-white mr-1 px-3 py-2 rounded-full">
+                  1
+                </span>
+                Upload Your Selfies
               </Highlight>
             </motion.h1>
           </HeroHighlight>
@@ -218,8 +221,11 @@ export function ImageTree({ className }: { className?: string }) {
               }}
               className=""
             >
-              <Highlight className="text-sm dark:text-white">
-                2. We Train Your AI Character
+              <Highlight className="ml-0 md:ml-[-60px] text-sm bg-gradient-to-r from-indigo-500 to-purple-500 text-white dark:text-white">
+                <span className="bg-gradient-to-r from-pink-500 to-indigo-500 text-white dark:text-white mr-1 px-3 py-2 rounded-full">
+                  2
+                </span>
+                We Train an AI Version Of You
               </Highlight>
             </motion.h1>
           </HeroHighlight>
@@ -268,8 +274,11 @@ export function ImageTree({ className }: { className?: string }) {
               }}
               className=""
             >
-              <Highlight className=" dark:text-white text-sm">
-                3. Then Generate Images
+              <Highlight className=" text-sm bg-gradient-to-r from-indigo-500 to-purple-500 text-white dark:text-white">
+              <span className="bg-gradient-to-r from-pink-500 to-indigo-500 text-white dark:text-white mr-1 px-3 py-2 rounded-full">
+                  3
+                </span>
+                Then Generate Images
               </Highlight>
             </motion.h1>
           </HeroHighlight>

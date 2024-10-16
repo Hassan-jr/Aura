@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 
 export function LandingNav() {
   return (
-    <div className="flex flex-col w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto py-2 px-1">
+    <div className="flex flex-col w-full m-2">
       <Card className="sticky top-0 z-50">
         <Tabs
           value=""
