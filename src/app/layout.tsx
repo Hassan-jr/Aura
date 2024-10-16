@@ -5,15 +5,16 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import { NavigationMenu } from "@/customui/navbar";
 import { ClerkProvider } from "@clerk/nextjs";
-import { ReduxProvider } from '@/redux/provider';
-
+import { ReduxProvider } from "@/redux/provider";
+// import PageTransition from "@/customui/navtabs";
+import Navheader from "@/customui/navheader";
 
 const roboto = Roboto({
-  weight: ['100', '300', '400', '500', '700', '900'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
-  display: 'swap',
-})
+  weight: ["100", "300", "400", "500", "700", "900"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "My Ai Shots",
@@ -38,8 +39,9 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <Toaster />
-              {/* <NavigationMenu/> */}
+              {/* <PageTransition> */}
               {children}
+              {/* </PageTransition> */}
             </ThemeProvider>
           </body>
         </html>

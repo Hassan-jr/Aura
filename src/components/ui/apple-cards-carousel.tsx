@@ -243,7 +243,7 @@ export const Card = ({
         layoutId={layout ? `card-${card.title}` : undefined}
         type="button"
         onClick={handleOpen}
-        className="rounded-3xl bg-gray-100 dark:bg-neutral-900 w-24 h-48 md:w-36 md:h-60 overflow-hidden flex flex-col items-start justify-start relative z-10"
+        className="rounded-md bg-gray-100 dark:bg-neutral-900 w-28 h-52 md:w-36 md:h-60 overflow-hidden flex flex-col items-start justify-start relative z-10"
       >
         <div className="absolute top-0 inset-x-0 bg-gradient-to-b from-black/50 via-transparent to-transparent z-30 pointer-events-none" />
         <div className="relative z-40 p-0">
