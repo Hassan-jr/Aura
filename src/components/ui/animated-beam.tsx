@@ -7,9 +7,9 @@ import { cn } from "@/lib/utils";
 
 export interface AnimatedBeamProps {
   className?: string;
-  containerRef: RefObject<HTMLElement>; // Container ref
-  fromRef: RefObject<HTMLElement>;
-  toRef: RefObject<HTMLElement>;
+  containerRef: RefObject<HTMLElement | null>; // Container ref
+  fromRef: RefObject<HTMLElement | null>;
+  toRef: RefObject<HTMLElement | null>;
   curvature?: number;
   reverse?: boolean;
   pathColor?: string;
@@ -184,7 +184,7 @@ export const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
     //     </motion.linearGradient>
     //   </defs>
     // </svg>
-    <svg
+    (<svg
       fill="none"
       width={svgDimensions.width}
       height={svgDimensions.height}
@@ -256,6 +256,6 @@ export const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
         strokeLinecap="round"
         markerEnd="url(#arrowhead)"
       />
-    </svg>
+    </svg>)
   );
 };

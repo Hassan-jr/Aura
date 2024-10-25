@@ -12,17 +12,17 @@ import { ModeToggle } from "@/customui/themebtn";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-import { UserButton } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
-import { ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
+// import { UserButton } from "@clerk/nextjs";
+// import { auth } from "@clerk/nextjs/server";
+// import { ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
 import { Icons } from "@/components/icons";
 import { Card } from "@/components/ui/card";
 import { OptimizedTabBar } from "./navtabs";
 
 
 const Navheader = ({ children }: { children: React.ReactNode }) => {
-  const { userId } = auth();
-  console.log("UserId: ", userId);
+  // const { userId } = auth();
+  // console.log("UserId: ", userId);
 
   return (
     <>
@@ -43,63 +43,6 @@ const Navheader = ({ children }: { children: React.ReactNode }) => {
               <MagnifyingGlassIcon className="h-9 w-9 text-white   bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full p-0.5" />
             </div>
 
-            {/* Clerk loading */}
-            <ClerkLoading>
-              <div className="flex items-center justify-center text-2xl">
-                <Icons.spinner className="size-4 animate-spin" />
-              </div>
-            </ClerkLoading>
-
-            {/* clerk loaded */}
-            <ClerkLoaded>
-              {!userId ? (
-                <>
-                  <Link href="/sign-in">
-                    <Button>Login</Button>
-                  </Link>
-                  <Link href="/sign-up">
-                    <Button>Sign Up</Button>
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="flex flex-row gap-1 overflow-hidden rounded-full w-20 bg-gradient-to-r from-indigo-500 to-purple-500"
-                      >
-                        <Image
-                          src="./coins.svg"
-                          width={20}
-                          height={20}
-                          alt="Avatar"
-                          className="overflow-hidden rounded-full"
-                        />
-                        <p>200</p>
-                        {/* 200 Credits */}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem>GearIcon</DropdownMenuItem>
-                      <DropdownMenuItem>Support</DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem>Logout</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-
-                  {/* Profile */}
-
-                  <UserButton />
-
-                
-                </>
-              )}
-            </ClerkLoaded>
-              {/* theme */}
               <ModeToggle />
           </div>
         </header>

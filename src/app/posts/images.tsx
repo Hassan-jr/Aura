@@ -31,7 +31,7 @@ export default function BlurFadeDemo() {
   };
 
   return (
-    <section className="container pt-3 p-0.5 bg-card/100 rounded-lg">
+    <section style={{ backgroundColor: '#FFFBF5' }} className="container pt-3 p-0.5 rounded-lg">
       <h1 className="text-2xl font-semibold mb-2">Posts</h1>
       <div className="columns-3 gap-0.5 mx-1 md:gap-1 sm:columns-3 md:columns-4 [&>div]:mb-1">
         {images.map((imageUrl, idx) => {

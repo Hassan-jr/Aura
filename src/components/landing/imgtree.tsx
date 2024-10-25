@@ -105,10 +105,9 @@ export function ImageTree({ className }: { className?: string }) {
                 duration: 0.5,
                 ease: [0.4, 0.0, 0.2, 1],
               }}
-              className=""
             >
               <Highlight className="text-sm bg-gradient-to-r from-indigo-500 to-purple-500 text-white dark:text-white">
-              <span className="bg-gradient-to-r from-pink-500 to-indigo-500 text-white dark:text-white mr-1 px-3 py-2 rounded-full">
+                <span className="bg-gradient-to-r from-pink-500 to-indigo-500 text-white dark:text-white mr-1 px-3 py-2 rounded-full">
                   1
                 </span>
                 Upload Your Selfies
@@ -219,7 +218,6 @@ export function ImageTree({ className }: { className?: string }) {
                 duration: 0.5,
                 ease: [0.4, 0.0, 0.2, 1],
               }}
-              className=""
             >
               <Highlight className="ml-0 md:ml-[-60px] text-sm bg-gradient-to-r from-indigo-500 to-purple-500 text-white dark:text-white">
                 <span className="bg-gradient-to-r from-pink-500 to-indigo-500 text-white dark:text-white mr-1 px-3 py-2 rounded-full">
@@ -275,7 +273,7 @@ export function ImageTree({ className }: { className?: string }) {
               className=""
             >
               <Highlight className=" text-sm bg-gradient-to-r from-indigo-500 to-purple-500 text-white dark:text-white">
-              <span className="bg-gradient-to-r from-pink-500 to-indigo-500 text-white dark:text-white mr-1 px-3 py-2 rounded-full">
+                <span className="bg-gradient-to-r from-pink-500 to-indigo-500 text-white dark:text-white mr-1 px-3 py-2 rounded-full">
                   3
                 </span>
                 Then Generate Images

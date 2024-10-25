@@ -5,7 +5,7 @@ import ShimmerButton from "../ui/shimmer-button";
 
 export function LandingHeader() {
   return (
-    <div className="w-full items-center justify-center overflow-hidden pt-8 p-4">
+    <main className="w-full items-center justify-center overflow-hidden pt-8 p-4">
       <BoxReveal boxColor={"#5046e6"} duration={0.5}>
         <p className="text-[4rem] md:text-[5.5rem] font-semibold text-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent relative z-20">
           Inprime AI<span className="text-[#5046e6]">.</span>
@@ -43,6 +43,6 @@ export function LandingHeader() {
           </ShimmerButton>
         </div>
       </BoxReveal>
-    </div>
+    </main>
   );
 }

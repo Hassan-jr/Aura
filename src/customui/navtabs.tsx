@@ -147,7 +147,7 @@ export function OptimizedTabBar({ children }: { children: React.ReactNode }) {
         </Tabs>
       </Card>
       <motion.div
-        className="flex-grow overflow-hidden"
+        // className="flex-grow overflow-hidden"
         drag="x"
         dragConstraints={{ left: 0, right: 0 }}
         dragElastic={0.2}
@@ -163,7 +163,7 @@ export function OptimizedTabBar({ children }: { children: React.ReactNode }) {
             animate="center"
             exit="exit"
             transition={pageTransition}
-            className="w-full h-full"
+            // className="w-full h-full"
           >
             {children}
           </motion.div>
