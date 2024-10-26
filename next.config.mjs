@@ -9,7 +9,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "nomapos.com",
+        hostname: "r2.nomapos.com",
         pathname: "**",
       },
       {

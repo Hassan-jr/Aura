@@ -10,8 +10,7 @@ import { uploadImages } from "@/actions/uploadImages.action";
 import { storeLoraData, updateLoraCaptions } from "@/actions/lora.action";
 import { sendToChatGPT } from "@/actions/caption.action";
 
-// import { auth, currentUser } from "@clerk/nextjs/server";
-import { useUser } from "@clerk/nextjs";
+
 import { SkeletonSpinner } from "@/customui/skeletonspinner";
 
 interface Step {
@@ -32,8 +31,9 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
   const [text1, setText1] = useState<string>(" ");
   const [text2, setText2] = useState<string>("Please DO NOT Close This Window");
 
-  const { user } = useUser();
   const params = useAppSelector(selectTrainLoraParams);
+  const user = false;
+  const user_id_test = "123456789"
 
   useEffect(() => {
     // Clean up function to revoke object URLs
@@ -172,7 +172,7 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
     setError(null);
     // ensure user is logged in
 
-    if (!user?.id || !user?.publicMetadata?.userId) {
+    if (user) {
       toast({
         variant: "destructive",
         title: "Unable To Authenticate",
@@ -193,15 +193,15 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
       // upload images
       const imageUrls = await uploadImages(
         allUrls,
-        user?.publicMetadata?.userId as string,
+        user_id_test, //user?.publicMetadata?.userId as string,
         params.characterName
       );
 
       setText2("Almost Done Uploading...");
       // save lora
       const mongoDbId = await storeLoraData({
-        clerkId: user?.id,
-        userId: user?.publicMetadata?.userId as string,
+        clerkId: user_id_test, //user?.id,
+        userId: user_id_test, //user?.publicMetadata?.userId as string,
         characterName: params.characterName,
         tokenName: params.token,
         gender: params.gender,

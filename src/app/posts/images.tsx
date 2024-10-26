@@ -6,15 +6,15 @@ import { cn } from "@/lib/utils";
 
 export default function BlurFadeDemo() {
   const images = [
-    "https://nomapos.com/model/hassanjr001%20(1).jpg",
-    "https://nomapos.com/model/hassanjr001%20(2).jpg",
-    "https://nomapos.com/model/hassanjr001%20(3).jpg",
-    "https://nomapos.com/model/hassanjr001%20(4).jpg",
-    "https://nomapos.com/model/hassanjr001%20(5).jpg",
-    "https://nomapos.com/model/hassanjr001%20(6).jpg",
-    "https://nomapos.com/model/hassanjr001%20(7).jpg",
-    "https://nomapos.com/model/hassanjr001%20(11).jpg",
-    "https://nomapos.com/model/hassanjr001%20(5).jpg",
+    "https://r2.nomapos.com/model/hassanjr001%20(1).jpg",
+    "https://r2.nomapos.com/model/hassanjr001%20(2).jpg",
+    "https://r2.nomapos.com/model/hassanjr001%20(3).jpg",
+    "https://r2.nomapos.com/model/hassanjr001%20(4).jpg",
+    "https://r2.nomapos.com/model/hassanjr001%20(5).jpg",
+    "https://r2.nomapos.com/model/hassanjr001%20(6).jpg",
+    "https://r2.nomapos.com/model/hassanjr001%20(7).jpg",
+    "https://r2.nomapos.com/model/hassanjr001%20(11).jpg",
+    "https://r2.nomapos.com/model/hassanjr001%20(5).jpg",
   ];
 
   const aspectRatios = [

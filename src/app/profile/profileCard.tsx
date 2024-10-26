@@ -11,7 +11,7 @@ export default function ProfileCard() {
             {/* Profile */}
             <div className="bg-white w-20 h-20 rounded-full  flex justify-center align-middle">
               <Image
-                src="https://nomapos.com/model/hassanjr001%20(7).jpg"
+                src="https://r2.nomapos.com/model/hassanjr001%20(7).jpg"
                 width={70}
                 height={70}
                 alt="Avatar"

@@ -46,50 +46,50 @@ const data = [
   {
     category: "",
     title: "",
-    src: "https://nomapos.com/model/hassanjr001%20(1).jpg",
+    src: "https://r2.nomapos.com/model/hassanjr001%20(1).jpg",
     content: (
-      <DummyContent src="https://nomapos.com/model/hassanjr001%20(1).jpg" />
+      <DummyContent src="https://r2.nomapos.com/model/hassanjr001%20(1).jpg" />
     ),
   },
   {
     category: "",
     title: "",
-    src: "https://nomapos.com/model/hassanjr001%20(2).jpg",
+    src: "https://r2.nomapos.com/model/hassanjr001%20(2).jpg",
     content: (
-      <DummyContent src="https://nomapos.com/model/hassanjr001%20(2).jpg" />
+      <DummyContent src="https://r2.nomapos.com/model/hassanjr001%20(2).jpg" />
     ),
   },
   {
     category: "",
     title: "",
-    src: "https://nomapos.com/model/hassanjr001%20(3).jpg",
+    src: "https://r2.nomapos.com/model/hassanjr001%20(3).jpg",
     content: (
-      <DummyContent src="https://nomapos.com/model/hassanjr001%20(2).jpg" />
+      <DummyContent src="https://r2.nomapos.com/model/hassanjr001%20(2).jpg" />
     ),
   },
 
   {
     category: "",
     title: "",
-    src: "https://nomapos.com/model/hassanjr001%20(4).jpg",
+    src: "https://r2.nomapos.com/model/hassanjr001%20(4).jpg",
     content: (
-      <DummyContent src="https://nomapos.com/model/hassanjr001%20(2).jpg" />
+      <DummyContent src="https://r2.nomapos.com/model/hassanjr001%20(2).jpg" />
     ),
   },
   {
     category: "",
     title: "",
-    src: "https://nomapos.com/model/hassanjr001%20(5).jpg",
+    src: "https://r2.nomapos.com/model/hassanjr001%20(5).jpg",
     content: (
-      <DummyContent src="https://nomapos.com/model/hassanjr001%20(2).jpg" />
+      <DummyContent src="https://r2.nomapos.com/model/hassanjr001%20(2).jpg" />
     ),
   },
   {
     category: "",
     title: "",
-    src: "https://nomapos.com/model/hassanjr001%20(7).jpg",
+    src: "https://r2.nomapos.com/model/hassanjr001%20(7).jpg",
     content: (
-      <DummyContent src="https://nomapos.com/model/hassanjr001%20(2).jpg" />
+      <DummyContent src="https://r2.nomapos.com/model/hassanjr001%20(2).jpg" />
     ),
   },
 ];

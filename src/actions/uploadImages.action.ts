@@ -42,7 +42,7 @@
 //     });
 
 //     await s3Client.send(command);
-//     return `https://nomapos.com/${key}`;
+//     return `https://r2.nomapos.com/${key}`;
 //   });
 
 //   return Promise.all(uploadPromises);
@@ -96,7 +96,7 @@ async function uploadSingleImage(
   });
 
   await s3Client.send(command);
-  return `https://nomapos.com/${key}`;
+  return `https://r2.nomapos.com/${key}`;
 }
 
 export async function uploadImages(
