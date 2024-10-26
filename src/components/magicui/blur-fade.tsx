@@ -1,3 +1,65 @@
+// "use client";
+
+// import { useRef } from "react";
+// import { AnimatePresence, motion, useInView, Variants } from "framer-motion";
+
+// type MarginType = number | string | { top?: number | string; right?: number | string; bottom?: number | string; left?: number | string };
+
+// interface BlurFadeProps {
+//   children: React.ReactNode;
+//   className?: string;
+//   variant?: {
+//     hidden: { y: number };
+//     visible: { y: number };
+//   };
+//   duration?: number;
+//   delay?: number;
+//   yOffset?: number;
+//   inView?: boolean;
+//   inViewMargin?: MarginType;
+//   blur?: string;
+// }
+
+// export default function BlurFade({
+//   children,
+//   className,
+//   variant,
+//   duration = 0.4,
+//   delay = 0,
+//   yOffset = 6,
+//   inView = false,
+//   inViewMargin = "-50px",
+//   blur = "6px",
+// }: BlurFadeProps) {
+//   const ref = useRef(null);
+//   const inViewResult = useInView(ref, { once: true, margin: undefined });
+//   const isInView = !inView || inViewResult;
+//   const defaultVariants: Variants = {
+//     hidden: { y: yOffset, opacity: 0, filter: `blur(${blur})` },
+//     visible: { y: -yOffset, opacity: 1, filter: `blur(0px)` },
+//   };
+//   const combinedVariants = variant || defaultVariants;
+//   return (
+//     <AnimatePresence>
+//       <motion.div
+//         ref={ref}
+//         initial="hidden"
+//         animate={isInView ? "visible" : "hidden"}
+//         exit="hidden"
+//         variants={combinedVariants}
+//         transition={{
+//           delay: 0.04 + delay,
+//           duration,
+//           ease: "easeOut",
+//         }}
+//         className={className}
+//       >
+//         {children}
+//       </motion.div>
+//     </AnimatePresence>
+//   );
+// }
+
 "use client";
 
 import { useRef } from "react";
@@ -31,8 +93,8 @@ export default function BlurFade({
   inViewMargin = "-50px",
   blur = "6px",
 }: BlurFadeProps) {
-  const ref = useRef<HTMLDivElement>(null); // Specify HTMLDivElement type
-  const inViewResult = useInView(ref, { once: true, margin: inViewMargin as string | undefined });
+  const ref = useRef<HTMLDivElement>(null);
+  const inViewResult = useInView(ref as React.RefObject<Element>, { once: true, margin: inViewMargin as string | undefined });
   const isInView = !inView || inViewResult;
   const defaultVariants: Variants = {
     hidden: { y: yOffset, opacity: 0, filter: `blur(${blur})` },
@@ -53,7 +115,7 @@ export default function BlurFade({
           duration,
           ease: "easeOut",
         }}
-        className={className}
+        // className={className}
       >
         {children}
       </motion.div>
