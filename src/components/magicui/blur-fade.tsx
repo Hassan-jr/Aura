@@ -94,11 +94,16 @@ export default function BlurFade({
   blur = "6px",
 }: BlurFadeProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const inViewResult = useInView(ref as React.RefObject<Element>, { once: true, margin: inViewMargin as string | undefined });
+  const inViewResult = useInView(ref, {
+    once: true,
+    margin: typeof inViewMargin === 'object'
+      ? `${inViewMargin.top ?? 0}px ${inViewMargin.right ?? 0}px ${inViewMargin.bottom ?? 0}px ${inViewMargin.left ?? 0}px`
+      : inViewMargin
+  });
   const isInView = !inView || inViewResult;
   const defaultVariants: Variants = {
     hidden: { y: yOffset, opacity: 0, filter: `blur(${blur})` },
-    visible: { y: -yOffset, opacity: 1, filter: `blur(0px)` },
+    visible: { y: -yOffset, opacity: 1, filter: "blur(0px)" },
   };
   const combinedVariants = variant || defaultVariants;
 
