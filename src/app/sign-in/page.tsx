@@ -101,7 +101,7 @@ export default function TextureCardDemo() {
                   <div className="flex flex-col items-center justify-center">
                     <div className="py-2 px-2">
                       <div className="text-center text-sm">
-                        Don't have an account?{" "}
+                        Don&apos;t have an account?{" "}
                         <span className="text-primary">Sign Up</span>
                       </div>
                     </div>
