@@ -96,7 +96,7 @@ export default function BlurFade({
   const ref = useRef<HTMLDivElement>(null);
 
   // Suppress the type error using type assertion here
-  const inViewResult = useInView(ref as React.RefObject<Element>, { once: true, margin:  undefined });
+  const inViewResult = useInView(ref as React.RefObject<Element>, { once: true, margin: undefined });
   const isInView = !inView || inViewResult;
   const defaultVariants: Variants = {
     hidden: { y: yOffset, opacity: 0, filter: `blur(${blur})` },
@@ -106,21 +106,23 @@ export default function BlurFade({
 
   return (
     <AnimatePresence>
-      <motion.div
-        ref={ref}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        exit="hidden"
-        variants={combinedVariants}
-        transition={{
-          delay: 0.04 + delay,
-          duration,
-          ease: "easeOut",
-        }}
-        // className={className}
-      >
-        {children}
-      </motion.div>
+      <div className={className}>
+        <motion.div
+          ref={ref}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          exit="hidden"
+          variants={combinedVariants}
+          transition={{
+            delay: 0.04 + delay,
+            duration,
+            ease: "easeOut",
+          }}
+
+        >
+          {children}
+        </motion.div>
+      </div>
     </AnimatePresence>
   );
 }
