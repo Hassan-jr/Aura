@@ -15,6 +15,10 @@ import Image from "next/image";
 // import { Card } from "@/components/ui/card";
 import { Carousel, Card } from "@/components/ui/apple-cards-carousel";
 
+
+const cardWidth = 500
+const cardHight = 5000
+
 export default function LoraDetails() {
   const params = useAppSelector(selectTrainLoraParams);
 
@@ -22,6 +26,8 @@ export default function LoraDetails() {
   const closeUpData = params.closeUp.map((img, i) => {
     return {
       category: "",
+      w: cardWidth,
+      h: cardHight,
       title: "",
       src: img,
       content: (
@@ -41,9 +47,13 @@ export default function LoraDetails() {
       ),
     };
   });
+
+
   const halfBodyData = params.halfbody.map((img, i) => {
     return {
       category: "",
+      w: cardWidth,
+      h: cardHight,
       title: "",
       src: img,
       content: (
@@ -67,6 +77,8 @@ export default function LoraDetails() {
   const fullBodyData = params.fullbody.map((img, i) => {
     return {
       category: "",
+      w: cardWidth,
+      h: cardHight,
       title: "",
       src: img,
       content: (
