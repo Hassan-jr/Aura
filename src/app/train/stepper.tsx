@@ -241,9 +241,9 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
   };
 
   return (
-    <form action="#" className="w-full" method="post">
-      <Card data-stepper="true">
-        <div className="card">
+    <form action="#" className="w-full overflow-y-hidden" method="post">
+      <Card className="rounded-none border-0 mt-2" data-stepper="true">
+        <div className="">
           {/* step header */}
           <div className="card-header flex justify-between md:justify-evenly align-top items-start relative">
             {steps.map((step, index) => (
@@ -332,7 +332,7 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
           </div>
 
           {/* step content */}
-          <div className="card-body py-16">
+          <div className="card-body">
             {steps.map((step, index) => (
               <div
                 key={index}

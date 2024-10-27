@@ -28,21 +28,21 @@ const Navheader = ({ children }: { children: React.ReactNode }) => {
           </Link>
 
           {/* search and credits */}
-          <div className=" flex flex-row gap-1">
+          <div className="flex flex-row gap-1 justify-center align-middle">
             {/* search */}
-            <div>
-              <MagnifyingGlassIcon className="h-9 w-9 text-white   bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full p-0.5" />
-            </div>
+
+            <MagnifyingGlassIcon className="h-9 w-9 text-white   bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full p-0.5" />
+
 
             {/* Singin and Sign UP */}
             <Link href="sign-up">
-              <TextureButton variant="accent" size="lg">
+              <TextureButton variant="accent" size="sm">
                 Sing Up
               </TextureButton>
             </Link>
 
             <Link href="/sign-in">
-              <TextureButton variant="accent" size="lg">
+              <TextureButton variant="accent" size="sm">
                 Sing In
               </TextureButton>
             </Link>

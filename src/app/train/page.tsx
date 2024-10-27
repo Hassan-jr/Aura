@@ -32,8 +32,8 @@ const MyPage = () => {
   return (
     <>
       <Navheader>
-        <div className="w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto">
-          <h1>My Stepper Page</h1>
+        <div className="bg-card/100 mt-2 rounded-md p-1">
+          <h1 className="text-xl font-semibold">Start Training Your Model</h1>
           <Stepper steps={steps} />
         </div>
       </Navheader>

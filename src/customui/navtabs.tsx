@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useMemo, useState, useTransition } from "react";
+import React, { useCallback, useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence, PanInfo } from "framer-motion";
@@ -51,6 +51,10 @@ export function OptimizedTabBar({ children }: { children: React.ReactNode }) {
   }, [pathname]);
 
   const [dragDirection, setDragDirection] = useState<number>(0);
+
+  useEffect(() => {
+    pages.forEach(page => router.prefetch(page.path))
+  }, [router])
 
   const navigateToPage = useCallback(
     (index: number) => {
@@ -109,28 +113,27 @@ export function OptimizedTabBar({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex flex-col w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto py-2 px-1">
-      <Card className="sticky top-0 z-50">
+      <Card className="fixed bottom-0 md:sticky md:top-0 z-50 w-full">
         <Tabs
           value={pages[currentPageIndex]?.name}
           className="w-full my-1 flex justify-center flex-nowrap rounded-full relative"
         >
           <TabsList className="w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-1 h-auto rounded-sm bg-transparent">
             {pages.map((page, i) => (
-              <Link href={page.path} key={i} prefetch={false}>
+              <Link href={page.path} key={i}>
                 <TabsTrigger
                   value={page.name}
                   onClick={() => navigateToPage(i)}
                   onMouseEnter={() => router.prefetch(page.path)}
                   className={
                     currentPageIndex === i
-                      ? "flex flex-col flex-nowrap justify-center align-middle bg-gradient-to-r from-indigo-500 to-purple-500 text-white dark:text-white py-1"
-                      : "flex flex-col flex-nowrap justify-center align-middle text-black dark:text-white m-0 py-1 hover:bg-white/10 transition-colors"
+                      ? "flex flex-col flex-nowrap justify-center align-middle bg-gradient-to-r from-indigo-500 to-purple-500 text-white dark:text-white py-1 mx-1"
+                      : "flex flex-col flex-nowrap justify-center align-middle text-black dark:text-white m-0 py-1 hover:bg-blue-300 transition-colors mx-1"
                   }
                 >
                   <p className={currentPageIndex === i ? "text-white" : ""}>
                     {page.icon}
                   </p>
-
                   <p
                     className={
                       currentPageIndex === i
