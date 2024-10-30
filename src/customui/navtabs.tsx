@@ -10,30 +10,32 @@ import {
   BoxModelIcon,
   PlusCircledIcon,
   PersonIcon,
+  ImageIcon
 } from "@radix-ui/react-icons";
 import { Card } from "@/components/ui/card";
 
 const pages = [
   {
-    path: "/posts",
+    path: "/home",
     name: "Home",
     icon: <HomeIcon className="h-5 w-5" />,
   },
+
   {
-    path: "/models",
-    name: "Models",
-    icon: <BoxModelIcon className="h-5 w-5" />,
+    path: "/posts",
+    name: "Posts",
+    icon: <ImageIcon className="h-5 w-5" />,
   },
   {
     path: "/create",
     name: "Create",
     icon: <PlusCircledIcon className="h-7 w-7" />,
   },
-  // {
-  //   path: "/train",
-  //   name: "Train",
-  //   icon: <PlusCircledIcon className="h-5 w-5" />,
-  // },
+  {
+    path: "/models",
+    name: "Models",
+    icon: <BoxModelIcon className="h-5 w-5" />,
+  },
   {
     path: "/profile",
     name: "Profile",

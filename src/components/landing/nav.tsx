@@ -42,7 +42,7 @@ export function LandingNav() {
               </TabsTrigger>
             </Link>
             {/* App */}
-            <Link href="/posts" prefetch={false}>
+            <Link href="/home" prefetch={false}>
               <TabsTrigger
                 value="feaatures"
                 className="flex flex-col flex-nowrap justify-center align-middle bg-gradient-to-r from-indigo-500 to-purple-500 text-white dark:text-white py-1"

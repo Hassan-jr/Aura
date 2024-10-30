@@ -12,8 +12,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import BlurFadeDemo from "../posts/images";
-import TopStories from "../posts/stories";
+import BlurFadeDemo from "../home/images";
+import TopStories from "../home/stories";
 import Navheader from "@/customui/navheader";
 
 export default function Home() {

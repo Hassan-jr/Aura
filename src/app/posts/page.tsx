@@ -1,33 +1,10 @@
-import * as React from "react";
+import Navheader from '@/customui/navheader'
+import React from 'react'
 
-import BlurFadeDemo from "./images";
-import TopStories from "./stories";
-import Navheader from "@/customui/navheader";
-
-export default function Home() {
+const Posts = () => {
   return (
-    <>
-      <Navheader>
-        <div className="flex min-h-screen w-full flex-col">
-          <div>
-            <main>
-              {/* Stories and Posts */}
-              <div className="flex flex-col items-center justify-center gap-1 w-full md:gap-3">
-                {/* Stories */}
-                <div className="w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl">
-                  <TopStories />
-                </div>
-                {/* <Counter /> */}
-
-                {/* POSTS */}
-                <div className="w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl">
-                  <BlurFadeDemo />
-                </div>
-              </div>
-            </main>
-          </div>
-        </div>
-      </Navheader>
-    </>
-  );
+    <Navheader>Posts</Navheader>
+  )
 }
+
+export default Posts
