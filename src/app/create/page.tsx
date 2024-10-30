@@ -1,10 +1,14 @@
+import { Button } from "@/components/ui/button";
 import Navheader from "@/customui/navheader";
+import CreateTabs from "./createTabs"
+
 
 export default function Home() {
   return (
     <main>
       <Navheader>
-        <h1>Generate IMAGE</h1>
+        {/* TABS */}
+        <CreateTabs />
       </Navheader>
     </main>
   );

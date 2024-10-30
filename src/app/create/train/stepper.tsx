@@ -241,7 +241,7 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
   };
 
   return (
-    <form action="#" className="w-full overflow-y-hidden" method="post">
+    <form action="#" className="w-full overflow-x-hidden mb-10" method="post">
       <Card className="rounded-none border-0 mt-2" data-stepper="true">
         <div className="">
           {/* step header */}

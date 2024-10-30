@@ -3,7 +3,6 @@ import DataFormat from "./data";
 import LoraDetails from "./loradetails";
 import TrainImgUpload from "./uploadImgs";
 import SubmitTrain from "./submitTrain";
-import Navheader from "@/customui/navheader";
 
 const steps = [
   {
@@ -28,17 +27,13 @@ const steps = [
   },
 ];
 
-const MyPage = () => {
+const Train = () => {
   return (
-    <>
-      <Navheader>
-        <div className="bg-card/100 mt-2 rounded-md p-1">
-          <h1 className="text-xl font-semibold">Start Training Your Model</h1>
-          <Stepper steps={steps} />
-        </div>
-      </Navheader>
-    </>
+    <div className="bg-card/100 mt-2 rounded-md p-1">
+      <h1 className="text-xl font-semibold">Start Training Your Model</h1>
+      <Stepper steps={steps} />
+    </div>
   );
 };
 
-export default MyPage;
+export default Train;

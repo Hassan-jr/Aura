@@ -8,7 +8,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   HomeIcon,
   BoxModelIcon,
-  PlusIcon,
+  PlusCircledIcon,
   PersonIcon,
 } from "@radix-ui/react-icons";
 import { Card } from "@/components/ui/card";
@@ -25,15 +25,15 @@ const pages = [
     icon: <BoxModelIcon className="h-5 w-5" />,
   },
   {
-    path: "/generate",
-    name: "Generate",
-    icon: <PlusIcon className="h-5 w-5" />,
+    path: "/create",
+    name: "Create",
+    icon: <PlusCircledIcon className="h-7 w-7" />,
   },
-  {
-    path: "/train",
-    name: "Train",
-    icon: <PlusIcon className="h-5 w-5" />,
-  },
+  // {
+  //   path: "/train",
+  //   name: "Train",
+  //   icon: <PlusCircledIcon className="h-5 w-5" />,
+  // },
   {
     path: "/profile",
     name: "Profile",
