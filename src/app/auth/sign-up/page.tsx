@@ -154,15 +154,15 @@
 //   )
 // }
 
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { ArrowRight, Merge } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { TextureButton } from '@/components/ui/texture-button'
+import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { ArrowRight, Merge } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { TextureButton } from "@/components/ui/texture-button";
 import {
   TextureCardContent,
   TextureCardFooter,
@@ -170,37 +170,66 @@ import {
   TextureCardStyled,
   TextureCardTitle,
   TextureSeparator,
-} from '@/components/ui/texture-card'
+} from "@/components/ui/texture-card";
+import { toast } from "@/components/ui/use-toast";
 
 export default function SignUp() {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const router = useRouter()
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, username, password }),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (response.ok) {
-        router.push('/auth/verify-request')
+        router.push("/auth/verify-request");
       } else {
-        setError(data.error || 'An error occurred during registration')
+        setError(data.error || "An error occurred during registration");
       }
     } catch (error) {
-      console.error('Registration error:', error)
-      setError('An error occurred during registration')
+      console.error("Registration error:", error);
+      setError("An error occurred during registration");
     }
-  }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      signIn("google");
+    } catch (error) {
+      const errorMessage = error?.message || error?.type || error;
+      toast({
+        variant: "destructive",
+        title: "Authentication Error",
+        description: getErrorMessage(errorMessage),
+      });
+    }
+  };
+
+  const getErrorMessage = (error: string | null) => {
+    switch (error) {
+      case "Configuration":
+        return "There is a problem with the server configuration.";
+      case "AccessDenied":
+        return "Access denied. You do not have permission to sign in.";
+      case "Verification":
+        return "The verification token is invalid or has expired.";
+      case "CredentialsSignin":
+        return "Invalid credentials. Please check your email and password.";
+      default:
+        return "An unexpected error occurred. Please try again later.";
+    }
+  };
 
   return (
     <div className="flex items-center justify-center py-4">
@@ -224,7 +253,7 @@ export default function SignUp() {
                     <TextureButton
                       variant="icon"
                       className="w-full"
-                      onClick={() => signIn('google')}
+                      onClick={handleGoogleSignIn}
                     >
                       {/* Google Icon */}
                       <svg
@@ -305,7 +334,11 @@ export default function SignUp() {
                       />
                     </div>
                     {error && <p className="text-red-500 text-sm">{error}</p>}
-                    <TextureButton variant="accent" className="w-full" type="submit">
+                    <TextureButton
+                      variant="accent"
+                      className="w-full"
+                      type="submit"
+                    >
                       <div className="flex gap-1 items-center justify-center">
                         Create Account
                         <ArrowRight className="h-4 w-4 text-neutral-50 mt-[1px]" />
@@ -318,10 +351,10 @@ export default function SignUp() {
                   <div className="flex flex-col items-center justify-center">
                     <div className="py-2 px-2">
                       <div className="text-center text-sm">
-                        Already have an account?{' '}
+                        Already have an account?{" "}
                         <span
                           className="text-primary cursor-pointer"
-                          onClick={() => router.push('/auth/sign-in')}
+                          onClick={() => router.push("/auth/sign-in")}
                         >
                           Sign In
                         </span>
@@ -345,5 +378,5 @@ export default function SignUp() {
         </div>
       </div>
     </div>
-  )
+  );
 }

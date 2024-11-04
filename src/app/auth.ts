@@ -41,7 +41,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           const user = await User.findOne({ email: credentials.email });
           // if (!user) return null;
           if (!user) {
-             throw new CustomError("CredentialsSignin");
+            throw new CustomError("CredentialsSignin");
           }
 
           const isPasswordValid = await bcrypt.compare(
@@ -65,33 +65,39 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           };
         } catch (error) {
           // console.log("Cacht Error:", error);
-          throw new CustomError(error?.message || error?.type || error);
+          const errorMessage = error?.message || error?.type || error;
+          throw new CustomError(errorMessage);
         }
       },
     }),
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
-      if (account?.provider === "google") {
-        await connect(); // Ensure mongoose connection is established
-        const existingUser = await User.findOne({ email: profile?.email });
-        if (existingUser) {
-          user.id = existingUser._id.toString();
-          // user.username = existingUser.username;
-        } else {
-          const newUser = await User.create({
-            name: profile?.name,
-            email: profile?.email,
-            username: (profile?.email as string).split("@")[0],
-            emailVerified: true,
-            image: profile?.picture,
-            isGmail: true,
-          });
-          user.id = newUser._id.toString();
-          // user.username = newUser.username;
+      try {
+        if (account?.provider === "google") {
+          await connect(); // Ensure mongoose connection is established
+          const existingUser = await User.findOne({ email: profile?.email });
+          if (existingUser) {
+            user.id = existingUser._id.toString();
+            // user.username = existingUser.username;
+          } else {
+            const newUser = await User.create({
+              name: profile?.name,
+              email: profile?.email,
+              username: (profile?.email as string).split("@")[0],
+              emailVerified: true,
+              image: profile?.picture,
+              isGmail: true,
+            });
+            user.id = newUser._id.toString();
+            // user.username = newUser.username;
+          }
         }
+        return true;
+      } catch (error) {
+        const errorMessage = error?.message || error?.type || error;
+        throw new CustomError(errorMessage);
       }
-      return true;
     },
     async jwt({ token, user }) {
       if (user) {
@@ -111,7 +117,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: {
     signIn: "/auth/sign-in",
     // signOut: '/auth/signout',
-    error: "/auth/error",
+    // error: "/auth/error",
     verifyRequest: "/auth/verify-request",
   },
   session: {

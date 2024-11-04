@@ -40,7 +40,7 @@ export default function SignIn() {
         setError(getErrorMessage(errorType))
         toast({
           variant: "destructive",
-          title: "Unable to Login",
+          title: "Authentication Error",
           description: getErrorMessage(errorType)
         });
       } else if (result?.ok) {
@@ -56,6 +56,20 @@ export default function SignIn() {
     } catch (error) {
       console.error('Sign in error:', error)
       setError('An error occurred during sign in')
+    }
+  }
+
+
+  const handleGoogleSignIn = async ()=>{
+    try {
+      signIn('google')
+    } catch (error) {
+      const errorMessage = error?.message || error?.type || error;
+      toast({
+        variant: "destructive",
+        title: "Authentication Error",
+        description: getErrorMessage(errorMessage)
+      });
     }
   }
 
@@ -96,7 +110,7 @@ export default function SignIn() {
                     <TextureButton
                       variant="icon"
                       className="w-full"
-                      onClick={() => signIn('google')}
+                      onClick={handleGoogleSignIn}
                     >
                       {/* Google Icon */}
                       <svg
