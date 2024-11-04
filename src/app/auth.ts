@@ -77,7 +77,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const existingUser = await User.findOne({ email: profile?.email });
         if (existingUser) {
           user.id = existingUser._id.toString();
-          user.username = existingUser.username;
+          // user.username = existingUser.username;
         } else {
           const newUser = await User.create({
             name: profile?.name,
@@ -88,7 +88,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             isGmail: true,
           });
           user.id = newUser._id.toString();
-          user.username = newUser.username;
+          // user.username = newUser.username;
         }
       }
       return true;
@@ -96,14 +96,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.username = user.username;
+        // token.username = user.username;
       }
       return token;
     },
     async session({ session, token }) {
       if (token && session.user) {
         session.user.id = token.id as string;
-        session.user.username = token.username as string;
+        // session.user.username = token.username as string;
       }
       return session;
     },
