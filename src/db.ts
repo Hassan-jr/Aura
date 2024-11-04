@@ -28,6 +28,8 @@ export const connect = async () => {
     });
 
   cached.conn = await cached.promise;
+  console.log("Connected to db");
+  
 
   return cached.conn;
 };

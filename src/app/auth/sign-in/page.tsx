@@ -1,10 +1,12 @@
-"use client";
+'use client'
 
-import { ArrowRight, Merge } from "lucide-react";
-
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { TextureButton } from "@/components/ui/texture-button";
+import { useState } from 'react'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { ArrowRight, Merge } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { TextureButton } from '@/components/ui/texture-button'
 import {
   TextureCardContent,
   TextureCardFooter,
@@ -12,13 +14,70 @@ import {
   TextureCardStyled,
   TextureCardTitle,
   TextureSeparator,
-} from "@/components/ui/texture-card";
+} from '@/components/ui/texture-card'
+import { toast } from '@/components/ui/use-toast'
 
-export default function TextureCardDemo() {
+export default function SignIn() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const router = useRouter()
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+    try {
+      const result = await signIn('credentials', {
+        redirect: false,
+        email,
+        password,
+      })
+
+      if (result?.error) {
+        const errorType = result.error;
+        console.log("Error Type:", errorType);
+
+        setError(getErrorMessage(errorType))
+        toast({
+          variant: "destructive",
+          title: "Unable to Login",
+          description: getErrorMessage(errorType)
+        });
+      } else if (result?.ok) {
+        toast({
+          variant: "default",
+          title: "Login successful",
+          description: '',
+        });
+        router.push('/home')
+      } else {
+        setError('An unexpected error occurred')
+      }
+    } catch (error) {
+      console.error('Sign in error:', error)
+      setError('An error occurred during sign in')
+    }
+  }
+
+  const getErrorMessage = (error: string | null) => {
+    switch (error) {
+      case 'Configuration':
+        return 'There is a problem with the server configuration.'
+      case 'AccessDenied':
+        return 'Access denied. You do not have permission to sign in.'
+      case 'Verification':
+        return 'The verification token is invalid or has expired.'
+      case 'CredentialsSignin':
+        return 'Invalid credentials. Please check your email and password.'
+      default:
+        return 'An unexpected error occurred. Please try again later.'
+    }
+  }
+
   return (
     <div className="flex items-center justify-center py-4">
-      <div className="dark:bg-stone-950  h-full    rounded-md">
-        <div className=" items-start justify-center gap-6 rounded-lg p-2 md:p-8 grid grid-cols-1 ">
+      <div className="h-full rounded-md">
+        <div className="items-start justify-center gap-6 rounded-lg p-2 md:p-8 grid grid-cols-1">
           <div className="col-span-1 grid items-start gap-6 lg:col-span-1">
             <div>
               <TextureCardStyled>
@@ -34,7 +93,11 @@ export default function TextureCardDemo() {
                 <TextureSeparator />
                 <TextureCardContent>
                   <div className="flex justify-center gap-2 mb-4">
-                    <TextureButton variant="icon" className="w-full">
+                    <TextureButton
+                      variant="icon"
+                      className="w-full"
+                      onClick={() => signIn('google')}
+                    >
                       {/* Google Icon */}
                       <svg
                         width="256"
@@ -66,13 +129,15 @@ export default function TextureCardDemo() {
                   </div>
                   <div className="text-center text-sm mb-4">or</div>
 
-                  <form className="flex flex-col gap-6">
+                  <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
                     <div>
                       <Label htmlFor="email">Email</Label>
                       <Input
                         id="email"
                         type="email"
                         required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         className="w-full px-4 py-2 rounded-md border border-neutral-300 dark:border-neutral-700 bg-white/80 dark:bg-neutral-800/80 placeholder-neutral-400 dark:placeholder-neutral-500"
                       />
                     </div>
@@ -82,31 +147,38 @@ export default function TextureCardDemo() {
                         id="password"
                         type="password"
                         required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         className="w-full px-4 py-2 rounded-md border border-neutral-300 dark:border-neutral-700 bg-white/80 dark:bg-neutral-800/80 placeholder-neutral-400 dark:placeholder-neutral-500"
                       />
                     </div>
+                    {error && <p className="text-red-500 text-sm">{error}</p>}
+                    <TextureButton variant="accent" className="w-full" type="submit">
+                      <div className="flex gap-1 items-center justify-center">
+                        Continue
+                        <ArrowRight className="h-4 w-4 text-neutral-50 mt-[1px]" />
+                      </div>
+                    </TextureButton>
                   </form>
                 </TextureCardContent>
                 <TextureSeparator />
                 <TextureCardFooter className="border-b rounded-b-sm">
-                  <TextureButton variant="accent" className="w-full">
-                    <div className="flex gap-1 items-center justify-center">
-                      Continue
-                      <ArrowRight className="h-4 w-4 text-neutral-50 mt-[1px]" />
-                    </div>
-                  </TextureButton>
-                </TextureCardFooter>
-
-                <div className="dark:bg-neutral-800 bg-stone-100 pt-px rounded-b-[20px] overflow-hidden ">
                   <div className="flex flex-col items-center justify-center">
                     <div className="py-2 px-2">
                       <div className="text-center text-sm">
-                        Don&apos;t have an account?{" "}
-                        <span className="text-primary">Sign Up</span>
+                        Don&apos;t have an account?{' '}
+                        <span
+                          className="text-primary cursor-pointer"
+                          onClick={() => router.push('/auth/sign-up')}
+                        >
+                          Sign Up
+                        </span>
                       </div>
                     </div>
                   </div>
-                  <TextureSeparator />
+                </TextureCardFooter>
+
+                <div className="dark:bg-neutral-800 bg-stone-100 pt-px rounded-b-[20px] overflow-hidden ">
                   <div className="flex flex-col items-center justify-center ">
                     <div className="py-2 px-2">
                       <div className="text-center text-xs ">
@@ -121,5 +193,5 @@ export default function TextureCardDemo() {
         </div>
       </div>
     </div>
-  );
+  )
 }
