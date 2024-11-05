@@ -21,8 +21,8 @@ export default function CreateTabs() {
   };
 
   return (
-    <div className="w-full   p-1 mt-0 md:mt-2">
-      <div className="bg-card/100 w-full flex flex-nowrap justify-evenly align-middle gap-1 p-2 mb-2">
+    <div className="w-full bg-card/100 mt-0 md:mt-2">
+      <div className=" shadow-md w-full flex flex-nowrap justify-evenly align-middle gap-1 p-2 mb-2">
         <Button
           onClick={handleIsgen}
           variant="outline"

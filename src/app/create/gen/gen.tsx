@@ -16,22 +16,18 @@ export const PrevGen = () => {
 
             {isgen ?
                 <div>
-                    <div  onClick={() => setIsgen(false)} className=' mb-[-60px] h-10 w-10 cursor-pointer bg-red-500'>
-                        <ArrowLeftIcon className="h-10 w-10" />
-                    </div>
-
-                    <CurrentGen />
+                    <CurrentGen cancel={setIsgen} />
                 </div>
 
                 :
                 <div>
 
-
-                    <div className='w-full py-5  flex justify-center align-middle border-dashed border-2 border-gray-500 mb-4'>
-                        <Button onClick={() => setIsgen(true)} className='text-xl font-medium ' variant='outline'>Generate Images</Button>
-                    </div>
+                    <div className='w-full py-5  flex justify-between align-middle mb-4'>
                     <p className='text-2xl font-semibold'>Recent Generation</p>
-                    <div className='w-full py-5  flex justify-center align-middle'>
+                        <Button onClick={() => setIsgen(true)} className='text-2xl font-medium bg-gradient-to-r from-indigo-500 to-purple-500 text-white dark:text-white' variant='outline'>Generate Images</Button>
+                    </div>
+                   
+                    <div className='bg-card/50 shadow-lg w-full py-5 mt-2  flex justify-center align-middle'>
                         <p className='text-base font-semibold text-gray-500'>No Images in Draft</p>
                     </div>
                 </div>
