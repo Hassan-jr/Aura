@@ -15,7 +15,7 @@ export async function POST(
     // Parse the request body
     const data = await request.json();
 
-    // Create a new WebhookData document
+    // Update the Feedback document
     if (data.status === "COMPLETED") {
       const polarity = data.output.polarity[0];
       const emotion = data.output.emotion[0];
