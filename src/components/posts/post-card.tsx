@@ -91,7 +91,7 @@ export default function PostCard({
       },
       webhook: `https://inprimeai.vercel.app/api/webhooks/feedback/${savedFeedback.id}`,
       policy: {
-        executionTimeout: 5000,
+        executionTimeout: 1000 * 60 * 3,
       },
     });
     console.log(result);
