@@ -77,7 +77,7 @@ const endpoint = runpod.endpoint(SENTIMENT_ENDPOINT_ID);
       "input": {
         "sentiments": [values.feedback],
       },
-      "webhook": `https://inprimeai.vercel.app/api/webhook/${savedFeedback.id}`,
+      "webhook": `https://inprimeai.vercel.app/api/webhooks/feedback/${savedFeedback.id}`,
       policy: {
         executionTimeout: 300,
       },
