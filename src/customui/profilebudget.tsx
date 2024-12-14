@@ -18,9 +18,6 @@ import { TextureButton } from "@/components/ui/texture-button";
 
 export function ProfileBadge() {
   const { data: session } = useSession();
-
-  console.log("Session:", session);
-
   return (
     <div>
       {session?.user ? (

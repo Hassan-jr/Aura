@@ -2,19 +2,32 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Heart, MessageCircle, Share2, Star } from 'lucide-react';
+import { Heart, MessageCircle, Share2, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { submitFeedback } from "@/actions/feedback.actions";
 import { useSession } from "next-auth/react";
-import { Textarea } from "@/components/ui/textarea"
-import { toast } from '@/components/ui/use-toast'
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/components/ui/use-toast";
 import runpodSdk from "runpod-sdk";
 
 interface PostCardProps {
@@ -23,7 +36,7 @@ interface PostCardProps {
   description: string;
   hashtags: string;
   images: string[];
-//   userId: string;
+  //   userId: string;
 }
 
 const formSchema = z.object({
@@ -56,16 +69,15 @@ export default function PostCard({
     },
   });
 
-const { RUNPOD_API_KEY, SENTIMENT_ENDPOINT_ID } = process.env;
-const runpod = runpodSdk(RUNPOD_API_KEY);
-const endpoint = runpod.endpoint(SENTIMENT_ENDPOINT_ID);
+  const runpod = runpodSdk(process.env.NEXT_PUBLIC_RUNPOD_API_KEY);
+  const endpoint = runpod.endpoint(process.env.NEXT_PUBLIC_SENTIMENT_ENDPOINT_ID);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const savedFeedback = await submitFeedback({
       feedback: values.feedback,
       productId: id,
       rating: values.rating,
-      userId:  session.user.id,
+      userId: session.user.id,
       polarity: [],
       emotion: [],
     });
@@ -74,10 +86,10 @@ const endpoint = runpod.endpoint(SENTIMENT_ENDPOINT_ID);
     console.log("savedFeedback id:", savedFeedback);
     // send to sentiment analysis
     const result = await endpoint.run({
-      "input": {
-        "sentiments": [values.feedback],
+      input: {
+        sentiments: [values.feedback],
       },
-      "webhook": `https://inprimeai.vercel.app/api/webhooks/feedback/${savedFeedback.id}`,
+      webhook: `https://inprimeai.vercel.app/api/webhooks/feedback/${savedFeedback.id}`,
       policy: {
         executionTimeout: 300,
       },
@@ -86,7 +98,7 @@ const endpoint = runpod.endpoint(SENTIMENT_ENDPOINT_ID);
     toast({
       variant: "default",
       title: "Feedback Submitted Successful",
-      description: '',
+      description: "",
     });
   }
 
@@ -157,7 +169,10 @@ const endpoint = runpod.endpoint(SENTIMENT_ENDPOINT_ID);
                   <DialogTitle>Give Feedback</DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-4"
+                  >
                     <FormField
                       control={form.control}
                       name="feedback"
@@ -165,7 +180,10 @@ const endpoint = runpod.endpoint(SENTIMENT_ENDPOINT_ID);
                         <FormItem>
                           <FormLabel>Feedback</FormLabel>
                           <FormControl>
-                            <Textarea placeholder="Enter your feedback" {...field} />
+                            <Textarea
+                              placeholder="Enter your feedback"
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -202,7 +220,12 @@ const endpoint = runpod.endpoint(SENTIMENT_ENDPOINT_ID);
                         </FormItem>
                       )}
                     />
-                    <Button type="submit" className="w-full bg-black text-white">Submit Feedback</Button>
+                    <Button
+                      type="submit"
+                      className="w-full bg-black text-white"
+                    >
+                      Submit Feedback
+                    </Button>
                   </form>
                 </Form>
               </DialogContent>
@@ -213,7 +236,9 @@ const endpoint = runpod.endpoint(SENTIMENT_ENDPOINT_ID);
               onClick={() => setIsShared(!isShared)}
               className={isShared ? "bg-blue-100" : ""}
             >
-              <Share2 className={isShared ? "fill-blue-500 text-blue-500" : ""} />
+              <Share2
+                className={isShared ? "fill-blue-500 text-blue-500" : ""}
+              />
             </Button>
           </div>
         </div>
