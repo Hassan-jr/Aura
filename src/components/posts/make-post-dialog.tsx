@@ -17,7 +17,7 @@ const formSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().min(1, 'Description is required'),
   hashtags: z.string().min(1, 'At least one hashtag is required'),
-  images: z.instanceof(FileList).refine((files) => files.length > 0, 'At least one image is required'),
+  images: z.any().refine((files) => files.length > 0, 'At least one image is required'),
 })
 
 export function MakePostDialog() {
