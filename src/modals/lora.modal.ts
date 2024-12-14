@@ -1,10 +1,6 @@
 import { Schema, model, models } from "mongoose";
 
 const loraSchema = new Schema({
-  clerkId: {
-    type: String,
-    required: true,
-  },
   userId: {
     type: String,
     required: true,

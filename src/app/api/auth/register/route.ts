@@ -8,7 +8,7 @@ import {connect} from "@/db"
 export async function POST(req: Request) {
   try {
     await connect();
-    const { name, email, username, password } = await req.json();
+    const { name, email, username, password, accountType } = await req.json();
 
     // Check if user already exists
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
@@ -29,6 +29,8 @@ export async function POST(req: Request) {
       email,
       username,
       password: hashedPassword,
+      accountType: accountType,
+      profileUrl: "",
       isGmail: false,
       verificationToken,
       verificationTokenExpiry,

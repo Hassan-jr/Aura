@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ReduxProvider } from "@/redux/provider";
 import { SessionProvider } from "next-auth/react"
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
@@ -27,6 +29,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={roboto.className}>
+      {/* <SidebarProvider>
+      <AppSidebar /> */}
         <SessionProvider>
           <ReduxProvider>
             <ThemeProvider>
@@ -35,6 +39,7 @@ export default function RootLayout({
             </ThemeProvider>
           </ReduxProvider>
         </SessionProvider>
+        {/* </SidebarProvider> */}
       </body>
     </html>
   );

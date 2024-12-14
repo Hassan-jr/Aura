@@ -8,7 +8,6 @@ interface ImageCaption {
 }
 
 export async function storeLoraData(data: {
-  clerkId: string;
   userId: string;
   characterName: string;
   tokenName: string;

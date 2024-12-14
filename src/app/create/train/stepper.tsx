@@ -200,7 +200,6 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
       setText2("Almost Done Uploading...");
       // save lora
       const mongoDbId = await storeLoraData({
-        clerkId: user_id_test, //user?.id,
         userId: user_id_test, //user?.publicMetadata?.userId as string,
         characterName: params.characterName,
         tokenName: params.token,
