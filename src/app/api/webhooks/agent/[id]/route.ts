@@ -1,14 +1,11 @@
 import mongoose from "mongoose";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { Agent } from "@/modals/agent.modal";
 import { connect } from "@/db";
 
-export async function POST(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: NextRequest) {
   try {
-    const { id } = params;
+    const id = request.nextUrl.pathname.split("/").pop();
     const body = await request.json();
 
     await connect();
