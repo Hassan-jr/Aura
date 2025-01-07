@@ -186,10 +186,10 @@ export function AIChat({ prevmessages, users, products }) {
             <CardTitle className="text-xl font-bold text-center z-50">
               <ProductSelect
                 products={filteredProducts}
-                onSelect={handleProductSelect}
-                selectedProductDetails={products.find(
-                  (product) => product._id === selectedProductId
-                )}
+                // onSelect={handleProductSelect}
+                // selectedProductDetails={products.find(
+                //   (product) => product._id === selectedProductId
+                // )}
               />
             </CardTitle>
           </CardHeader>

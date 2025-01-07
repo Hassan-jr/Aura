@@ -8,13 +8,13 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { selectProductId, setProductId } from "@/redux/slices/productId";
 
 export function ProductSelect({
-  products,
+  products
   // onSelect,
   // selectedProductDetails,
 }) {
   const dispatch = useAppDispatch();
   const selectedProductId = useAppSelector(selectProductId);
-  const [selectedProductDetails, setselectedProductDetails] = React.useState();
+  const [selectedProductDetails, setselectedProductDetails] = React.useState(products?.find((product) => product._id === products[0]?._id));
 
   React.useEffect(() => {
     if (!selectedProductId && products?.length > 0) {
