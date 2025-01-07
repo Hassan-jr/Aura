@@ -39,11 +39,11 @@ export default async function MailPage() {
       </div>
       <div className="hidden flex-col md:flex">
         <Mail
-          accounts={[]}
+          // accounts={[]}
           mails={data}
           defaultLayout={defaultLayout}
           defaultCollapsed={defaultCollapsed}
-          navCollapsedSize={4}
+          // navCollapsedSize={4}
         />
       </div>
     </>

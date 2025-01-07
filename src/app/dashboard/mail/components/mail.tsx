@@ -37,25 +37,11 @@ import { Nav } from "./nav"
 import { type Mail } from "../data"
 import { useMail } from "../use-mail"
 
-interface MailProps {
-  accounts: {
-    label: string
-    email: string
-    icon: React.ReactNode
-  }[]
-  mails: Mail[]
-  defaultLayout: number[] | undefined
-  defaultCollapsed?: boolean
-  navCollapsedSize: number
-}
-
 export function Mail({
-  accounts,
   mails,
   defaultLayout = [20, 32, 48],
   defaultCollapsed = false,
-  navCollapsedSize,
-}: MailProps) {
+}) {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed)
   const [mail] = useMail()
 
