@@ -33,17 +33,18 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { ProfileBadge } from "@/customui/profilebudget";
 
 // This is sample data.
 const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar: "https://r2.nomapos.com/model/hassanjr001%20(1).jpg",
   },
   teams: [
     {
-      name: "Watt Marketting Inc",
+      name: "Watt Marketting Inc 2",
       logo: GalleryVerticalEnd,
       plan: "Enterprise",
     },
@@ -82,7 +83,17 @@ const data = {
         },
         {
           title: "Customers",
-          url: "#",
+          url: "/dashboard/chat",
+          icon: SquareTerminal,
+        },
+        {
+          title: "Mails",
+          url: "/dashboard/mail",
+          icon: SquareTerminal,
+        },
+        {
+          title: "Connect Socials",
+          url: "/dashboard/social",
           icon: SquareTerminal,
         },
       ],
@@ -94,11 +105,11 @@ const data = {
       items: [
         {
           title: "Sentiment",
-          url: "#",
+          url: "/dashboard/sentiment",
         },
         {
-          title: "S.E.O and SM Analysis",
-          url: "#",
+          title: "S.E.O & SM Analysis Agent",
+          url: "/dashboard/agent",
         },
         {
           title: "Vision Model",
@@ -200,7 +211,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        {/* <NavUser user={data.user} /> */}
+        <ProfileBadge isDashboard={true} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

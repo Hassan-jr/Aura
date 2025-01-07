@@ -1,16 +1,20 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from "@reduxjs/toolkit";
 // Import your reducers here
-import exampleReducer from './slices/example';
-import trainloraSlice from './slices/trainlora'
+import exampleReducer from "./slices/example";
+import trainloraSlice from "./slices/trainlora";
+import productsSlice from "./slices/product";
+import productIdSlice  from "./slices/productId";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       // Add your reducers here
       example: exampleReducer,
-      trainlora: trainloraSlice
+      trainlora: trainloraSlice,
+      products: productsSlice,
+      productId: productIdSlice,
     },
-    devTools: process.env.NODE_ENV !== 'production',
+    devTools: process.env.NODE_ENV !== "production",
   });
 };
 
@@ -18,5 +22,5 @@ export const makeStore = () => {
 export type AppStore = ReturnType<typeof makeStore>;
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<AppStore['getState']>;
-export type AppDispatch = AppStore['dispatch'];
+export type RootState = ReturnType<AppStore["getState"]>;
+export type AppDispatch = AppStore["dispatch"];

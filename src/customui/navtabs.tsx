@@ -37,6 +37,11 @@ const pages = [
     icon: <BoxModelIcon className="h-5 w-5" />,
   },
   {
+    path: "/chat",
+    name: "Chats",
+    icon: <BoxModelIcon className="h-5 w-5" />,
+  },
+  {
     path: "/profile",
     name: "Profile",
     icon: <PersonIcon className="h-5 w-5" />,
