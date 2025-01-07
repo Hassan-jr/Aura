@@ -27,7 +27,7 @@ const { data: session } = useSession();
   const [customQuery, setCustomQuery] = useState('')
   const [runs, setRuns] = useState([])
   const { toast } = useToast()
-  const userId = session.user.id
+  const userId = session?.user.id
 
   const productTitle = 'iPhone 15' // This would come from your product JSON
 
@@ -62,8 +62,8 @@ const { data: session } = useSession();
 
     try {
 
-      const products= await getProducts()
-      const productId = products[0]._id.toString()
+    //   const products= await getProducts()
+      const productId = "675d535a0e36e390469f0a17" //products[0]._id.toString()
       const result = await createAgent(query, userId, productId)
       toast({
         title: 'Success',
@@ -85,7 +85,7 @@ const { data: session } = useSession();
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Previous Runs On Social Media and S.E.O Analysis</h1>
+        <h1 className="text-2xl font-bold">Previous Runs On Social Media and S.E.O Analysis {userId}</h1>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button className='bg-black text-white'>Make a new run</Button>
