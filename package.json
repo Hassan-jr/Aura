@@ -57,7 +57,7 @@
     "openai-edge": "^1.2.2",
     "p-limit": "^6.1.0",
     "react": "19.0.0-rc-69d4b800-20241021",
-    "react-day-picker": "^8.10.1",
+    "react-day-picker": "^9.5.0",
     "react-dom": "19.0.0-rc-69d4b800-20241021",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.54.1",
