@@ -24,7 +24,7 @@ export const connect = async () => {
     mongoose.connect(MONGODB_URL, {
       dbName: "shots",
       bufferCommands: false,
-      connectTimeoutMS: 30000,
+      connectTimeoutMS: 50000,
     });
 
   cached.conn = await cached.promise;

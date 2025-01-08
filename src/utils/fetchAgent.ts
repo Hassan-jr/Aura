@@ -19,8 +19,9 @@ export async function fetchAgent(userId: string) {
   } catch (error) {
     console.error('Error fetching agent:', error)
     throw error
-  } finally {
-    await mongoose.disconnect()
-  }
+  } 
+  // finally {
+  //   await mongoose.disconnect()
+  // }
 }
 
