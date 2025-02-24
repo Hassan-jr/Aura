@@ -26,6 +26,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { LoadingOverlay } from "@/components/LoadingOverlay";
+import { Button } from "@/components/ui/button";
+import insertUsers from "./inserData"
 
 export default function SignUp() {
   const [name, setName] = useState("");
@@ -96,6 +98,7 @@ export default function SignUp() {
         <div className="items-start justify-center gap-6 rounded-lg p-2 md:p-8 grid grid-cols-1">
           <div className="col-span-1 grid items-start gap-6 lg:col-span-1">
             <div>
+              {/* <Button className="w-full bg-black text-white" onClick={insertUsers}>Insert All Users Data</Button> */}
             <LoadingOverlay isLoading={isLoading} />
               <TextureCardStyled>
                 <TextureCardHeader className="flex flex-col gap-1 items-center justify-center p-4">

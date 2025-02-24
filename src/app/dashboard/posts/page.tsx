@@ -21,7 +21,7 @@ export default async function Home() {
      
       <div className="w-80 flex flex-row gap-1">
         {posts.map((post, index) => (
-          <PostCard key={index} id={post.id} title={post.title} description={post.description} hashtags={post.hashtags} images={post.images} />
+          <PostCard key={index} id={post.id} title={post.title} description={post.description} hashtags={post.hashtags} images={post?.images} />
         ))}
       </div>
     </main>

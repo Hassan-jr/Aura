@@ -40,18 +40,18 @@ export default function LoraDetails() {
       <div className="w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl grid grid-cols-1 md:grid-cols-2 z-20">
         {/* Character Name */}
         <div className="grid w-full max-w-sm items-center gap-1.5 m-1">
-          <Label htmlFor="character">Character Name</Label>
+          <Label htmlFor="character">Model Name</Label>
           <Input
             type="text"
             id="character"
-            placeholder="Character Name"
+            placeholder="Model Name"
             onChange={handleCharacterNameChange}
             required={true}
           />
         </div>
 
         {/* Gender */}
-        <div className="w-full max-w-sm items-center gap-1.5 m-1">
+        {/* <div className="w-full max-w-sm items-center gap-1.5 m-1">
           <Label htmlFor="gender">Gender</Label>
           <Select onValueChange={handleGenderChange}>
             <SelectTrigger>
@@ -74,7 +74,7 @@ export default function LoraDetails() {
               </SelectGroup>
             </SelectContent>
           </Select>
-        </div>
+        </div> */}
 
         {/* Token */}
         <div className="grid w-full max-w-sm items-center gap-1.5 m-1">

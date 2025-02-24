@@ -47,7 +47,7 @@ export default function PolarityChart({polarity}) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{highestScore.polarity} - {highestScore.score.toFixed(3)}</CardTitle>
+        <CardTitle>{highestScore?.polarity} - {highestScore?.score.toFixed(3)}</CardTitle>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

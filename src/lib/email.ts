@@ -2,17 +2,55 @@ import nodemailer from "nodemailer";
 import User from "@/modals/user.modal";
 import { Product } from "@/modals/product.modal";
 import { Discount } from "@/modals/discount.modal";
+import { EmailCredentialsModel } from "@/modals/email.modal";
 
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_SERVER_HOST,
-  port: process.env.EMAIL_SERVER_PORT,
-  auth: {
-    user: process.env.EMAIL_SERVER_USER,
-    pass: process.env.EMAIL_SERVER_PASSWORD,
-  },
-});
+
+let transporter: nodemailer.Transporter | null = null;
+
+async function initializeEmailTransporter() {
+  try {
+    // Get the active email settings from MongoDB
+    const emailSettings = await EmailCredentialsModel.find().lean();
+    // console.log("Email Settings:",emailSettings );
+    
+    
+    if (!emailSettings) {
+      throw new Error("No active email settings found in database");
+    }
+
+    // Create the transporter with database credentials
+    transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_SERVER_HOST,
+      port: process.env.EMAIL_SERVER_PORT,
+      auth: {
+        user: emailSettings[0].EMAIL_SERVER_USER,
+        pass: emailSettings[0].EMAIL_SERVER_PASSWORD
+      }
+    });
+
+    // Verify the connection
+    await transporter.verify();
+    console.log("DB Email transporter initialized successfully");
+    
+    return transporter;
+  } catch (error) {
+    console.error("Failed to initialize email transporter:", error);
+    // Fallback to environment variables if database connection fails
+    return nodemailer.createTransport({
+      host: process.env.EMAIL_SERVER_HOST,
+      port: process.env.EMAIL_SERVER_PORT,
+      auth: {
+        user: process.env.EMAIL_SERVER_USER,
+        pass: process.env.EMAIL_SERVER_PASSWORD,
+      }
+    });
+  }
+}
 
 export async function sendVerificationEmail(to: string, token: string) {
+  if (!transporter) {
+    await initializeEmailTransporter();
+  }
   const verificationUrl = `${process.env.NEXTAUTH_URL}/auth/verify-email?token=${token}`;
 
   await transporter.sendMail({
@@ -32,6 +70,9 @@ export async function sendDiscountEmail(
   productId: string,
   expiryDate: Date
 ) {
+  if (!transporter) {
+    await initializeEmailTransporter();
+  }
   const user = await User.findById(userId);
 
   const product = await Product.findById(productId);
@@ -132,6 +173,9 @@ export async function sendInvoiceEmail(
   expiryDate: Date,
   qty: number
 ) {
+  if (!transporter) {
+    await initializeEmailTransporter();
+  }
   const currentDate = new Date();
 
   const user = await User.findById(userId);

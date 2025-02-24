@@ -1,0 +1,100 @@
+"use server";
+import { connect } from "@/db";
+import { Feedback } from "@/modals/feedback.modal";
+import UserModel from "@/modals/user.modal";
+import { Product } from "@/modals/product.modal";
+import { Agent } from "@/modals/agent.modal";
+import { ChatMessage } from "@/modals/chatMessage.modal";
+import {EmailCredentialsModel} from "@/modals/email.modal"
+
+export async function getFeedbacks() {
+  await connect();
+  const feedback = await Feedback.find().lean().sort({ createdAt: -1 });
+  return JSON.parse(
+    JSON.stringify(
+      feedback.map((doc) => ({
+        ...doc,
+        _id: doc._id.toString(),
+        createdAt: doc.createdAt?.toISOString(),
+        updatedAt: doc.updatedAt?.toISOString(),
+      }))
+    )
+  );
+}
+
+export async function getProducts() {
+  
+  await connect();
+  const products = await Product.find().lean().sort({ createdAt: +1 });
+  return JSON.parse(
+    JSON.stringify(
+      products.map((doc) => ({
+        ...doc,
+        _id: doc._id.toString(),
+        createdAt: doc.createdAt?.toISOString(),
+        updatedAt: doc.updatedAt?.toISOString(),
+      }))
+    )
+  );
+}
+
+export async function getEmails() {
+  await connect();
+  const products = await EmailCredentialsModel.find().lean().sort({ createdAt: +1 });
+  return JSON.parse(
+    JSON.stringify(
+      products.map((doc) => ({
+        ...doc,
+        _id: doc._id.toString(),
+        createdAt: doc.createdAt?.toISOString(),
+        updatedAt: doc.updatedAt?.toISOString(),
+      }))
+    )
+  );
+}
+
+export async function getUsers() {
+  await connect();
+  const users = await UserModel.find().lean().sort({ createdAt: -1 });
+  return JSON.parse(
+    JSON.stringify(
+      users.map((doc) => ({
+        ...doc,
+        _id: doc._id.toString(),
+        createdAt: doc.createdAt?.toISOString(),
+        updatedAt: doc.updatedAt?.toISOString(),
+      }))
+    )
+  );
+}
+
+export async function fetchAgent(userId: string) {
+  try {
+    await connect();
+
+    const agent = await Agent.find({ userId })
+      .sort({ createdAt: -1 })
+      .limit(10)
+      .lean();
+
+    return agent;
+  } catch (error) {
+    console.error("Error fetching agent:", error);
+    throw error;
+  }
+}
+
+export async function findChatsForEmail(from: string, bid: string) {
+  const users = await UserModel.find({ email: from })
+    .lean()
+    .sort({ createdAt: -1 });
+  const userId = JSON.parse(JSON.stringify(users[0]._id.toString()));
+
+  const messages = await ChatMessage.find({ userId: userId, bId: bid })
+    .lean()
+    .sort({ createdAt: -1 });
+
+  const productId = messages[0].productId
+
+  return { messages, userId, productId };
+}

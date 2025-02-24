@@ -34,6 +34,8 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { ProfileBadge } from "@/customui/profilebudget";
+import { getProducts } from "@/actions/fetch.actions";
+import { useSelector } from "react-redux";
 
 // This is sample data.
 const data = {
@@ -44,9 +46,9 @@ const data = {
   },
   teams: [
     {
-      name: "Watt Marketting Inc 2",
+      name: "Watt 4 Marketting",
       logo: GalleryVerticalEnd,
-      plan: "Enterprise",
+      plan: "",
     },
     {
       name: "Acme Corp",
@@ -81,13 +83,20 @@ const data = {
           url: "/dashboard/posts",
           icon: SquareTerminal,
         },
+      ],
+    },
+    {
+      title: "Customer & Socials",
+      url: "#",
+      icon: Bot,
+      items: [
         {
-          title: "Customers",
+          title: "Customers Engagement",
           url: "/dashboard/chat",
           icon: SquareTerminal,
         },
         {
-          title: "Mails",
+          title: "E-mail Marketting",
           url: "/dashboard/mail",
           icon: SquareTerminal,
         },
@@ -104,7 +113,7 @@ const data = {
       icon: Bot,
       items: [
         {
-          title: "Sentiment",
+          title: "Sentiment Analysis",
           url: "/dashboard/sentiment",
         },
         {
@@ -113,30 +122,11 @@ const data = {
         },
         {
           title: "Vision Model",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
+          url: "/dashboard/vision",
         },
         {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
+          title: "Campaign Automation",
+          url: "/dashboard/campaign",
         },
       ],
     },
@@ -146,11 +136,11 @@ const data = {
       icon: Settings2,
       items: [
         {
-          title: "General",
+          title: "General Setting",
           url: "#",
         },
         {
-          title: "Team",
+          title: "Webhook Integration",
           url: "#",
         },
         {
@@ -164,26 +154,42 @@ const data = {
       ],
     },
   ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  // const [products, setProducts] = React.useState([]);
+  // const [loading, setLoading] = React.useState(false);
+
+  // React.useEffect(() => {
+  //   const fetchProductData = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const data = await getProducts();
+  //       setProducts(
+  //         data.map((dat) => ({
+  //           name: dat.title,
+  //           logo: GalleryVerticalEnd,
+  //           plan: "",
+  //         }))
+  //       );
+  //       setLoading(false);
+  //     } catch (error) {
+  //       console.log("Error Fetching Products in sidebar", error);
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchProductData();
+  // }, []);
+
+  // console.log("products:", products);
+
+  const products = useSelector((state) => state?.products);
+
+  console.log("Products in sidebar:", products[0]);
+  
+  
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -199,7 +205,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton isActive={item.isActive}>
-                    {item.icon && <item.icon />}
+                      {item.icon && <item.icon />}
                       <a href={item.url}>{item.title}</a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -208,7 +214,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarGroupContent>
           </SidebarGroup>
         ))}
-        <NavProjects projects={data.projects} />
+        {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
         {/* <NavUser user={data.user} /> */}

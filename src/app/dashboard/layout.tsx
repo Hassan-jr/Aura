@@ -1,5 +1,5 @@
+"use client";
 import { AppSidebar } from "@/components/app-sidebar";
-import ChartTEST from "@/components/charts/test";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,12 +14,41 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import React from "react";
+import { getProducts } from "@/actions/fetch.actions";
+import { useDispatch } from "react-redux";
+import { setProducts } from "@/redux/slices/product";
 
 export default function Page({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // fetch data here
+  // const [products, setProducts] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        setLoading(true);
+        const data = await getProducts();
+        // setProducts(data);
+        dispatch(setProducts(data));
+        setLoading(false);
+      } catch (error) {
+        console.log("Error Fetching Products in sidebar", error);
+        setLoading(false);
+      }
+    };
+
+    fetchProductData();
+  }, []);
+
+  // console.log("products 2:", products);
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -31,13 +60,11 @@ export default function Page({
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
-                  </BreadcrumbLink>
+                  <BreadcrumbLink href="#">Dashboard</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                  <BreadcrumbPage></BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>

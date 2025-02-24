@@ -187,12 +187,12 @@ export default async function ChatPage() {
           />
         </TabsContent>
         <TabsContent value="meetings">
-          <InvoiceCards
+          {/* <InvoiceCards
             invoices={finalInvoices}
             products={finalProducts}
             discounts={finalDiscounts}
             users={InvoicesUsers}
-          />
+          /> */}
         </TabsContent>
       </Tabs>
     </div>

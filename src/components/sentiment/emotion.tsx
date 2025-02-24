@@ -47,7 +47,7 @@ export default function EmotionChart({emotion}) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{highestScore.emotion} - {highestScore.score.toFixed(3)}</CardTitle>
+        <CardTitle>{highestScore?.emotion} - {highestScore?.score.toFixed(3)}</CardTitle>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

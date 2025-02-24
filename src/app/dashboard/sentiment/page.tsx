@@ -1,7 +1,8 @@
 import { SentimentTable } from "@/components/sentiment/sentimentTable";
-import { getFeedbacks, getProducts, getUsers } from "@/utils/fetch";
-
-
+import { getFeedbacks, getProducts, getUsers } from "@/actions/fetch.actions";
+// import { FilterComponent } from "../../../components/sentiment/component/FilterComponent";
+import { Card } from "@/components/ui/card";
+import InsertFeed from "./insert";
 
 export default async function Home() {
   const products = await getProducts();

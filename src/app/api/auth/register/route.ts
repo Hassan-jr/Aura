@@ -32,12 +32,13 @@ export async function POST(req: Request) {
       accountType: accountType,
       profileUrl: "",
       isGmail: false,
+      emailVerified: true,
       verificationToken,
       verificationTokenExpiry,
     });
 
     // Send verification email
-    await sendVerificationEmail(email, verificationToken);
+    // await sendVerificationEmail(email, verificationToken);
 
     return NextResponse.json({ message: "User registered successfully" }, { status: 201 });
   } catch (error) {

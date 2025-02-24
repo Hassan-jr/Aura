@@ -38,7 +38,7 @@ export async function createAgent(
     //   }),
     // })
 
-    const response = await axios.post(
+    const response = axios.post(
       "https://social-media-seo-agent.onrender.com/api/agent",
       {
         query,
@@ -59,9 +59,9 @@ export async function createAgent(
     //   throw new Error('Failed to start analysis')
     // }
 
-    if (response.status !== 200) {
-      throw new Error("Failed to start analysis");
-    }
+    // if (response.status !== 200) {
+    //   throw new Error("Failed to start analysis");
+    // }
 
     return { mongodbId: agent._id.toString() };
   } catch (error) {

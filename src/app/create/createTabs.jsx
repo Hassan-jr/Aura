@@ -24,32 +24,30 @@ export default function CreateTabs() {
     <div className="w-full bg-card/100 mt-0 md:mt-2">
       <div className=" shadow-md w-full flex flex-nowrap justify-evenly align-middle gap-1 p-2 mb-2">
         <Button
-          onClick={handleIsgen}
-          variant="outline"
-          className={
-            isgen
-              ? "w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white dark:text-white"
-              : "w-full text-white dark:text-black"
-          }
-        >
-          Generate Images
-        </Button>
-        <Button
           onClick={handleIstrain}
           variant="outline"
           className={
             istrain
               ? "w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white dark:text-white"
-              : "w-full text-white dark:text-black"
+              : "w-full dark:text-black text-black"
           }
         >
           Train Your Models
         </Button>
+        <Button
+          onClick={handleIsgen}
+          variant="outline"
+          className={
+            isgen
+              ? "w-full bg-gradient-to-r from-indigo-500 to-purple-500 dark:text-white"
+              : "w-full  dark:text-black text-black"
+          }
+        >
+          Generate Visuals
+        </Button>
       </div>
 
-      {isgen === true && (
-        <PrevGen />
-      )}
+      {isgen === true && <PrevGen />}
 
       {istrain === true && <Train />}
     </div>

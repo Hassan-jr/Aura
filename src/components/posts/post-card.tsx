@@ -30,14 +30,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import runpodSdk from "runpod-sdk";
 
-interface PostCardProps {
-  id: string;
-  title: string;
-  description: string;
-  hashtags: string;
-  images: string[];
-  //   userId: string;
-}
+// interface PostCardProps {
+//   id: string;
+//   title: string;
+//   description: string;
+//   hashtags: string;
+//   images: string[];
+//   bid: string,
+//   products: []
+//   //   userId: string;
+// }
 
 const formSchema = z.object({
   feedback: z.string().min(1, "Feedback is required"),
@@ -50,12 +52,16 @@ export default function PostCard({
   description,
   images,
   hashtags,
-}: PostCardProps) {
+  bid,
+  products,
+}) {
   const [mainImage, setMainImage] = useState(0);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [isShared, setIsShared] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  const url = "https://r2.nomapos.com"
 
   const { data: session } = useSession();
 
@@ -70,7 +76,50 @@ export default function PostCard({
   });
 
   const runpod = runpodSdk(process.env.NEXT_PUBLIC_RUNPOD_API_KEY);
-  const endpoint = runpod.endpoint(process.env.NEXT_PUBLIC_SENTIMENT_ENDPOINT_ID);
+  const endpoint = runpod.endpoint(
+    process.env.NEXT_PUBLIC_SENTIMENT_ENDPOINT_ID
+  );
+
+  const sendMessage = async (
+    messages,
+    productId,
+    userId,
+    bId,
+    productDetails
+  ) => {
+    try {
+      const response = await fetch("http://localhost:3000/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: messages,
+          productId: productId,
+          userId: userId,
+          bId: bId,
+          productDetails: productDetails,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get response");
+      }
+
+      toast({
+        variant: "default",
+        title: "Email Reply Sent Successfuly",
+        description: "",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "An Error Occurred While replying to email",
+        description: "",
+      });
+      console.error("Error:", error);
+    }
+  };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const savedFeedback = await submitFeedback({
@@ -95,6 +144,19 @@ export default function PostCard({
       },
     });
     console.log(result);
+
+    // start a chat
+
+    const userMessage = {
+      userId: session.user.id,
+      bId: bid,
+      productId: id,
+      role: "user",
+      content: values.feedback,
+    };
+    const messages = [userMessage];
+    const productDetails = products.find((product) => product._id === id);
+    await sendMessage(messages, id, session.user.id, bid, productDetails);
     toast({
       variant: "default",
       title: "Feedback Submitted Successful",
@@ -116,7 +178,7 @@ export default function PostCard({
                 }`}
               >
                 <Image
-                  src={`https://r2.nomapos.com/${img}`}
+                  src={`${url}/${img}`}
                   alt={`${title} - Thumbnail ${index + 1}`}
                   fill
                   className="object-cover"
@@ -126,7 +188,7 @@ export default function PostCard({
           </div>
           <div className="aspect-square">
             <Image
-              src={`https://r2.nomapos.com/${images[mainImage]}`}
+              src={`${url}/${images[mainImage]}`}
               alt={`${title} - Image ${mainImage + 1}`}
               fill
               className="object-cover"
