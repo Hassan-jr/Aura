@@ -5,9 +5,12 @@ import UserModel from "@/modals/user.modal";
 import { Product } from "@/modals/product.modal";
 import { Agent } from "@/modals/agent.modal";
 import { ChatMessage } from "@/modals/chatMessage.modal";
-import {EmailCredentialsModel} from "@/modals/email.modal"
+import { EmailCredentialsModel } from "@/modals/email.modal";
+import { auth } from "@/app/auth";
+import { Post } from "@/modals/post.modal";
 
 export async function getFeedbacks() {
+
   await connect();
   const feedback = await Feedback.find().lean().sort({ createdAt: -1 });
   return JSON.parse(
@@ -23,9 +26,29 @@ export async function getFeedbacks() {
 }
 
 export async function getProducts() {
-  
   await connect();
-  const products = await Product.find().lean().sort({ createdAt: +1 });
+  const user = await auth();
+  const products = await Product.find({ userId: user?.user?.id })
+    .lean()
+    .sort({ createdAt: +1 });
+  return JSON.parse(
+    JSON.stringify(
+      products.map((doc) => ({
+        ...doc,
+        _id: doc._id.toString(),
+        createdAt: doc.createdAt?.toISOString(),
+        updatedAt: doc.updatedAt?.toISOString(),
+      }))
+    )
+  );
+}
+
+export async function getPosts() {
+  await connect();
+  const user = await auth();
+  const products = await Post.find({ userId: user?.user?.id })
+    .lean()
+    .sort({ createdAt: +1 });
   return JSON.parse(
     JSON.stringify(
       products.map((doc) => ({
@@ -40,7 +63,9 @@ export async function getProducts() {
 
 export async function getEmails() {
   await connect();
-  const products = await EmailCredentialsModel.find().lean().sort({ createdAt: +1 });
+  const products = await EmailCredentialsModel.find()
+    .lean()
+    .sort({ createdAt: +1 });
   return JSON.parse(
     JSON.stringify(
       products.map((doc) => ({
@@ -94,7 +119,7 @@ export async function findChatsForEmail(from: string, bid: string) {
     .lean()
     .sort({ createdAt: -1 });
 
-  const productId = messages[0].productId
+  const productId = messages[0].productId;
 
   return { messages, userId, productId };
 }

@@ -19,7 +19,7 @@ export default async function Home() {
       <div className="">
         <SentimentTable
           feedbacks={feedbacks}
-          products={products}
+          // products={products}
           users={users}
         />
       </div>

@@ -19,8 +19,11 @@ import { createAgent } from "@/actions/createAgent.action";
 import { fetchAgent } from "@/utils/fetchAgent";
 import { useSession } from "next-auth/react";
 import { RunDisplay } from "./RunDisplay";
+import { useAppSelector } from "@/redux/hooks";
+import { selectProductId } from "@/redux/slices/productId";
+import { Card } from "@/components/ui/card";
 
-export default function AnalysisComponent({products}) {
+export default function AnalysisComponent({ products }) {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const [queryType, setQueryType] = useState("product");
@@ -30,7 +33,9 @@ export default function AnalysisComponent({products}) {
 
   const userId = session?.user.id;
 
-  const productTitle = products[0].title
+  const productTitle = products[0].title;
+
+  const productId = useAppSelector(selectProductId);
 
   useEffect(() => {
     const loadRuns = async () => {
@@ -62,8 +67,6 @@ export default function AnalysisComponent({products}) {
     }
 
     try {
-          //   const products= await getProducts()
-      const productId = "675d535a0e36e390469f0a17" //products[0]._id.toString()
       const result = await createAgent(query, userId, productId);
       toast({
         title: "Success",
@@ -82,6 +85,13 @@ export default function AnalysisComponent({products}) {
     }
   };
 
+  const [productAgentRuns, setproductAgentRuns] = useState([]);
+
+  useEffect(() => {
+    const filteredPosts = runs?.filter((run) => run.productId == productId);
+    setproductAgentRuns(filteredPosts);
+  }, [productId, runs]);
+
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
@@ -90,7 +100,9 @@ export default function AnalysisComponent({products}) {
         </h1>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-black text-white hover:bg-slate-500">Make a new run</Button>
+            <Button className="bg-black text-white hover:bg-slate-500">
+              Make a new run
+            </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
@@ -144,17 +156,28 @@ export default function AnalysisComponent({products}) {
                 )}
               </div>
               <DialogFooter>
-                <Button className="bg-black text-white hover:bg-slate-500" type="submit">Start Analysis</Button>
+                <Button
+                  className="bg-black text-white hover:bg-slate-500"
+                  type="submit"
+                >
+                  Start Analysis
+                </Button>
               </DialogFooter>
             </form>
           </DialogContent>
         </Dialog>
       </div>
       <div className="space-y-4">
-        {runs.map((run) => (
+        {productAgentRuns.map((run) => (
           <RunDisplay key={run._id} run={run} />
         ))}
       </div>
+
+      {productAgentRuns.length == 0 && (
+        <Card className="p-5 w-64 mx-auto">
+          No Agentic Runs for this product
+        </Card>
+      )}
     </div>
   );
 }

@@ -16,18 +16,19 @@ export function Usersidebar({
   selectedUserId,
   onSelectUser,
   isUserSide = false,
+  messages,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredusers = users.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredusers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase()) && messages.some(message => message.userId === user._id)
   );
 
   return (
     <Sidebar
       className={` ${
-        isUserSide ? "absolute top-14 ml-[350px]" : "absolute top-28 ml-[35px]"
-      } rounded-lg mt-[150px] h-[65%]`}
+        isUserSide ? "absolute top-0 ml-[350px]" : "absolute top-28 ml-[35px]"
+      } rounded-lg mt-[0px] h-[65%]`}
     >
       <SidebarHeader className="border-b px-4 py-2">
         <Input

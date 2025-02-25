@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import { FilterComponent } from "./component/FilterComponent";
 import { Card } from "@/components/ui/card";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import CustomerCard from "@/components/sentiment/userCard";
 import PolarityChart from "./polarity";
@@ -20,19 +20,31 @@ import EmotionChart from "./emotion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PieChartComponent from "./chart/pie";
 import { BarChartComponent } from "./chart/bar";
+import { useAppSelector } from "@/redux/hooks";
+import { selectProductId } from "@/redux/slices/productId";
 
-export function SentimentTable({ feedbacks, products, users }) {
-  const [filteredFeedbacks, setFilteredFeedbacks] = useState(feedbacks);
+export function SentimentTable({ feedbacks, users }) {
+  const productId = useAppSelector(selectProductId);
+  const [productSentiments, setproductSentiments] = useState([]);
+  const [filteredFeedbacks, setFilteredFeedbacks] = useState([]);
   const [sentimentClass, setSentimentClass] = useState({
     polarity: [],
     emotion: [],
     rating: [],
-  })
+  });
+
+  useEffect(() => {
+    const filteredPosts = feedbacks?.filter(
+      (feedback) => feedback.productId == productId
+    );
+    setproductSentiments(filteredPosts);
+    setFilteredFeedbacks(filteredPosts);
+  }, [productId]);
   return (
     <div>
       <Card className="container mx-auto p-4">
         <FilterComponent
-          data={feedbacks}
+          data={productSentiments}
           setFilteredFeedbacks={setFilteredFeedbacks}
           setSentimentClass={setSentimentClass}
         />
@@ -89,7 +101,7 @@ export function SentimentTable({ feedbacks, products, users }) {
         </TabsContent>
         <TabsContent value="chart">
           <PieChartComponent data={filteredFeedbacks} />
-          <BarChartComponent  data={filteredFeedbacks} />
+          <BarChartComponent data={filteredFeedbacks} />
         </TabsContent>
         <TabsContent value="analysis"></TabsContent>
       </Tabs>

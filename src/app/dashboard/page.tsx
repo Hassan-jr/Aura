@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 export default async function DashboardPage() {
   const feedbacks = await getFeedbacks();
 
-  console.log("feedbacks:", feedbacks);
+  // console.log("feedbacks:", feedbacks);
   
   return (
     <>

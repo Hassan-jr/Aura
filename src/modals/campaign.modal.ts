@@ -2,18 +2,21 @@ import mongoose from "mongoose";
 
 const CampaignSchema = new mongoose.Schema(
   {
+    title: {
+      type: String,
+      required: [true, "Campagin Title is required"],
+    },
     userId: {
       type: String,
       required: [true, "User ID is required"],
     },
     productId: {
       type: String,
-      required: [true, "User ID is required"],
+      required: [true, "Product ID is required"],
     },
     runId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Run",
-      required: [true, "Run ID is required"],
     },
     frequency: {
       type: String,

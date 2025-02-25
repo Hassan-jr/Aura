@@ -4,14 +4,28 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { CalendarIcon, PackageIcon, UserIcon, DollarSignIcon, PercentIcon } from 'lucide-react'
+import { useAppSelector } from "@/redux/hooks"
+import { selectProductId } from "@/redux/slices/productId"
+import { useEffect, useState } from "react"
 
 
 export default function InvoiceCards({invoices, users, products, discounts}) {
   const currentDate = new Date();
 
+    const productId = useAppSelector(selectProductId);
+  
+    const [productInvoices, setproductInvoices] = useState([]);
+  
+    useEffect(() => {
+      const filteredPosts = invoices?.filter(
+        (inv) => inv.productId == productId
+      );
+      setproductInvoices(filteredPosts);
+    }, [productId]);
+
   return (
     <div className="space-y-4">
-      {invoices.map((invoice) => {
+      {productInvoices.map((invoice) => {
         const user = users.find(u => u._id === invoice.userId)
         const product = products.find(p => p._id === invoice.productId)
         const discount = discounts.find(d => d.productId === invoice.productId && d.userId === invoice.userId)
@@ -98,6 +112,11 @@ export default function InvoiceCards({invoices, users, products, discounts}) {
           </Card>
         )
       })}
+
+        {/* no posts */}
+        {productInvoices.length == 0 && (
+        <Card className="p-5 w-64 mx-auto">No Invoices available for this product</Card>
+      )}
     </div>
   )
 }

@@ -47,7 +47,6 @@ export default function Page({
     fetchProductData();
   }, []);
 
-  // console.log("products 2:", products);
 
   return (
     <SidebarProvider>

@@ -36,6 +36,9 @@ import {
 import { ProfileBadge } from "@/customui/profilebudget";
 import { getProducts } from "@/actions/fetch.actions";
 import { useSelector } from "react-redux";
+import { selectProducts } from "@/redux/slices/product";
+import { useAppSelector } from "@/redux/hooks";
+import Link from "next/link";
 
 // This is sample data.
 const data = {
@@ -157,43 +160,32 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  // const [products, setProducts] = React.useState([]);
-  // const [loading, setLoading] = React.useState(false);
+  const [productTeam, setproductTeam] = React.useState([
+    {
+      name: "",
+      logo: GalleryVerticalEnd,
+      plan: "",
+      id: "",
+    },
+  ]);
 
-  // React.useEffect(() => {
-  //   const fetchProductData = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const data = await getProducts();
-  //       setProducts(
-  //         data.map((dat) => ({
-  //           name: dat.title,
-  //           logo: GalleryVerticalEnd,
-  //           plan: "",
-  //         }))
-  //       );
-  //       setLoading(false);
-  //     } catch (error) {
-  //       console.log("Error Fetching Products in sidebar", error);
-  //       setLoading(false);
-  //     }
-  //   };
+  const products = useAppSelector(selectProducts);
 
-  //   fetchProductData();
-  // }, []);
+  React.useEffect(() => {
+    const team = products?.map((pro) => ({
+      name: pro?.title,
+      logo: GalleryVerticalEnd,
+      plan: pro?.description,
+      id: pro?._id
+    }));
 
-  // console.log("products:", products);
-
-  const products = useSelector((state) => state?.products);
-
-  console.log("Products in sidebar:", products[0]);
-  
-  
+    setproductTeam(team);
+  }, [products]);
 
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <TeamSwitcher teams={productTeam} />
       </SidebarHeader>
       <SidebarContent>
         {/* <NavMain items={data.navMain} /> */}
@@ -206,7 +198,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton isActive={item.isActive}>
                       {item.icon && <item.icon />}
-                      <a href={item.url}>{item.title}</a>
+                      <Link href={item.url} prefetch={true}>{item.title}</Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}

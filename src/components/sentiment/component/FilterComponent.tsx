@@ -146,11 +146,10 @@ export const FilterComponent = ({ data, setFilteredFeedbacks, setSentimentClass 
         </div>
       </div>
 
-      <div>
+      {/* <div>
         <h3 className="text-lg font-medium">Filtered Results</h3>
-        <p>Number of items: {filteredData.length}</p>
-        {/* You can display more details about the filtered data here */}
-      </div>
+        <p>Number of Sentiment Feedbacks: {filteredData.length}</p>
+      </div> */}
     </div>
   );
 };

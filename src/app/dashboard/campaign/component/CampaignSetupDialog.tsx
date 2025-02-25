@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -25,6 +25,8 @@ import { Card } from "@/components/ui/card";
 import { FilterComponent } from "@/components/sentiment/component/FilterComponent";
 import { RunDisplay } from "../../agent/components/RunDisplay";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
+import { useAppSelector } from "@/redux/hooks";
+import { selectProductId } from "@/redux/slices/productId";
 
 export function CampaignSetupDialog({
   open,
@@ -34,9 +36,24 @@ export function CampaignSetupDialog({
   feedbacks,
   runs,
 }) {
+  const getCurrentDateTime = () => {
+    const now = new Date();
+    now.setHours(now.getHours() + 1);
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
+    const day = String(now.getDate()).padStart(2, "0");
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
+  const productId = useAppSelector(selectProductId);
+  const [productSentiments, setproductSentiments] = useState([]);
+
+  const [title, setTitle] = useState("");
   const [runId, setRunId] = useState("");
   const [frequency, setFrequency] = useState("daily");
-  const [scheduledTime, setScheduledTime] = useState("");
+  const [scheduledTime, setScheduledTime] = useState(getCurrentDateTime());
   const [outputType, setOutputType] = useState("photos");
   const [numberOfPhotos, setNumberOfPhotos] = useState(4);
   const [publishSites, setPublishSites] = useState({
@@ -53,8 +70,13 @@ export function CampaignSetupDialog({
     rating: [],
   });
 
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(true);
 
+  const handleTitleChange = (e) => {
+    e.preventDefault();
+
+    setTitle(e.target.value);
+  };
   const handleCheckedChange = (checked: boolean) => {
     setChecked(checked);
     // onToggle(checked)
@@ -63,9 +85,10 @@ export function CampaignSetupDialog({
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const campaignData = {
+      title,
       sentimentClass,
       newRun: checked,
-      productId: feedbacks[0].productId,
+      productId: productId,
       userId,
       runId,
       frequency,
@@ -74,8 +97,6 @@ export function CampaignSetupDialog({
       numberOfPhotos,
       publishSites,
     };
-
-    console.log("campaignData:", campaignData);
     const result = await createCampaign(campaignData);
     if (result.success) {
       toast({
@@ -95,6 +116,13 @@ export function CampaignSetupDialog({
 
   const [filteredFeedbacks, setFilteredFeedbacks] = useState(feedbacks);
 
+  useEffect(() => {
+    const filteredPosts = feedbacks?.filter(
+      (feedback) => feedback.productId == productId
+    );
+    setproductSentiments(filteredPosts);
+    setFilteredFeedbacks(filteredPosts);
+  }, [productId]);
 
   // Function to get the selected run
   const getSelectedRun = () => runs.find((run) => run._id === runId);
@@ -110,15 +138,39 @@ export function CampaignSetupDialog({
           onSubmit={handleSubmit}
           className="space-y-4 overflow-y-auto relative"
         >
+          <div>
+            <Label
+              htmlFor="campaign-title"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Campagin Title
+            </Label>
+            <Input
+              id="campaign-title"
+              type="text"
+              placeholder="Campagin Title"
+              value={title}
+              onChange={handleTitleChange}
+              className="mx-1"
+              required={true}
+            />
+          </div>
           <Card className="container mx-auto p-4">
+            <h1 className="text-xl font-bold ml-[-10px] mb-1 text-blue-700">
+              Select Sentiment Class
+            </h1>
             <FilterComponent
-              data={feedbacks}
+              data={productSentiments}
               setFilteredFeedbacks={setFilteredFeedbacks}
               setSentimentClass={setSentimentClass}
             />
           </Card>
 
-          <Select2.Root value={runId} onValueChange={setRunId}>
+          <Select2.Root
+            value={runId}
+            onValueChange={setRunId}
+            disabled={checked}
+          >
             <Select2.Trigger className=" w-full mx-auto inline-flex items-center justify-between rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
               <Select2.Value
                 placeholder="Select from previous S.E.O Agent Runs"
@@ -168,7 +220,7 @@ export function CampaignSetupDialog({
               htmlFor="new-run"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              Make a new run every time
+              Make a new agentic run every time
             </Label>
           </div>
 
@@ -189,7 +241,7 @@ export function CampaignSetupDialog({
 
           {frequency !== "now" && (
             <div>
-              <Label htmlFor="scheduledTime">Scheduled Time</Label>
+              <Label htmlFor="scheduledTime">Start Date</Label>
               <Input
                 type="datetime-local"
                 id="scheduledTime"

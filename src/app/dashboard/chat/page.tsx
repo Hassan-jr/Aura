@@ -8,23 +8,9 @@ import { Product } from "@/modals/product.modal";
 import { Discount } from "@/modals/discount.modal";
 import { Invoice } from "@/modals/invoice.modal";
 
-// ui
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DiscountCards from "@/components/discounts/discount";
 import InvoiceCards from "@/components/invoice/invoice";
-import { ProductSelect } from "@/components/chat/chat-product-select";
-import { AddProductDialog } from "@/components/product/add-product-popover";
 
 // chats
 async function getChats(id: string) {
@@ -150,20 +136,14 @@ export default async function ChatPage() {
 
   return (
     <div className="mx-5">
-      <div className="w-full flex flex-row justify-between align-middle mb-5">
-        <h1 className="text-2xl font-bold mb-4">Product Management</h1>
-        <AddProductDialog />
-      </div>
-      <div className="mt-0 mb-2">
-        <ProductSelect products={finalProducts} />
-      </div>
 
       <Tabs defaultValue="account" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="account">Customer Engagement</TabsTrigger>
           <TabsTrigger value="discounts">Discounts</TabsTrigger>
           <TabsTrigger value="invoices">Invoices</TabsTrigger>
           <TabsTrigger value="meetings">Meetings</TabsTrigger>
+          <TabsTrigger value="images">Product Images</TabsTrigger>
         </TabsList>
         <TabsContent value="account">
           <div className="container mx-auto">
@@ -193,6 +173,10 @@ export default async function ChatPage() {
             discounts={finalDiscounts}
             users={InvoicesUsers}
           /> */}
+        </TabsContent>
+
+        <TabsContent value="images">
+         
         </TabsContent>
       </Tabs>
     </div>

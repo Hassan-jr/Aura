@@ -22,7 +22,7 @@ const ClientFetch = () => {
   }, []);
 
 
-  console.log("Feedbacks:", feedbacks);
+  // console.log("Feedbacks:", feedbacks);
   
   return (
     <div>
