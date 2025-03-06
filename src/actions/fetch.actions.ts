@@ -8,9 +8,9 @@ import { ChatMessage } from "@/modals/chatMessage.modal";
 import { EmailCredentialsModel } from "@/modals/email.modal";
 import { auth } from "@/app/auth";
 import { Post } from "@/modals/post.modal";
+import { Discount } from "@/modals/discount.modal";
 
 export async function getFeedbacks() {
-
   await connect();
   const feedback = await Feedback.find().lean().sort({ createdAt: -1 });
   return JSON.parse(
@@ -40,6 +40,19 @@ export async function getProducts() {
         updatedAt: doc.updatedAt?.toISOString(),
       }))
     )
+  );
+}
+
+export async function getSingleProducts(id) {
+  await connect();
+  const products = await Product.findById(id).lean().sort({ createdAt: +1 });
+  return JSON.parse(
+    JSON.stringify({
+      ...products,
+      _id: products?._id.toString(),
+      createdAt: products?.createdAt?.toISOString(),
+      updatedAt: products?.updatedAt?.toISOString(),
+    })
   );
 }
 
@@ -122,4 +135,52 @@ export async function findChatsForEmail(from: string, bid: string) {
   const productId = messages[0].productId;
 
   return { messages, userId, productId };
+}
+
+// discount
+// export async function getUserDiscount(userId, productId) {
+//   await connect();
+//   const discount = await Discount.find({userId, productId})
+//     .lean()
+//     .sort({ createdAt: +1 });
+//   return JSON.parse(
+//     JSON.stringify(
+//      {
+//         ...discount,
+//         _id: discount?._id?.toString(),
+//         createdAt: discount?.createdAt?.toISOString(),
+//         updatedAt: discount?.updatedAt?.toISOString(),
+//       })
+//     )
+
+// }
+
+// discount
+export async function getUserDiscount(userId, productId) {
+  await connect();
+
+  // Get the current date and time
+  const currentDate = new Date();
+
+  // Fetch the most recent active discount
+  const discount = await Discount.findOne({
+    userId,
+    productId,
+    expiryDate: { $gte: currentDate }, // Ensure the discount is active
+  })
+    .sort({ createdAt: -1 }) // Sort by createdAt in descending order
+    .lean(); // Return plain JavaScript objects
+
+  // If a discount is found, format the dates
+  if (discount) {
+    return {
+      ...discount,
+      _id: discount?._id.toString(),
+      createdAt: discount?.createdAt.toISOString(),
+      updatedAt: discount?.updatedAt.toISOString(),
+    };
+  }
+
+  // Return null if no active discount is found
+  return null;
 }

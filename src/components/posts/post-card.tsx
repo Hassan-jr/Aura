@@ -29,6 +29,7 @@ import { useSession } from "next-auth/react";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import runpodSdk from "runpod-sdk";
+import Link from "next/link";
 
 // interface PostCardProps {
 //   id: string;
@@ -206,7 +207,7 @@ export default function PostCard({
                 onClick={() => setShowFullDescription(true)}
                 className="text-blue-500 hover:underline ml-1"
               >
-                ... see more
+                ... see more 2
               </button>
             )}
           </p>
@@ -302,6 +303,11 @@ export default function PostCard({
                 className={isShared ? "fill-blue-500 text-blue-500" : ""}
               />
             </Button>
+            <Link href={`/checkout/${id}`}>
+            <Button className="bg-black text-white">
+              Checkout
+            </Button>
+            </Link>
           </div>
         </div>
       </CardContent>

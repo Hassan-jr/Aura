@@ -79,7 +79,7 @@ export async function sendDiscountEmail(
 
   const userName = user.name;
   const productTitle = product.title;
-  const productLink = "";
+  const productLink = `${process.env.NEXTAUTH_URL}/checkout/${productId}`;;
 
   await transporter.sendMail({
     from: process.env.EMAIL_FROM,
@@ -188,7 +188,7 @@ export async function sendInvoiceEmail(
 
   const userName = user.name;
   const productTitle = product.title;
-  const productLink = "";
+  const productLink = `${process.env.NEXTAUTH_URL}/checkout/${productId}`;
   const discountRate = discount ? discount.agreedDiscountRate : 0;
 
   const pricePerPiece = ((100 - discountRate) / 100) * product.price;

@@ -18,7 +18,7 @@ function PostsCardsComponent({ posts }) {
       {productPosts?.map((post, index) => (
         <PostCard
           key={index}
-          id={post.id}
+          id={post.productId}
           title={post.title}
           description={post.description}
           hashtags={post.hashtags}

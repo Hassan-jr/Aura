@@ -27,13 +27,13 @@ export default async function Home() {
     <Navheader>
     <main className="p-2">
       <div className="w-full flex flex-row justify-between align-middle mb-5">
-        <h1 className="text-2xl font-bold mb-4">Post Management</h1>
+        <h1 className="text-2xl font-bold mb-4">Posts</h1>
         <MakePostDialog />
       </div>
      
       <div className="w-80 flex flex-row gap-1">
         {posts.map((post, index) => (
-          <PostCard key={index} id={post.productId} title={post.title} description={post.description} hashtags={post.hashtags} images={images} bid={post.userId} products={products} />
+          <PostCard key={index} id={post.productId} title={post.title} description={post.description} hashtags={post.hashtags} images={post?.images} bid={post.userId} products={products} />
         ))}
       </div>
     </main>
