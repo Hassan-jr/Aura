@@ -58,7 +58,7 @@ async function GenerateVisuals({
         r2_secret_access_key:
           process.env.NEXT_PUBLIC_R2_VISION_SECRET_ACCESS_KEY,
         r2_endpoint_url: process.env.NEXT_PUBLIC_R2_VISION_ENDPOINT_URL,
-        r2_path_in_bucket: `${process.env.NEXT_PUBLIC_R2_VISION_PATH_IN_BUCKET}/${instanceId}`,
+        r2_path_in_bucket: `${process.env.NEXT_PUBLIC_R2_GEN_PATH_IN_BUCKET}/${instanceId}`,
       },
       webhook: `https://inprimeai.vercel.app/api/webhooks/gen/${instanceId}`,
       policy: {
