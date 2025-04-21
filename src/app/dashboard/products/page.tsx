@@ -1,9 +1,11 @@
+"use client"
 import { AddProductDialog } from "@/components/product/add-product-popover";
 import ProductCard from "@/components/product/product-card";
-import { getProducts } from "@/actions/fetch.actions";
+import { selectProducts } from "@/redux/slices/product";
+import { useAppSelector } from "@/redux/hooks";
 
-export default async function Home() {
-  const products = await getProducts();
+export default function Home() {
+  const products = useAppSelector(selectProducts);
 
   return (
     <main className="p-2">

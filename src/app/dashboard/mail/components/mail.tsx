@@ -37,7 +37,7 @@ import { Nav } from "./nav"
 import { type Mail } from "../data"
 import { useMail } from "../use-mail"
 import { Button } from "@/components/ui/button"
-import { findChatsForEmail, getProducts } from "@/actions/fetch.actions";
+import { findChatsForEmail } from "@/actions/fetch.actions";
 import { toast } from "@/components/ui/use-toast"
 
 export function Mail({

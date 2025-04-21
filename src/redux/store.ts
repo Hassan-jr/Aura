@@ -4,6 +4,7 @@ import exampleReducer from "./slices/example";
 import trainloraSlice from "./slices/trainlora";
 import productsSlice from "./slices/product";
 import productIdSlice  from "./slices/productId";
+import lorasSlice  from "./slices/lora";
 
 export const makeStore = () => {
   return configureStore({
@@ -13,6 +14,7 @@ export const makeStore = () => {
       trainlora: trainloraSlice,
       products: productsSlice,
       productId: productIdSlice,
+      loras: lorasSlice,
     },
     devTools: process.env.NODE_ENV !== "production",
   });

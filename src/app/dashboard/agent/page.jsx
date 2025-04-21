@@ -1,15 +1,16 @@
 
-import { Suspense } from 'react'
+"use client"
 import AnalysisComponent from './components/AnalysisComponent'
-import { getProducts } from "@/actions/fetch.actions";
+import { selectProducts } from "@/redux/slices/product";
+import { useAppSelector } from "@/redux/hooks";
 
 export default async function Page() {
-  const products = await getProducts();
+  const products = useAppSelector(selectProducts);
   return (
     <main className="container mx-auto p-4">
-      {/* <Suspense fallback={<div>Loading...</div>}> */}
+      
         <AnalysisComponent products={products} />
-      {/* </Suspense> */}
+      
     </main>
   )
 }

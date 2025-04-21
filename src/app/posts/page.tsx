@@ -3,7 +3,7 @@ import { MakePostDialog } from "@/components/posts/make-post-dialog";
 import PostCard from "@/components/posts/post-card";
 import { connect } from '@/db'
 import { Post } from "@/modals/post.modal";
-import { findChatsForEmail, getProducts } from "@/actions/fetch.actions";
+import { getProducts } from "@/actions/fetch.actions";
 
 async function getPosts() {
     await connect()

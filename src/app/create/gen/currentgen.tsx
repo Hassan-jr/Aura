@@ -1,7 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowLeftIcon, ChevronDown, ChevronUp, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  ArrowLeftIcon,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  X,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +20,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useAppSelector } from "@/redux/hooks";
+import { selectloras } from "@/redux/slices/lora";
+import { Card } from "@/components/ui/card";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { SkeletonSpinner } from "@/customui/skeletonspinner";
+import GenerateVisuals from "./generate";
+import { toast } from "@/components/ui/use-toast";
 
 export default function CurrentGen({ cancel }) {
   const [prompt, setPrompt] = useState("");
@@ -21,36 +36,92 @@ export default function CurrentGen({ cancel }) {
   const [dimension, setDimension] = useState("square");
   const [customWidth, setCustomWidth] = useState(1024);
   const [customHeight, setCustomHeight] = useState(1024);
-  const [showAdvanced, setShowAdvanced] = useState(false);
-  const [steps, setSteps] = useState(4);
+  const [steps, setSteps] = useState(30);
+  const [scale, setScale] = useState(4);
   const [seed, setSeed] = useState(0);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [text1, setText1] = useState<string>(" ");
+  const [text2, setText2] = useState<string>("Please DO NOT Close This Window");
+
+  const [selectedLora, setSelectedLora] = useState<any>({});
+
+  const lorasData = useAppSelector(selectloras);
+
+  const { data: session } = useSession();
+  const user_id = session.user.id;
+
+  useEffect(() => {
+    const selectedOne = lorasData.find((lora) => lora.loraPath == model);
+    setSelectedLora(selectedOne);
+  }, [model]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({
+    const userId = user_id;
+    const lora_url = model;
+    const lora_scale = 0.9;
+    const productId = selectedLora.productId;
+
+    const generations = [];
+    const data = {
       prompt,
-      model,
-      numImages,
-      dimension,
+      negative_prompt: "",
+      num_outputs: numImages,
       width:
         dimension === "custom"
           ? customWidth
           : dimension === "square"
-            ? 1024
-            : dimension === "portrait"
-              ? 1080
-              : 1920,
+          ? 1024
+          : dimension === "portrait"
+          ? 1080
+          : 1920,
       height:
         dimension === "custom"
           ? customHeight
           : dimension === "square"
-            ? 1024
-            : dimension === "portrait"
-              ? 1920
-              : 1080,
-      steps,
-      seed,
-    });
+          ? 1024
+          : dimension === "portrait"
+          ? 1920
+          : 1080,
+      num_inference_steps: steps,
+      guidance_scale: scale,
+      seed: seed == 0 ? null : seed,
+    };
+
+    generations.push(data);
+    console.log(generations);
+    setIsLoading(true);
+    try {
+      setText1("Submitting Your Request....");
+      const result = await GenerateVisuals({
+        userId,
+        lora_url,
+        lora_scale,
+        productId,
+        generations,
+      });
+
+      console.log(result);
+
+      if (result) {
+        toast({
+          title: "Generation Has Started",
+          description: `We will notify you when its done`,
+        });
+      }
+      setIsLoading(false);
+      cancel(false);
+    } catch (error) {
+      console.log("Error:", error);
+      toast({
+        title: "An Error Occured",
+        description: `An error occured while generating`,
+      });
+      setIsLoading(false);
+      cancel(false);
+    }
   };
 
   return (
@@ -59,10 +130,7 @@ export default function CurrentGen({ cancel }) {
       className="relative h-full top-0 z-50 w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto  p-6 space-y-6 bg-white dark:bg-card rounded-xl shadow-md mb-10 ml-[-4px]"
     >
       <div className="flex flex-row flex-nowrap justify-between align-middle gap-2">
-
-        <h2 className="text-2xl font-bold text-center mb-6">
-          Create
-        </h2>
+        <h2 className="text-2xl font-bold text-center mb-6">Create</h2>
         <Button
           onClick={() => cancel(false)}
           variant="outline"
@@ -81,13 +149,31 @@ export default function CurrentGen({ cancel }) {
               <SelectValue placeholder="Select a model" />
             </SelectTrigger>
             <SelectContent className="dark:bg-card dark:text-white">
-              <SelectItem value="model1">Model 1</SelectItem>
-              <SelectItem value="model2">Model 2</SelectItem>
-              <SelectItem value="model3">Model 3</SelectItem>
+              {lorasData?.length > 0 &&
+                lorasData.map((lora, idx) => (
+                  <SelectItem key={idx} value={lora.loraPath}>
+                    {lora.characterName}
+                  </SelectItem>
+                ))}
             </SelectContent>
           </Select>
         </div>
-        
+
+        {/* TOKEN AND PHRAE model */}
+        {selectedLora && (
+          <p className="text-sm text-muted-foreground mb-1">
+            Token: <span className="font-mono">{selectedLora?.tokenName}</span>
+          </p>
+        )}
+        {selectedLora && (
+          <p className="text-sm text-muted-foreground mb-1">
+            Pharase:{" "}
+            <span className="font-mono">
+              {selectedLora?.tokenName}, a photo of {selectedLora?.tokenName}
+            </span>
+          </p>
+        )}
+
         <div>
           <Label htmlFor="prompt">Prompt</Label>
           <Textarea
@@ -100,8 +186,6 @@ export default function CurrentGen({ cancel }) {
             className="dark:bg-card"
           />
         </div>
-
-
 
         <div>
           <Label htmlFor="numImages">Number of Images</Label>
@@ -154,46 +238,39 @@ export default function CurrentGen({ cancel }) {
           </div>
         )}
 
-        <div>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => setShowAdvanced(!showAdvanced)}
-            className="w-full justify-between bg-white dark:bg-transparent text-black dark:text-white"
-          >
-            Advanced Options
-            {showAdvanced ? (
-              <ChevronUp className="h-4 w-4" />
-            ) : (
-              <ChevronDown className="h-4 w-4" />
-            )}
-          </Button>
-        </div>
-
-        {showAdvanced && (
-          <div className="space-y-4 pt-4">
-            <div>
-              <Label htmlFor="steps">Number of Steps</Label>
-              <Input
-                id="steps"
-                type="number"
-                value={steps}
-                onChange={(e) => setSteps(Number(e.target.value))}
-                min={1}
-              />
-            </div>
-            <div>
-              <Label htmlFor="seed">Seed</Label>
-              <Input
-                id="seed"
-                type="number"
-                value={seed}
-                onChange={(e) => setSeed(Number(e.target.value))}
-                min={0}
-              />
-            </div>
+        <div className="space-y-4 pt-4">
+          <div>
+            <Label htmlFor="steps">Number of Steps</Label>
+            <Input
+              id="steps"
+              type="number"
+              value={steps}
+              onChange={(e) => setSteps(Number(e.target.value))}
+              min={1}
+            />
           </div>
-        )}
+
+          <div>
+            <Label htmlFor="steps">Guidance Scale</Label>
+            <Input
+              id="guidance_scale"
+              type="number"
+              value={scale}
+              onChange={(e) => setScale(Number(e.target.value))}
+              min={1}
+            />
+          </div>
+          <div>
+            <Label htmlFor="seed">Seed</Label>
+            <Input
+              id="seed"
+              type="number"
+              value={seed}
+              onChange={(e) => setSeed(Number(e.target.value))}
+              min={0}
+            />
+          </div>
+        </div>
       </div>
 
       <Button
@@ -203,6 +280,12 @@ export default function CurrentGen({ cancel }) {
       >
         Generate Images
       </Button>
+
+      {isLoading && (
+        <div>
+          <SkeletonSpinner text1={text1} text2={text2} />
+        </div>
+      )}
     </form>
   );
 }

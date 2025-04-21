@@ -51,3 +51,23 @@ export async function updateLoraCaptions(documentId: string, captions: ImageCapt
 
   return updatedLora._id.toString();
 }
+
+export async function getLoras(){
+  try {
+    await connect();
+      const product_lora = await Lora.find().lean().sort({ createdAt: -1 });
+      return JSON.parse(
+        JSON.stringify(
+          product_lora.map((doc) => ({
+            ...doc,
+            _id: doc._id.toString(),
+            createdAt: doc.createdAt?.toISOString(),
+            updatedAt: doc.updatedAt?.toISOString(),
+          }))
+        )
+      );
+  } catch (error) {
+    console.log("Error:", error);
+    
+  }
+}

@@ -71,6 +71,8 @@ const loraSchema = new Schema({
     required: false,
   },
   
+}, {
+  timestamps: true,
 });
 
 const Lora = models?.Lora || model("Lora", loraSchema);

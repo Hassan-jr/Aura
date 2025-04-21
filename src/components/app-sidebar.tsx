@@ -34,8 +34,6 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { ProfileBadge } from "@/customui/profilebudget";
-import { getProducts } from "@/actions/fetch.actions";
-import { useSelector } from "react-redux";
 import { selectProducts } from "@/redux/slices/product";
 import { useAppSelector } from "@/redux/hooks";
 import Link from "next/link";

@@ -1,5 +1,5 @@
 import { CampaignSetupPage } from "./component/CampaignSetupPage";
-import { getFeedbacks, getProducts, getUsers } from "@/actions/fetch.actions";
+import { getFeedbacks } from "@/actions/fetch.actions";
 import { auth } from "@/app/auth";
 import { fetchAgent } from "@/utils/fetchAgent";
 

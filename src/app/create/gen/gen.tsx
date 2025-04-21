@@ -16,7 +16,7 @@ export const PrevGen = () => {
             {/* Generate Image */}
 
             <Dialog open={isgen} onOpenChange={()=>setIsgen(true)}>
-                <DialogContent className="sm:max-w-[500px] p-0 m-0">
+                <DialogContent className="sm:max-w-[500px] p-0 m-0 max-h-[98vh] overflow-y-auto">
                     <div>
                         <CurrentGen cancel={setIsgen} />
                     </div>
