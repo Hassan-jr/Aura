@@ -66,7 +66,7 @@ export const FileUpload = ({
             whileHover="animate"
           >
             <div
-              className={`relative z-20 w-full h-28 md:h-28 md:w-3/4 p-5 max-w-4xl mx-auto border border-dashed rounded-lg ${isDragActive
+              className={`relative z-20 w-full h-28 md:h-28 p-5 max-w-4xl mx-auto border border-dashed rounded-lg ${isDragActive
                 ? "border-cyan-300"
                 : "border-black dark:border-white"
                 }`}

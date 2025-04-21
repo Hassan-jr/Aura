@@ -83,7 +83,7 @@ async function uploadSingleImage(
   const base64Data = matches[2];
 
   const fileExtension = contentType.split("/").pop();
-  const key = `users/${userId}/${characterName}/trainImgs/${Date.now()}-${index}.${fileExtension}`;
+  const key = `416TrainingImages/${userId}/${characterName}/${Date.now()}-${index}.${fileExtension}`;
 
   const buffer = Buffer.from(base64Data, "base64");
 

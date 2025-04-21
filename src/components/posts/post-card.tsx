@@ -62,7 +62,7 @@ export default function PostCard({
   const [isShared, setIsShared] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const url = "https://r2.nomapos.com"
+  const url = "https://r2.nomapos.com";
 
   const { data: session } = useSession();
 
@@ -89,7 +89,12 @@ export default function PostCard({
     productDetails
   ) => {
     try {
-      const response = await fetch("http://localhost:3000/api/chat", {
+      const url =
+        process.env.NODE_ENV == "development"
+          ? process.env.NEXTAUTH_URL
+          : process.env.NEXT_PUBLIC_APP_URL;
+
+      const response = await fetch(`${url}api/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -304,9 +309,7 @@ export default function PostCard({
               />
             </Button>
             <Link href={`/checkout/${id}`}>
-            <Button className="bg-black text-white">
-              Checkout
-            </Button>
+              <Button className="bg-black text-white">Checkout</Button>
             </Link>
           </div>
         </div>

@@ -3,8 +3,8 @@ import { Icons } from "@/components/icons";
 
 export function SkeletonSpinner({text1, text2}: {text1: string, text2:string}) {
   return (
-    <div className="fixed top-0 right-0 left-0 w-full h-full flex justify-center align-middle bg-black/80 backdrop-blur-lg z-50">
-      <div className="m-auto bg-card/70 w-80 h-60 rounded-lg">
+    <div className="fixed top-0 right-0 left-0 w-full h-full flex justify-center align-middle bg-transparent z-50">
+      <div className="m-auto bg-blue-200 w-80 h-60 rounded-lg">
         <div className="w-full flex flex-row flex-nowrap justify-evenly mt-1">
           <Skeleton className="h-40 w-24" />
           <Skeleton className="h-40 w-24" />

@@ -179,6 +179,7 @@ export function AIChat({ prevmessages, users, products }) {
         selectedUserId={selectedUserId}
         onSelectUser={setselectedUserId}
         isUserSide={true}
+        messages={messages} // added this
       />
       <div className="flex-1 flex flex-col mt-0">
         <Card className="flex-1 m-4 bg-background/60 backdrop-blur-sm shadow-xl border-t border-l border-background/20">

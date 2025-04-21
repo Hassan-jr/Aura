@@ -1,42 +1,35 @@
+"use client"
 import Stepper from "./stepper";
-import DataFormat from "./data";
 import LoraDetails from "./loradetails";
 import TrainImgUpload from "./uploadImgs";
-import SubmitTrain from "./submitTrain";
 
-const steps = [
-  // {
-  //   title: "Get Training Images Right",
-  //   description: " ",
-  //   content: <DataFormat />,
-  // },
-  {
-    title: "Vision Model Details",
-    description: "",
-    content: (
-      <div className="flex flex-col gap 1">
-        <LoraDetails />
-        <TrainImgUpload />
-      </div>
-    ),
-  },
-  // {
-  //   title: "Upload Training Images",
-  //   description: "",
-  //   content: <TrainImgUpload />,
-  // },
-  // {
-  //   title: "Start Training",
-  //   description: "",
-  //   content: <SubmitTrain />,
-  // },
-];
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+
 
 const Train = () => {
+  const [open, setOpen] = useState(false)
+
   return (
     <div className="mt-2 rounded-md p-1">
-      <h1 className="text-xl font-semibold">Start Training Your Model</h1>
-      <Stepper steps={steps} />
+      <h1 className="text-xl font-semibold">Start Training Product Model</h1>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button variant="outline">Train Lora Model</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[500px] m-0 max-h-[98vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Train Lora Model</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col gap-1">
+            <TrainImgUpload />
+            <LoraDetails />
+            <Stepper setOpen={setOpen} />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -13,6 +13,15 @@ export async function storeLoraData(data: {
   tokenName: string;
   gender: string;
   trainImgs: string[];
+  productId: string;
+  caption_dropout_rate: number;
+  batch_size: number;
+  steps: number;
+  optimizer: string;
+  lr: number;
+  quantize: boolean;
+  loraPath: string;
+  status: string;
 }) {
     await connect();
 

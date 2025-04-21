@@ -5,8 +5,8 @@ import Train from "./train/train";
 import { PrevGen } from "./gen/gen";
 
 export default function CreateTabs() {
-  const [isgen, setIsgen] = useState(true);
-  const [istrain, setIstrain] = useState(false);
+  const [isgen, setIsgen] = useState(false);
+  const [istrain, setIstrain] = useState(true);
 
   const handleIsgen = () => {
     console.log("Clicked");

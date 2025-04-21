@@ -15,7 +15,7 @@ const loraSchema = new Schema({
   },
   gender: {
     type: String,
-    required: true,
+    required: false,
   },
   trainImgs: [
     {
@@ -29,10 +29,48 @@ const loraSchema = new Schema({
     {
       caption: {
         type: String,
-        required: true,
+        required: false,
       },
     },
   ],
+  // other files
+  productId: {
+    type: String,
+    required: false,
+  },
+  caption_dropout_rate: {
+    type: Number,
+    required: false,
+  },
+  batch_size: {
+    type: Number,
+    required: false,
+  },
+  steps: {
+    type: Number,
+    required: false,
+  },
+  optimizer: {
+    type: String,
+    required: false,
+  },
+  lr: {
+    type: Number,
+    required: false,
+  },
+  quantize: {
+    type: Boolean,
+    required: false,
+  },
+  loraPath: {
+    type: String,
+    required: false,
+  },
+  status: {
+    type: String,
+    required: false,
+  },
+  
 });
 
 const Lora = models?.Lora || model("Lora", loraSchema);

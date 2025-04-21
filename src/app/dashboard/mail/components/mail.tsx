@@ -60,7 +60,12 @@ export function Mail({
       productDetails
     ) => {
       try {
-        const response = await fetch("http://localhost:3000/api/chat", {
+        const url =
+        process.env.NODE_ENV == "development"
+          ? process.env.NEXTAUTH_URL
+          : process.env.NEXT_PUBLIC_APP_URL;
+
+        const response = await fetch(`${url}api/chat`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

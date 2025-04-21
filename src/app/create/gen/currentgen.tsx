@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeftIcon, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowLeftIcon, ChevronDown, ChevronUp, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -36,18 +36,18 @@ export default function CurrentGen({ cancel }) {
         dimension === "custom"
           ? customWidth
           : dimension === "square"
-          ? 1024
-          : dimension === "portrait"
-          ? 1080
-          : 1920,
+            ? 1024
+            : dimension === "portrait"
+              ? 1080
+              : 1920,
       height:
         dimension === "custom"
           ? customHeight
           : dimension === "square"
-          ? 1024
-          : dimension === "portrait"
-          ? 1920
-          : 1080,
+            ? 1024
+            : dimension === "portrait"
+              ? 1920
+              : 1080,
       steps,
       seed,
     });
@@ -56,35 +56,24 @@ export default function CurrentGen({ cancel }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="absolute h-full top-0 z-50 w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto  p-6 space-y-6 bg-white dark:bg-card rounded-xl shadow-md mb-10 ml-[-4px]"
+      className="relative h-full top-0 z-50 w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto  p-6 space-y-6 bg-white dark:bg-card rounded-xl shadow-md mb-10 ml-[-4px]"
     >
-      <div className="flex flex-row flex-nowrap justify-start align-middle gap-2">
+      <div className="flex flex-row flex-nowrap justify-between align-middle gap-2">
+
+        <h2 className="text-2xl font-bold text-center mb-6">
+          Create
+        </h2>
         <Button
           onClick={() => cancel(false)}
           variant="outline"
-          className="cursor-pointer bg-transparent shadow-none border-none hover:bg-transparent"
+          className="cursor-pointer bg-red-600 text-white shadow-none border-none hover:bg-red-400"
         >
-          <ArrowLeftIcon className="h-10 w-10 text-black dark:text-white" />
+          {/* <X className="h-20 w-20 text-red-600 dark:text-white" /> */}
+          close
         </Button>
-        <h2 className="text-2xl font-bold text-center mb-6">
-          AI Image Generator
-        </h2>
       </div>
 
       <div className="space-y-4">
-        <div>
-          <Label htmlFor="prompt">Prompt</Label>
-          <Textarea
-            id="prompt"
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            required
-            // row={4}
-            placeholder="Enter your image description (Prompt)"
-            className="dark:bg-card"
-          />
-        </div>
-
         <div>
           <Label htmlFor="model">Model</Label>
           <Select value={model} onValueChange={setModel} required>
@@ -98,6 +87,21 @@ export default function CurrentGen({ cancel }) {
             </SelectContent>
           </Select>
         </div>
+        
+        <div>
+          <Label htmlFor="prompt">Prompt</Label>
+          <Textarea
+            id="prompt"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            required
+            // row={4}
+            placeholder="Enter your image description (Prompt)"
+            className="dark:bg-card"
+          />
+        </div>
+
+
 
         <div>
           <Label htmlFor="numImages">Number of Images</Label>
