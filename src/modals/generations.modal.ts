@@ -7,9 +7,14 @@ const GenerationSchema = new Schema(
       required: true,
     },
     clientId: {
-        type: String,
-        required: false,
-        default: "auto"
+      type: String,
+      required: false,
+      default: "auto",
+    },
+    isVideo: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
     lora_url: {
       type: String,

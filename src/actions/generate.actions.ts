@@ -1,3 +1,4 @@
+"use server";
 import Generation from "@/modals/generations.modal";
 import { connect } from "@/db";
 import runpodSdk from "runpod-sdk";
@@ -75,3 +76,24 @@ async function GenerateVisuals({
 }
 
 export default GenerateVisuals;
+
+export async function getGenerations() {
+  try {
+    await connect();
+    const generationsData = await Generation.find()
+      .lean()
+      .sort({ createdAt: -1 });
+    return JSON.parse(
+      JSON.stringify(
+        generationsData.map((doc) => ({
+          ...doc,
+          _id: doc._id.toString(),
+          createdAt: doc.createdAt?.toISOString(),
+          updatedAt: doc.updatedAt?.toISOString(),
+        }))
+      )
+    );
+  } catch (error) {
+    console.log("Error:", error);
+  }
+}

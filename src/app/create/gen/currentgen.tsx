@@ -26,8 +26,8 @@ import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { SkeletonSpinner } from "@/customui/skeletonspinner";
-import GenerateVisuals from "./generate";
 import { toast } from "@/components/ui/use-toast";
+import GenerateVisuals from "@/actions/generate.actions";
 
 export default function CurrentGen({ cancel }) {
   const [prompt, setPrompt] = useState("");

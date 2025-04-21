@@ -106,6 +106,8 @@ import { getProducts } from "@/actions/fetch.actions";
 import { getLoras } from "@/actions/lora.action"; // Assuming correct path
 import { setProducts } from "@/redux/slices/product"; // Assuming correct path
 import { setloras } from "@/redux/slices/lora"; // Assuming correct path
+import { getGenerations } from "@/actions/generate.actions";
+import { setgenerations } from "@/redux/slices/generate";
 
 // Placeholder for a Spinner component (you'll need to create or import one)
 const Spinner = () => (
@@ -166,9 +168,10 @@ export default function AppLayout({ // Renamed from Page for clarity if this is 
 
       try {
         // Fetch data concurrently
-        const [productsData, loraData] = await Promise.all([
+        const [productsData, loraData, generationsData] = await Promise.all([
           getProducts(),
           getLoras(),
+          getGenerations()
           // Add other independent fetch calls here if needed
           // e.g., getSettings(), getUserProfile()
         ]);
@@ -178,6 +181,7 @@ export default function AppLayout({ // Renamed from Page for clarity if this is 
           dispatch(setProducts(productsData));
           dispatch(setloras(loraData));
           // dispatch other setters here
+          dispatch(setgenerations(generationsData))
         }
       } catch (err) {
         console.error("Error fetching initial layout data:", err);
