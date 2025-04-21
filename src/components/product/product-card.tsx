@@ -11,7 +11,6 @@ interface ProductCardProps {
   title: string;
   price: number;
   description: string;
-  images: string[];
 }
 
 export default function ProductCard({
@@ -27,10 +26,6 @@ export default function ProductCard({
   ];
   const [mainImage, setMainImage] = useState(0);
   const [showFullDescription, setShowFullDescription] = useState(false);
-
-  const nextImage = () => setMainImage((prev) => (prev + 1) % images.length);
-  const prevImage = () =>
-    setMainImage((prev) => (prev - 1 + images.length) % images.length);
 
   const truncatedDescription = description.slice(0, 100);
 
