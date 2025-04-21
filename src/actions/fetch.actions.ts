@@ -43,15 +43,16 @@ export async function getProducts() {
   );
 }
 
+
 export async function getSingleProducts(id) {
   await connect();
-  const products = await Product.findById(id).lean().sort({ createdAt: +1 });
+  const product = await Product.findById(id).lean();
   return JSON.parse(
     JSON.stringify({
-      ...products,
-      _id: products?._id.toString(),
-      createdAt: products?.createdAt?.toISOString(),
-      updatedAt: products?.updatedAt?.toISOString(),
+      ...product,
+      _id: id,
+      // createdAt: product?.createdAt?.toISOString(),
+      // updatedAt: product?.updatedAt?.toISOString(),
     })
   );
 }
@@ -175,9 +176,9 @@ export async function getUserDiscount(userId, productId) {
   if (discount) {
     return {
       ...discount,
-      _id: discount?._id.toString(),
-      createdAt: discount?.createdAt.toISOString(),
-      updatedAt: discount?.updatedAt.toISOString(),
+      // _id: discount?._id.toString(),
+      // createdAt: discount?.createdAt.toISOString(),
+      // updatedAt: discount?.updatedAt.toISOString(),
     };
   }
 

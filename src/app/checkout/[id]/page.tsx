@@ -54,13 +54,13 @@ export default function CheckoutPage({
   const [unwrappedParams, setUnwrappedParams] = useState<{ id: string } | null>(
     null
   );
-  const [productData, setProductData] = useState({});
+  const [productData, setProductData] = useState<any>({}); //useState({});
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [showFullDescription, setShowFullDescription] = useState(false);
-   const { data: session } = useSession();
-   const   userId = session?.user?.id;
-   const [discount, setDiscount] = useState({})
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+  const [discount, setDiscount] = useState<any>({}); //useState({})
 
   // Unwrap the params Promise and update state
   useEffect(() => {
@@ -77,16 +77,14 @@ export default function CheckoutPage({
   }, [params]);
 
   // Fetch product data once params are available
-//   getUserDiscount
+  //   getUserDiscount
   useEffect(() => {
     if (unwrappedParams?.id) {
       const getData = async () => {
         try {
           const data = await getSingleProducts(unwrappedParams.id);
-          
+
           setProductData(data);
-         
-          
         } catch (error) {
           console.error("Error fetching product data:", error);
         }
@@ -96,16 +94,14 @@ export default function CheckoutPage({
     }
   }, [unwrappedParams]);
 
-
-//   discount
-useEffect(() => {
+  //   discount
+  useEffect(() => {
     if (unwrappedParams?.id) {
       const getData = async () => {
         try {
           const data = await getUserDiscount(userId, unwrappedParams.id);
-          
+
           setDiscount(data);
-          
         } catch (error) {
           console.error("Error fetching product data:", error);
         }
@@ -120,8 +116,10 @@ useEffect(() => {
   }
 
   // Calculate the discounted price
-  const discountedPrice = discount?.agreedDiscountRate ? 
-  productData?.price - productData?.price * (discount?.agreedDiscountRate / 100) :  productData?.price;
+  const discountedPrice = discount?.agreedDiscountRate
+    ? productData?.price -
+      productData?.price * (discount?.agreedDiscountRate / 100)
+    : productData?.price;
   const total = discountedPrice * quantity;
 
   // Handle quantity changes
@@ -133,10 +131,12 @@ useEffect(() => {
   };
 
   // Truncate description for mobile view
-  const shortDescription = productData?.description
-    .split("\n")
-    .slice(0, 4)
-    .join("\n");
+  // const shortDescription = productData?.description
+  //   .split("\n")
+  //   .slice(0, 4)
+  //   .join("\n");
+  const shortDescription =
+    productData?.description?.split("\n").slice(0, 4).join("\n") ?? "";
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -215,13 +215,18 @@ useEffect(() => {
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground">Price:</span>
-                <span className="font-medium">${productData.price?.toFixed(2)}</span>
+                <span className="font-medium">
+                  ${productData.price?.toFixed(2)}
+                </span>
               </div>
 
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground">Discount:</span>
                 <span className="font-medium text-green-600">
-                  {discount?.agreedDiscountRate ? discount?.agreedDiscountRate : "0"}% OFF
+                  {discount?.agreedDiscountRate
+                    ? discount?.agreedDiscountRate
+                    : "0"}
+                  % OFF
                 </span>
               </div>
 
@@ -254,7 +259,10 @@ useEffect(() => {
                 <span>${total.toFixed(2)}</span>
               </div>
 
-              <Button className="w-full bg-blue-500 hover:bg-blue-400" size="lg">
+              <Button
+                className="w-full bg-blue-500 hover:bg-blue-400"
+                size="lg"
+              >
                 <ShoppingCart className="mr-2 h-5 w-5" />
                 Proceed to Checkout
               </Button>
