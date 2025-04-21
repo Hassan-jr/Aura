@@ -24,7 +24,7 @@ export async function createAgent(
     console.log("Mongodb Created");
     
 
-    const webhookURL = `${process.env.NEXT_PUBLIC_APP_URL}/api/webhooks/agent/${agent._id}`;
+    const webhookURL = `${process.env.NEXT_PUBLIC_APP_URL}api/webhooks/agent/${agent._id}`;
 
     // const response = await fetch('https://social-media-seo-agent.onrender.com/api/agent', {
     //   method: 'POST',

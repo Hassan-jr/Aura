@@ -133,7 +133,7 @@ useEffect(() => {
   };
 
   // Truncate description for mobile view
-  const shortDescription = productData?.description?
+  const shortDescription = productData?.description
     .split("\n")
     .slice(0, 4)
     .join("\n");
