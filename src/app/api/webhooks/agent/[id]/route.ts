@@ -199,25 +199,21 @@ export async function POST(request: NextRequest) {
 
     // 6. Prepare data and 7. Call ChatGPT for Content Generation
     const systemPrompt = `You are an expert marketing content creator specializing in social media promotion. Your task is to generate compelling promotional content for a product based on provided details, market analysis, and user feedback.
-
     Product Information:
     - Title: ${product.title}
     - Description: ${product.description}
-
     Market Analysis Insights:
     - Target Audience: ${target_audience.join(", ") || "Not specified"}
     - Content Ideas: ${content_ideas.join(", ") || "Not specified"}
     - Key Selling Points: ${keySellingPoints.join(", ") || "Not specified"}
     - Relevant Hashtags: ${hashtags.join(", ") || "Not specified"}
     - Key Phrases: ${keyPhrases.join(", ") || "Not specified"}
-
     User Feedback Snippets (Reflecting specific sentiments):
     ${
       feedbackTexts.length > 0
         ? feedbackTexts.map((f) => `- "${f}"`).join("\n")
         : "- No specific feedback provided for this sentiment selection."
     }
-
     Instructions:
     Generate a JSON object containing the following fields:
     1.  "PostTitle": A catchy and engaging title for a social media post (max 100 characters).
@@ -229,12 +225,14 @@ export async function POST(request: NextRequest) {
 
     Ensure the output is ONLY a valid JSON object and nothing else. Use the provided token name "${tokenName}" where specified in the prompts. Make the prompts creative and visually descriptive for an AI image generator.`;
 
+    console.log("systemPrompt: ", systemPrompt);
+
     let chatResponse;
     let generatedContent;
     try {
       console.log("Calling OpenAI for content generation...");
       chatResponse = await openai.chat.completions.create({
-        model: "gpt-4o-mini-2024-07-18", // Or your preferred model like gpt-3.5-turbo
+        model: "o4-mini-2025-04-16", // Or your preferred model like gpt-3.5-turbo
         messages: [
           { role: "system", content: systemPrompt },
           {
@@ -244,7 +242,8 @@ export async function POST(request: NextRequest) {
           },
         ],
         response_format: { type: "json_object" }, // Use JSON mode
-        temperature: 0.7, // Adjust creativity
+        
+        temperature: 1.0, // Adjust creativity
       });
 
       const rawContent = chatResponse.choices[0]?.message?.content;
