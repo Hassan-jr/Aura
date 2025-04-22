@@ -196,49 +196,7 @@ export async function POST(req: Request) {
           },
         },
       ],
-      // tools: [
-      //   {
-      //     name: "give_discount",
-      //     description: "Agree on a discount rate with the user",
-      //     parameters: {
-      //       type: "object",
-      //       properties: {
-      //         agreedDiscountRate: {
-      //           type: "number",
-      //           description: "The discount rate agreed with the user (0-100)",
-      //         },
-      //         expiresIn: {
-      //           type: "number",
-      //           description:
-      //             "The number of days from now when the discount expires, by defual these should be 1.",
-      //         },
-      //       },
-      //       required: ["agreedDiscountRate", "expiresIn"],
-      //     },
-      //   },
-      //   {
-      //     name: "issue_invoice",
-      //     description: "Generate an invoice for the product",
-      //     parameters: {
-      //       type: "object",
-      //       properties: {
-      //         qty: {
-      //           type: "number",
-      //           description: "Quantity of the product in the invoice",
-      //           default: 1,
-      //         },
-      //         expiresIn: {
-      //           type: "number",
-      //           description:
-      //             "The number of days from now when the Invoice expires, by defual these should be 1.",
-      //         },
-      //       },
-      //       required: ["qty", "expiresIn"],
-      //     },
-      //   },
-      // ],
       function_call: "auto",
-      // tool_choice: "auto",
     });
 
     const aiResponse = completion.choices[0].message;

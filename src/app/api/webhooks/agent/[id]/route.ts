@@ -233,6 +233,18 @@ export async function POST(request: NextRequest) {
 
     Ensure the output is ONLY a valid JSON object and nothing else. Use the provided token name "${tokenName}" where specified in the prompts. Make the prompts creative and visually descriptive for an AI image generator.`;
 
+    const systemPrompt2 = ` You are an expert marketing content creator specializing in social media promotion. Your task is to generate compelling promotional content for a product based on provided details, market analysis, and user feedback.
+    Product Information:
+    - Title: ${product.title}
+    Generate a JSON object containing the following fields:
+    1.  "PostTitle": A catchy and engaging title for a social media post (max 100 characters).
+    2.  "PostDescription": A compelling caption for the social media post (max 500 characters). Incorporate key selling points, address the target audience, and subtly reflect insights from the user feedback if applicable. Include relevant hashtags naturally or at the end.
+    3.  "Prompt1": A detailed image generation prompt (around 75-100 words) starting EXACTLY with "${tokenName}, a photo of ${tokenName}". Describe a scene showcasing the product in a compelling environment relevant to its use or target audience. Be specific about lighting, style, and mood.
+    4.  "Prompt2": Another detailed image prompt (around 75-100 words), starting EXACTLY with "${tokenName}, a photo of ${tokenName}". Describe a DIFFERENT scene, potentially focusing on a different key feature or benefit, or a contrasting environment.
+    5.  "Prompt3": A third detailed image prompt (around 75-100 words), starting EXACTLY with "${tokenName}, a photo of ${tokenName}". Explore another distinct visual concept.
+    6.  "Prompt4": A fourth detailed image prompt (around 75-100 words), starting EXACTLY with "${tokenName}, a photo of ${tokenName}". Offer a final unique visual angle.
+
+    Ensure the output is ONLY a valid JSON object and nothing else. Use the provided token name "${tokenName}" where specified in the prompts. Make the prompts creative and visually descriptive for an AI image generator.`;
     let chatResponse;
     let generatedContent;
     try {
@@ -293,7 +305,7 @@ export async function POST(request: NextRequest) {
         messages: [
           {
             role: "system",
-            content: systemPrompt,
+            content: systemPrompt2,
           },
           {
             role: "user",
