@@ -252,44 +252,62 @@ export async function POST(request: NextRequest) {
       //   temperature: 1.0, // Adjust creativity
       // });
 
-      chatResponse = await openai.responses.create({
-        model: "o4-mini-2025-04-16",
-        input: [
-          {
-            role: "developer",
-            content: [
-              {
-                type: "input_text",
-                text: systemPrompt,
-              },
-            ],
-          },
+      // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ try 2 @@@@@@@@@@@@@@@@@@@@
+      // chatResponse = await openai.responses.create({
+      //   model: "o4-mini-2025-04-16",
+      //   input: [
+      //     {
+      //       role: "developer",
+      //       content: [
+      //         {
+      //           type: "input_text",
+      //           text: systemPrompt,
+      //         },
+      //       ],
+      //     },
 
+      //     {
+      //       role: "user",
+      //       content: [
+      //         {
+      //           type: "input_text",
+      //           text: "Generate the promotional content JSON based on the provided details",
+      //         },
+      //       ],
+      //     },
+      //   ],
+      //   text: {
+      //     format: {
+      //       type: "json_object",
+      //     },
+      //   },
+      //   reasoning: {
+      //     effort: "medium",
+      //   },
+      //   stream: false,
+      // });
+
+      // @@@@@@@@@@@@@@@@@@@@@@@ try 3 @@@@@@@@@@@@@@@@@@@@@@@@@@@
+      chatResponse = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo", // Use valid model name
+        messages: [
+          {
+            role: "system",
+            content: systemPrompt,
+          },
           {
             role: "user",
-            content: [
-              {
-                type: "input_text",
-                text: "Generate the promotional content JSON based on the provided details",
-              },
-            ],
+            content:
+              "Generate the promotional content JSON based on the provided details",
           },
         ],
-        text: {
-          format: {
-            type: "json_object",
-          },
-        },
-        reasoning: {
-          effort: "medium",
-        },
-        stream: false,
+        response_format: { type: "json_object" },
+        temperature: 1.0,
       });
-
       console.log("CHAT RESPONSE:", chatResponse);
 
       // chatResponse.choices[0]?.message?.content;
-      const rawContent = chatResponse.output_text;
+      const rawContent = chatResponse.choices[0]?.message?.content;
       if (!rawContent) {
         throw new Error("OpenAI response content is empty.");
       }
@@ -308,7 +326,7 @@ export async function POST(request: NextRequest) {
         throw new Error("OpenAI response is missing required fields.");
       }
     } catch (error) {
-      console.log("Error calling OpenAI or parsing response:", error);
+      console.error("Error calling OpenAI or parsing response:", error);
       return NextResponse.json(
         { error: "Failed to generate content via AI" },
         { status: 500 }
