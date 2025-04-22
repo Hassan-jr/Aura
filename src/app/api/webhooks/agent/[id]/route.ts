@@ -197,6 +197,13 @@ export async function POST(request: NextRequest) {
     }
     console.log(`Found Product: ${product.title}`);
     //    - Description: ${product.description}
+
+    if (!process.env.OPENAI_API_KEY) {
+      return NextResponse.json(
+        { error: "OpenAI API key not configured" },
+        { status: 500 }
+      );
+    }
     // 6. Prepare data and 7. Call ChatGPT for Content Generation
     const systemPrompt = `You are an expert marketing content creator specializing in social media promotion. Your task is to generate compelling promotional content for a product based on provided details, market analysis, and user feedback.
     Product Information:
