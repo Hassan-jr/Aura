@@ -201,7 +201,8 @@ export async function POST(request: NextRequest) {
     const systemPrompt = `You are an expert marketing content creator specializing in social media promotion. Your task is to generate compelling promotional content for a product based on provided details, market analysis, and user feedback.
     Product Information:
     - Title: ${product.title}
- 
+    - Description: ${product.description}
+    
     Market Analysis Insights:
     - Target Audience: ${target_audience.join(", ") || "Not specified"}
     - Content Ideas: ${content_ideas.join(", ") || "Not specified"}
