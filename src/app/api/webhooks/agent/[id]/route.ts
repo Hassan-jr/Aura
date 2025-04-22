@@ -196,12 +196,12 @@ export async function POST(request: NextRequest) {
       );
     }
     console.log(`Found Product: ${product.title}`);
-
+    //    - Description: ${product.description}
     // 6. Prepare data and 7. Call ChatGPT for Content Generation
     const systemPrompt = `You are an expert marketing content creator specializing in social media promotion. Your task is to generate compelling promotional content for a product based on provided details, market analysis, and user feedback.
     Product Information:
     - Title: ${product.title}
-    - Description: ${product.description}
+ 
     Market Analysis Insights:
     - Target Audience: ${target_audience.join(", ") || "Not specified"}
     - Content Ideas: ${content_ideas.join(", ") || "Not specified"}
@@ -248,7 +248,7 @@ export async function POST(request: NextRequest) {
         model: "o4-mini-2025-04-16",
         input: [
           {
-            role: "system",
+            role: "developer",
             content: [
               {
                 type: "input_text",
@@ -279,7 +279,7 @@ export async function POST(request: NextRequest) {
       });
 
       console.log("CHAT RESPONSE:", chatResponse);
-      
+
       // chatResponse.choices[0]?.message?.content;
       const rawContent = chatResponse.output[0].content[0].text;
       if (!rawContent) {
