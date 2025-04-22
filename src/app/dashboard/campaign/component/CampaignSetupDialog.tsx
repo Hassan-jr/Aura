@@ -166,8 +166,6 @@ export function CampaignSetupDialog({
             />
           </Card>
 
-        
-
           <div className="flex items-center space-x-2">
             <Checkbox
               id="new-run"
@@ -196,6 +194,17 @@ export function CampaignSetupDialog({
             </Select>
           </div>
 
+          {frequency !== "now" && (
+            <div>
+              <Label htmlFor="scheduledTime">Start Date</Label>
+              <Input
+                type="datetime-local"
+                id="scheduledTime"
+                value={scheduledTime}
+                onChange={(e) => setScheduledTime(e.target.value)}
+              />
+            </div>
+          )}
 
           <div>
             <Label htmlFor="outputType">Campaign Output</Label>
@@ -206,6 +215,7 @@ export function CampaignSetupDialog({
               <SelectContent>
                 <SelectItem value="photos">Photos</SelectItem>
                 <SelectItem value="videos">Videos</SelectItem>
+                <SelectItem value="both">Both</SelectItem>
               </SelectContent>
             </Select>
           </div>

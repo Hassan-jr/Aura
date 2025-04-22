@@ -234,7 +234,7 @@ export async function POST(request: NextRequest) {
     try {
       console.log("Calling OpenAI for content generation...");
       chatResponse = await openai.chat.completions.create({
-        model: "gpt-4-0613", // Or your preferred model like gpt-3.5-turbo
+        model: "gpt-4o-mini-2024-07-18", // Or your preferred model like gpt-3.5-turbo
         messages: [
           { role: "system", content: systemPrompt },
           {
