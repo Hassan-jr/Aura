@@ -24,6 +24,7 @@ async function GenerateVisuals({
   lora_scale,
   productId,
   clientId = "auto",
+  isVideo = false,
   generations = [], // Default to empty array if not provided
 }) {
   // Basic validation for required field
@@ -39,6 +40,7 @@ async function GenerateVisuals({
       userId,
       lora_url,
       lora_scale,
+      isVideo,
       clientId,
       productId,
       generations,
@@ -68,7 +70,7 @@ async function GenerateVisuals({
     });
 
     // Return the ID of the saved document
-    return result;
+    return {result, id: instanceId};
   } catch (error) {
     console.error("Error creating Generation document:", error);
     return null; // Return null or throw the error, depending on desired error handling

@@ -166,49 +166,7 @@ export function CampaignSetupDialog({
             />
           </Card>
 
-          <Select2.Root
-            value={runId}
-            onValueChange={setRunId}
-            disabled={checked}
-          >
-            <Select2.Trigger className=" w-full mx-auto inline-flex items-center justify-between rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
-              <Select2.Value
-                placeholder="Select from previous S.E.O Agent Runs"
-                className="w-full m-1 space-y-4"
-              >
-                <RunDisplay run={getSelectedRun()} />
-              </Select2.Value>
-            </Select2.Trigger>
-
-            <Select2.Portal>
-              <Select2.Content className="relative w-auto mx-auto overflow-hidden rounded-md bg-white shadow-lg z-50">
-                <Select2.ScrollUpButton className="flex items-center justify-center h-[25px] w-full bg-white text-gray-700 cursor-default">
-                  <ChevronUp className="h-4 w-4" />
-                </Select2.ScrollUpButton>
-                <Select2.Viewport className="p-2 w-full">
-                  {runs.map((run) => (
-                    <Select2.Item
-                      key={run._id}
-                      value={run._id}
-                      className="relative flex justify-center align-middle mx-auto items-center  rounded-md text-sm text-gray-700 hover:bg-indigo-100 focus:bg-indigo-100 focus:outline-none select-none z-50"
-                    >
-                      <Select2.ItemIndicator className="absolute left-2 inline-flex items-center">
-                        <Check className="h-4 w-4" />
-                      </Select2.ItemIndicator>
-
-                      <RunDisplay run={run} />
-
-                      <Select2.ItemText></Select2.ItemText>
-                    </Select2.Item>
-                  ))}
-                </Select2.Viewport>
-
-                <Select2.ScrollDownButton className="flex items-center justify-center h-[25px] bg-white text-gray-700 cursor-default">
-                  <ChevronDown className="h-4 w-4" />
-                </Select2.ScrollDownButton>
-              </Select2.Content>
-            </Select2.Portal>
-          </Select2.Root>
+        
 
           <div className="flex items-center space-x-2">
             <Checkbox
@@ -234,22 +192,10 @@ export function CampaignSetupDialog({
                 <SelectItem value="daily">Daily</SelectItem>
                 <SelectItem value="weekly">Weekly</SelectItem>
                 <SelectItem value="monthly">Monthly</SelectItem>
-                <SelectItem value="now">Now</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
-          {frequency !== "now" && (
-            <div>
-              <Label htmlFor="scheduledTime">Start Date</Label>
-              <Input
-                type="datetime-local"
-                id="scheduledTime"
-                value={scheduledTime}
-                onChange={(e) => setScheduledTime(e.target.value)}
-              />
-            </div>
-          )}
 
           <div>
             <Label htmlFor="outputType">Campaign Output</Label>
@@ -260,7 +206,6 @@ export function CampaignSetupDialog({
               <SelectContent>
                 <SelectItem value="photos">Photos</SelectItem>
                 <SelectItem value="videos">Videos</SelectItem>
-                <SelectItem value="both">Both</SelectItem>
               </SelectContent>
             </Select>
           </div>

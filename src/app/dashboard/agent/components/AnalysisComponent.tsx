@@ -22,6 +22,7 @@ import { RunDisplay } from "./RunDisplay";
 import { useAppSelector } from "@/redux/hooks";
 import { selectProductId } from "@/redux/slices/productId";
 import { Card } from "@/components/ui/card";
+import { selectProducts } from "@/redux/slices/product";
 
 export default function AnalysisComponent({ products }) {
   const { data: session } = useSession();
@@ -33,9 +34,11 @@ export default function AnalysisComponent({ products }) {
 
   const userId = session?.user.id;
 
-  const productTitle = products[0].title;
+  
 
   const productId = useAppSelector(selectProductId);
+  // const products2 = useAppSelector(selectProducts);
+  const productTitle = products.find(product=>product._id == productId)?.title;
 
   useEffect(() => {
     const loadRuns = async () => {

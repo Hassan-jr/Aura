@@ -105,7 +105,7 @@ export default function CurrentGen({ cancel }) {
 
       console.log(result);
 
-      if (result) {
+      if (result.result) {
         toast({
           title: "Generation Has Started",
           description: `We will notify you when its done`,
