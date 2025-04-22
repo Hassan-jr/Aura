@@ -202,7 +202,7 @@ export async function POST(request: NextRequest) {
     Product Information:
     - Title: ${product.title}
     - Description: ${product.description}
-    
+
     Market Analysis Insights:
     - Target Audience: ${target_audience.join(", ") || "Not specified"}
     - Content Ideas: ${content_ideas.join(", ") || "Not specified"}
@@ -282,7 +282,7 @@ export async function POST(request: NextRequest) {
       console.log("CHAT RESPONSE:", chatResponse);
 
       // chatResponse.choices[0]?.message?.content;
-      const rawContent = chatResponse.output[0].content[0].text;
+      const rawContent = chatResponse.output_text;
       if (!rawContent) {
         throw new Error("OpenAI response content is empty.");
       }
