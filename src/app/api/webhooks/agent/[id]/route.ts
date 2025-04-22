@@ -300,7 +300,7 @@ export async function POST(request: NextRequest) {
         throw new Error("OpenAI response is missing required fields.");
       }
     } catch (error) {
-      console.error("Error calling OpenAI or parsing response:", error);
+      console.log("Error calling OpenAI or parsing response:", error);
       return NextResponse.json(
         { error: "Failed to generate content via AI" },
         { status: 500 }
