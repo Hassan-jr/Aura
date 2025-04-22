@@ -225,28 +225,63 @@ export async function POST(request: NextRequest) {
 
     Ensure the output is ONLY a valid JSON object and nothing else. Use the provided token name "${tokenName}" where specified in the prompts. Make the prompts creative and visually descriptive for an AI image generator.`;
 
-    console.log("systemPrompt: ", systemPrompt);
-
     let chatResponse;
     let generatedContent;
     try {
       console.log("Calling OpenAI for content generation...");
-      chatResponse = await openai.chat.completions.create({
-        model: "o4-mini-2025-04-16", // Or your preferred model like gpt-3.5-turbo
-        messages: [
-          { role: "system", content: systemPrompt },
+      // chatResponse = await openai.chat.completions.create({
+      //   model: "o4-mini-2025-04-16", // Or your preferred model like gpt-3.5-turbo
+      //   messages: [
+      //     { role: "system", content: systemPrompt },
+      //     {
+      //       role: "user",
+      //       content:
+      //         "Generate the promotional content JSON based on the provided details.",
+      //     },
+      //   ],
+      //   response_format: { type: "json_object" }, // Use JSON mode
+
+      //   temperature: 1.0, // Adjust creativity
+      // });
+
+      chatResponse = await openai.responses.create({
+        model: "o4-mini-2025-04-16",
+        input: [
+          {
+            role: "system",
+            content: [
+              {
+                type: "input_text",
+                text: systemPrompt,
+              },
+            ],
+          },
+
           {
             role: "user",
-            content:
-              "Generate the promotional content JSON based on the provided details.",
+            content: [
+              {
+                type: "input_text",
+                text: "Generate the promotional content JSON based on the provided details",
+              },
+            ],
           },
         ],
-        response_format: { type: "json_object" }, // Use JSON mode
-        
-        temperature: 1.0, // Adjust creativity
+        text: {
+          format: {
+            type: "json_object",
+          },
+        },
+        reasoning: {
+          effort: "medium",
+        },
+        stream: false,
       });
 
-      const rawContent = chatResponse.choices[0]?.message?.content;
+      console.log("CHAT RESPONSE:", chatResponse);
+      
+      // chatResponse.choices[0]?.message?.content;
+      const rawContent = chatResponse.output[0].content[0].text;
       if (!rawContent) {
         throw new Error("OpenAI response content is empty.");
       }
