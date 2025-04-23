@@ -30,7 +30,7 @@ export default async function DashboardPage() {
   const feedbacks = await getFeedbacks();
 
   // console.log("feedbacks:", feedbacks);
-  
+
   return (
     <>
       <div className="md:hidden">
@@ -63,6 +63,7 @@ export default async function DashboardPage() {
         <div className="flex-1 space-y-4 p-8 pt-6">
           <div className="flex items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+
             <div className="flex items-center space-x-2">
               <CalendarDateRangePicker />
               <Button>Download</Button>
@@ -176,7 +177,6 @@ export default async function DashboardPage() {
             </div>
             <PieChartComponent data={feedbacks} />
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-
               {/* main chart card */}
               <Card className="col-span-4">
                 <CardHeader>
@@ -202,7 +202,6 @@ export default async function DashboardPage() {
           </div>
           {/* sentiment */}
           <div>
-           
             <BarChartComponent data={feedbacks} />
           </div>
         </div>

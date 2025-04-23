@@ -43,19 +43,6 @@
 
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
-import OpenAI from "openai";
-
-import z from "zod";
-import { zodResponseFormat, zodTextFormat } from "openai/helpers/zod";
-
-const ContentStructure = z.object({
-  PostTitle: z.string(),
-  PostDescription: z.string(),
-  Prompt1: z.string(),
-  Prompt2: z.string(),
-  Prompt3: z.string(),
-  Prompt4: z.string(),
-});
 
 // --- Model Imports ---
 import { Agent } from "@/modals/agent.modal"; // Assuming this path is correct
@@ -68,11 +55,7 @@ import { Post } from "@/modals/post.modal"; // Adjust path if needed
 
 import { connect } from "@/db";
 import GenerateVisuals from "@/actions/generate.actions"; // *** IMPORT YOUR GenerateVisuals FUNCTION ***
-
-// Initialize OpenAI Client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+import { generateStructuredContent } from "@/actions/structured.action";
 
 export async function POST(request: NextRequest) {
   const agentId = request.nextUrl.pathname.split("/").pop();
@@ -217,121 +200,22 @@ export async function POST(request: NextRequest) {
       );
     }
     // 6. Prepare data and 7. Call ChatGPT for Content Generation
-    const systemPrompt = `Generate the promotional content in JSON format on the provided product details.
-    Product Information:
-    - Title: ${product.title}
-    - Description: ${product.description}
-
-    Market Analysis Insights:
-    - Target Audience: ${target_audience.join(", ") || "Not specified"}
-    - Content Ideas: ${content_ideas.join(", ") || "Not specified"}
-    - Key Selling Points: ${keySellingPoints.join(", ") || "Not specified"}
-    - Relevant Hashtags: ${hashtags.join(", ") || "Not specified"}
-    - Key Phrases: ${keyPhrases.join(", ") || "Not specified"}
-    User Feedback Snippets (Reflecting specific sentiments):
-    ${
-      feedbackTexts.length > 0
-        ? feedbackTexts.map((f) => `- "${f}"`).join("\n")
-        : "- No specific feedback provided for this sentiment selection."
-    }
-    Instructions:
-    Generate a JSON object containing the following fields:
-    1.  "PostTitle": A catchy and engaging title for a social media post (max 100 characters).
-    2.  "PostDescription": A compelling caption for the social media post (max 500 characters). Incorporate key selling points, address the target audience, and subtly reflect insights from the user feedback if applicable. Include relevant hashtags naturally or at the end.
-    3.  "Prompt1": A detailed image generation prompt (around 75-100 words) starting EXACTLY with "${tokenName}, a photo of ${tokenName}". Describe a scene showcasing the product in a compelling environment relevant to its use or target audience. Be specific about lighting, style, and mood.
-    4.  "Prompt2": Another detailed image prompt (around 75-100 words), starting EXACTLY with "${tokenName}, a photo of ${tokenName}". Describe a DIFFERENT scene, potentially focusing on a different key feature or benefit, or a contrasting environment.
-    5.  "Prompt3": A third detailed image prompt (around 75-100 words), starting EXACTLY with "${tokenName}, a photo of ${tokenName}". Explore another distinct visual concept.
-    6.  "Prompt4": A fourth detailed image prompt (around 75-100 words), starting EXACTLY with "${tokenName}, a photo of ${tokenName}". Offer a final unique visual angle.
-
-    Ensure the output is ONLY a valid JSON object and nothing else. Use the provided token name "${tokenName}" where specified in the prompts. Make the prompts creative and visually descriptive for an AI image generator.`;
-
-    let chatResponse;
     let generatedContent;
     try {
       console.log("Calling OpenAI for content generation...");
-      // chatResponse = await openai.chat.completions.create({
-      //   model: "o4-mini-2025-04-16", // Or your preferred model like gpt-3.5-turbo
-      //   messages: [
-      //     { role: "system", content: systemPrompt },
-      //     {
-      //       role: "user",
-      //       content:
-      //         "Generate the promotional content JSON based on the provided details.",
-      //     },
-      //   ],
-      //   response_format: { type: "json_object" }, // Use JSON mode
 
-      //   temperature: 1.0, // Adjust creativity
-      // });
+      const generatedContent = await generateStructuredContent(
+        tokenName,
+        product.title,
+        product.description,
+        target_audience,
+        content_ideas,
+        keySellingPoints,
+        hashtags,
+        keyPhrases,
+        feedbackTexts
+      );
 
-      // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ try 2 @@@@@@@@@@@@@@@@@@@@
-      // chatResponse = await openai.responses.create({
-      //   model: "o4-mini-2025-04-16",
-      //   input: [
-      //     {
-      //       role: "developer",
-      //       content: [
-      //         {
-      //           type: "input_text",
-      //           text: systemPrompt,
-      //         },
-      //       ],
-      //     },
-
-      //     {
-      //       role: "user",
-      //       content: [
-      //         {
-      //           type: "input_text",
-      //           text: "Generate the promotional content JSON based on the provided details",
-      //         },
-      //       ],
-      //     },
-      //   ],
-      //   text: {
-      //     format: {
-      //       type: "json_object",
-      //     },
-      //   },
-      //   reasoning: {
-      //     effort: "medium",
-      //   },
-      //   stream: false,
-      // });
-
-      // @@@@@@@@@@@@@@@@@@@@@@@ try 3 @@@@@@@@@@@@@@@@@@@@@@@@@@@
-      chatResponse = await openai.responses.parse({
-        model: "gpt-4o-2024-08-06", // Use valid model name
-        input: [
-          {
-            role: "system",
-            content:
-              "You are an expert product marketing content creator specializing in product social media promotion. Your task is to generate compelling promotional content for a product based on provided details, market analysis, and sentiment feedback by the user",
-          },
-          {
-            role: "user",
-            content: systemPrompt,
-          },
-        ],
-        // text_format: ContentStructure,
-        text: {
-          format: zodTextFormat(ContentStructure, "raw_content"),
-        },
-        // response_format: { type: "json_object" },
-        // temperature: 1.0,
-      });
-      console.log("CHAT RESPONSE:", chatResponse);
-
-      // chatResponse.choices[0]?.message?.content;
-      const raw_content = chatResponse.output_parsed;
-      const rawContent = raw_content;
-      if (!rawContent) {
-        throw new Error("OpenAI response content is empty.");
-      }
-
-      generatedContent = JSON.parse(rawContent);
-      console.log("Successfully received and parsed content from OpenAI.");
-      // Basic validation (can be more thorough)
       if (
         !generatedContent.PostTitle ||
         !generatedContent.PostDescription ||
