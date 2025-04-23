@@ -46,7 +46,7 @@ import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
 import z from "zod";
-import { zodResponseFormat } from "openai/helpers/zod";
+import { zodResponseFormat, zodTextFormat } from "openai/helpers/zod";
 
 const ContentStructure = z.object({
   PostTitle: z.string(),
@@ -313,14 +313,18 @@ export async function POST(request: NextRequest) {
             content: systemPrompt,
           },
         ],
-        text_format: ContentStructure,
+        // text_format: ContentStructure,
+        text: {
+          format: zodTextFormat(ContentStructure, "raw_content"),
+        },
         // response_format: { type: "json_object" },
-        temperature: 1.0,
+        // temperature: 1.0,
       });
       console.log("CHAT RESPONSE:", chatResponse);
 
       // chatResponse.choices[0]?.message?.content;
-      const rawContent = chatResponse.output_parsed;
+      const raw_content = chatResponse.output_parsed;
+      const rawContent = raw_content;
       if (!rawContent) {
         throw new Error("OpenAI response content is empty.");
       }
