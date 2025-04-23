@@ -41,7 +41,12 @@
 
 // src/app/api/agents/webhook/[id]/route.ts
 
-export const config = { runtime: 'nodejs' }
+export const config = {
+  runtime: "nodejs",
+  api: {
+    responseLimit: false,
+  },
+};
 
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
