@@ -45,6 +45,18 @@ import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
+import z from "zod";
+import { zodResponseFormat } from "openai/helpers/zod";
+
+const ContentStructure = z.object({
+  PostTitle: z.string(),
+  PostDescription: z.string(),
+  Prompt1: z.string(),
+  Prompt2: z.string(),
+  Prompt3: z.string(),
+  Prompt4: z.string(),
+});
+
 // --- Model Imports ---
 import { Agent } from "@/modals/agent.modal"; // Assuming this path is correct
 import { CampaignResult } from "@/modals/campaignResult.modal"; // Adjust path if needed
@@ -205,7 +217,7 @@ export async function POST(request: NextRequest) {
       );
     }
     // 6. Prepare data and 7. Call ChatGPT for Content Generation
-    const systemPrompt = `You are an expert marketing content creator specializing in social media promotion. Your task is to generate compelling promotional content for a product based on provided details, market analysis, and user feedback.
+    const systemPrompt = `Generate the promotional content in JSON format on the provided product details.
     Product Information:
     - Title: ${product.title}
     - Description: ${product.description}
@@ -233,18 +245,6 @@ export async function POST(request: NextRequest) {
 
     Ensure the output is ONLY a valid JSON object and nothing else. Use the provided token name "${tokenName}" where specified in the prompts. Make the prompts creative and visually descriptive for an AI image generator.`;
 
-    const systemPrompt2 = ` You are an expert marketing content creator specializing in social media promotion. Your task is to generate compelling promotional content for a product based on provided details, market analysis, and user feedback.
-    Product Information:
-    - Title: ${product.title}
-    Generate a JSON object containing the following fields:
-    1.  "PostTitle": A catchy and engaging title for a social media post (max 100 characters).
-    2.  "PostDescription": A compelling caption for the social media post (max 500 characters). Incorporate key selling points, address the target audience, and subtly reflect insights from the user feedback if applicable. Include relevant hashtags naturally or at the end.
-    3.  "Prompt1": A detailed image generation prompt (around 75-100 words) starting EXACTLY with "${tokenName}, a photo of ${tokenName}". Describe a scene showcasing the product in a compelling environment relevant to its use or target audience. Be specific about lighting, style, and mood.
-    4.  "Prompt2": Another detailed image prompt (around 75-100 words), starting EXACTLY with "${tokenName}, a photo of ${tokenName}". Describe a DIFFERENT scene, potentially focusing on a different key feature or benefit, or a contrasting environment.
-    5.  "Prompt3": A third detailed image prompt (around 75-100 words), starting EXACTLY with "${tokenName}, a photo of ${tokenName}". Explore another distinct visual concept.
-    6.  "Prompt4": A fourth detailed image prompt (around 75-100 words), starting EXACTLY with "${tokenName}, a photo of ${tokenName}". Offer a final unique visual angle.
-
-    Ensure the output is ONLY a valid JSON object and nothing else. Use the provided token name "${tokenName}" where specified in the prompts. Make the prompts creative and visually descriptive for an AI image generator.`;
     let chatResponse;
     let generatedContent;
     try {
@@ -300,26 +300,27 @@ export async function POST(request: NextRequest) {
       // });
 
       // @@@@@@@@@@@@@@@@@@@@@@@ try 3 @@@@@@@@@@@@@@@@@@@@@@@@@@@
-      chatResponse = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo", // Use valid model name
-        messages: [
+      chatResponse = await openai.responses.parse({
+        model: "gpt-4o-2024-08-06", // Use valid model name
+        input: [
           {
             role: "system",
-            content: systemPrompt2,
+            content:
+              "You are an expert product marketing content creator specializing in product social media promotion. Your task is to generate compelling promotional content for a product based on provided details, market analysis, and sentiment feedback by the user",
           },
           {
             role: "user",
-            content:
-              "Generate the promotional content JSON based on the provided details",
+            content: systemPrompt,
           },
         ],
-        response_format: { type: "json_object" },
+        text_format: ContentStructure,
+        // response_format: { type: "json_object" },
         temperature: 1.0,
       });
       console.log("CHAT RESPONSE:", chatResponse);
 
       // chatResponse.choices[0]?.message?.content;
-      const rawContent = chatResponse.choices[0]?.message?.content;
+      const rawContent = chatResponse.output_parsed;
       if (!rawContent) {
         throw new Error("OpenAI response content is empty.");
       }
