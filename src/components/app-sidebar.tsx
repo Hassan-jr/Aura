@@ -142,7 +142,7 @@ const data = {
         },
         {
           title: "Webhook Integration",
-          url: "#",
+          url: "/dashboard/webhook",
         },
         {
           title: "Billing",

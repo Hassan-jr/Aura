@@ -8,6 +8,8 @@ import { SessionProvider } from "next-auth/react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 
+import { ToastContainer } from "react-toastify";
+
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
   style: ["normal", "italic"],
@@ -26,7 +28,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={roboto.className}>
@@ -37,6 +38,7 @@ export default function RootLayout({
             <ThemeProvider>
               <Toaster />
               {children}
+              <ToastContainer />
             </ThemeProvider>
           </ReduxProvider>
         </SessionProvider>
