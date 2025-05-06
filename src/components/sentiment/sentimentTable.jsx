@@ -25,8 +25,16 @@ import { selectProductId } from "@/redux/slices/productId";
 
 export function SentimentTable({ feedbacks, users }) {
   const productId = useAppSelector(selectProductId);
-  const [productSentiments, setproductSentiments] = useState([]);
-  const [filteredFeedbacks, setFilteredFeedbacks] = useState([]);
+  const [productSentiments, setproductSentiments] = useState(
+    productId
+      ? feedbacks?.filter((feedback) => feedback.productId == productId)
+      : []
+  );
+  const [filteredFeedbacks, setFilteredFeedbacks] = useState(
+    productId
+      ? feedbacks?.filter((feedback) => feedback.productId == productId)
+      : []
+  );
   const [sentimentClass, setSentimentClass] = useState({
     polarity: [],
     emotion: [],
@@ -39,7 +47,7 @@ export function SentimentTable({ feedbacks, users }) {
     );
     setproductSentiments(filteredPosts);
     setFilteredFeedbacks(filteredPosts);
-  }, [productId]);
+  }, [productId, feedbacks]);
   return (
     <div>
       <Card className="container mx-auto p-4">

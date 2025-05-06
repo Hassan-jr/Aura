@@ -27,8 +27,8 @@ export async function getFeedbacks() {
 
 export async function getProducts() {
   await connect();
-  const user = await auth();
-  const products = await Product.find({ userId: user?.user?.id })
+  // const user = await auth();
+  const products = await Product.find()
     .lean()
     .sort({ createdAt: +1 });
   return JSON.parse(
@@ -42,7 +42,6 @@ export async function getProducts() {
     )
   );
 }
-
 
 export async function getSingleProducts(id) {
   await connect();
@@ -59,8 +58,8 @@ export async function getSingleProducts(id) {
 
 export async function getPosts() {
   await connect();
-  const user = await auth();
-  const products = await Post.find({ userId: user?.user?.id })
+  // const user = await auth();
+  const products = await Post.find()
     .lean()
     .sort({ createdAt: +1 });
   return JSON.parse(
@@ -107,16 +106,39 @@ export async function getUsers() {
   );
 }
 
+export async function getSingleUsers(id) {
+  await connect();
+  const user = await UserModel.findById(id).lean();
+
+  return JSON.parse(
+    JSON.stringify({
+      ...user,
+      _id: id,
+      // createdAt: product?.createdAt?.toISOString(),
+      // updatedAt: product?.updatedAt?.toISOString(),
+    })
+  );
+}
+
 export async function fetchAgent(userId: string) {
   try {
     await connect();
 
-    const agent = await Agent.find({ userId })
-      .sort({ createdAt: -1 })
-      .limit(10)
-      .lean();
+    const agent = await Agent.find({ userId }).sort({ createdAt: -1 }).lean();
 
-    return agent;
+    // return agent;
+    const returnAgent = JSON.parse(
+      JSON.stringify(
+        agent.map((doc) => ({
+          ...doc,
+          _id: doc._id.toString(),
+          createdAt: doc.createdAt?.toISOString(),
+          updatedAt: doc.updatedAt?.toISOString(),
+        }))
+      )
+    );
+
+    return returnAgent;
   } catch (error) {
     console.error("Error fetching agent:", error);
     throw error;
@@ -129,11 +151,22 @@ export async function findChatsForEmail(from: string, bid: string) {
     .sort({ createdAt: -1 });
   const userId = JSON.parse(JSON.stringify(users[0]._id.toString()));
 
-  const messages = await ChatMessage.find({ userId: userId, bId: bid })
+  const rawmessages = await ChatMessage.find({ userId: userId, bId: bid })
     .lean()
     .sort({ createdAt: -1 });
 
-  const productId = messages[0].productId;
+  const messages = JSON.parse(
+    JSON.stringify(
+      rawmessages.map((doc) => ({
+        ...doc,
+        _id: doc._id.toString(),
+        createdAt: doc.createdAt?.toISOString(),
+        updatedAt: doc.updatedAt?.toISOString(),
+      }))
+    )
+  );
+
+  const productId = rawmessages[0].productId;
 
   return { messages, userId, productId };
 }

@@ -1,13 +1,12 @@
+"use client"
 import { SentimentTable } from "@/components/sentiment/sentimentTable";
-import { getFeedbacks, getProducts, getUsers } from "@/actions/fetch.actions";
-// import { FilterComponent } from "../../../components/sentiment/component/FilterComponent";
-import { Card } from "@/components/ui/card";
-import InsertFeed from "./insert";
+import { useAppSelector } from "@/redux/hooks";
+import { selectfeedbacks } from "@/redux/slices/feeback";
+import { selectusers } from "@/redux/slices/user";
 
-export default async function Home() {
-  const products = await getProducts();
-  const feedbacks = await getFeedbacks();
-  const users = await getUsers();
+export default function Home() {
+ const feedbacks = useAppSelector(selectfeedbacks);
+ const users = useAppSelector(selectusers);
 
   return (
     <main className="p-2">

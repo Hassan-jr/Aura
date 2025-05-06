@@ -1,13 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import ReactMarkdown from "react-markdown";
+import { useAppSelector } from "@/redux/hooks";
+import { selectloras } from "@/redux/slices/lora";
 
 interface ProductCardProps {
+  _id: string;
   title: string;
   price: number;
   description: string;
@@ -17,33 +20,61 @@ export default function ProductCard({
   title,
   price,
   description,
+  _id,
 }: ProductCardProps) {
-  const images = [
-    "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2hvZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1539185441755-769473a23570?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHNob2VzfGVufDB8fDB8fHww",
-    "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHNob2VzfGVufDB8fDB8fHww",
-    "https://images.unsplash.com/photo-1570464197285-9949814674a7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHNob2VzfGVufDB8fDB8fHww",
-  ];
+  const lorasData = useAppSelector(selectloras);
+  const [currentLora, setCurrentLora] = useState(
+    lorasData.find((lora) => lora.productId == _id)
+  );
+
+  useEffect(() => {
+    if (_id && lorasData) {
+      const lora = lorasData.find((lora) => lora.productId == _id);
+      setCurrentLora(lora);
+    }
+  }, [lorasData, _id]);
+
+  const [trainUrls, setTrainUrls] = useState([]);
+  useEffect(() => {
+    if (currentLora) {
+      const urls = currentLora?.trainImgs?.map((lora) => lora.imgUrl);
+      setTrainUrls(urls);
+    }
+  }, [currentLora]);
+
+  // https://r2.nomapos.com/CSC416/loadingImage.svg
+  const [images, setImages] = useState(
+    trainUrls?.length > 0
+      ? trainUrls
+      : ["https://r2.nomapos.com/CSC416/loadingImage.svg"]
+  );
+
+  useEffect(() => {
+    setImages(
+      trainUrls?.length > 0
+        ? trainUrls
+        : ["https://r2.nomapos.com/CSC416/loadingImage.svg"]
+    );
+  }, [trainUrls]);
+
   const [mainImage, setMainImage] = useState(0);
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   const truncatedDescription = description.slice(0, 100);
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-80 h-auto">
       <CardContent className="p-0">
-        <div className="relative aspect-square">
+        <div className="relative w-80 h-80">
           <Image
             src={images[mainImage]}
             alt={`${title} - Image ${mainImage + 1}`}
             fill
-            // width={50}
-            // height={50}
-            className="object-cover"
+            className="object-cover w-80 h-80"
           />
         </div>
         <div className="flex justify-between p-2">
-          <div className="flex space-x-2">
+          <div className="flex space-x-1 overflow-y-auto whitespace-nowrap">
             {images.map((img, index) => (
               <button
                 key={index}

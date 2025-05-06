@@ -11,6 +11,10 @@ import { Invoice } from "@/modals/invoice.modal";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DiscountCards from "@/components/discounts/discount";
 import InvoiceCards from "@/components/invoice/invoice";
+import { ObjectId } from "mongodb";
+import MeetEvent from "@/modals/meet.modal";
+import MeetingCard from "@/components/meeting/meeting-card";
+import GenerationCards from "@/app/create/gen/generation-card";
 
 // chats
 async function getChats(id: string) {
@@ -124,6 +128,15 @@ async function getInvoices(id: string) {
   };
 }
 
+// get meetings
+async function getMeetings(id) {
+  await connect();
+  const meetings = await MeetEvent.find({ bid: id })
+    .sort({ createdAt: -1 })
+    .lean();
+
+  return meetings;
+}
 export default async function ChatPage() {
   const session = await auth();
   const { finalUsers, finalMessages } = await getChats(session?.user?.id);
@@ -133,10 +146,10 @@ export default async function ChatPage() {
   );
 
   const { InvoicesUsers, finalInvoices } = await getInvoices(session?.user?.id);
+  const meetings = await getMeetings(session?.user?.id);
 
   return (
     <div className="mx-5">
-
       <Tabs defaultValue="account" className="w-full">
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="account">Customer Engagement</TabsTrigger>
@@ -167,16 +180,15 @@ export default async function ChatPage() {
           />
         </TabsContent>
         <TabsContent value="meetings">
-          {/* <InvoiceCards
-            invoices={finalInvoices}
+          <MeetingCard
+            meetings={meetings}
+            users={finalUsers}
             products={finalProducts}
-            discounts={finalDiscounts}
-            users={InvoicesUsers}
-          /> */}
+          />
         </TabsContent>
 
         <TabsContent value="images">
-         
+          <GenerationCards />
         </TabsContent>
       </Tabs>
     </div>

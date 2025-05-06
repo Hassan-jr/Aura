@@ -2,6 +2,7 @@ export interface WebhookType {
     _id?: string
     url: string
     secret: string
+    bId: string
     events: {
       discountSent: boolean
       invoiceIssued: boolean

@@ -18,6 +18,15 @@ const ChatMessageSchema = new mongoose.Schema({
     type: String,
     required: [true, 'User ID is required'],
   },
+  isImage: {
+    type: Boolean,
+    default: false,
+    require: false,
+  },
+  generationId: {
+    type: String,
+    require: false,
+  },
   bId: {
     type: String,
     required: [true, 'User ID is required'],

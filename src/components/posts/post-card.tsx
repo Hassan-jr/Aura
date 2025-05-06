@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Heart, MessageCircle, Share2, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -30,22 +30,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import runpodSdk from "runpod-sdk";
 import Link from "next/link";
-
-// interface PostCardProps {
-//   id: string;
-//   title: string;
-//   description: string;
-//   hashtags: string;
-//   images: string[];
-//   bid: string,
-//   products: []
-//   //   userId: string;
-// }
+import { useAppSelector } from "@/redux/hooks";
+import { selectgenerations } from "@/redux/slices/generate";
 
 const formSchema = z.object({
   feedback: z.string().min(1, "Feedback is required"),
   rating: z.number().min(1).max(5),
 });
+
+interface Visuals {
+  images: string[];
+  isVideos: boolean;
+}
 
 export default function PostCard({
   id,
@@ -55,12 +51,38 @@ export default function PostCard({
   hashtags,
   bid,
   products,
+  genId,
 }) {
   const [mainImage, setMainImage] = useState(0);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [isShared, setIsShared] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const generations = useAppSelector(selectgenerations);
+  const [visuals, setVisuals] = useState<Visuals>({
+    images: [],
+    isVideos: false,
+  });
+
+  useEffect(() => {
+    if (genId) {
+      const generationResult = generations.find((gen) => gen._id == genId);
+      const allUrls: string[] =
+        generationResult?.generations?.flatMap(
+          (gen) => gen.images?.map((img) => img.url) ?? []
+        ) ?? [];
+
+      setVisuals({
+        images: allUrls,
+        isVideos: generationResult?.isVideo,
+      });
+    } else {
+      setVisuals({
+        images: images,
+        isVideos: false,
+      });
+    }
+  }, [generations, genId]);
 
   const url = "https://r2.nomapos.com";
 
@@ -94,7 +116,7 @@ export default function PostCard({
           ? process.env.NEXTAUTH_URL
           : process.env.NEXT_PUBLIC_APP_URL;
 
-      const response = await fetch(`${url}api/chat`, {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,6 +127,15 @@ export default function PostCard({
           userId: userId,
           bId: bId,
           productDetails: productDetails,
+          // other
+          customerName: "",
+          userEmail: "",
+          myEmail: "",
+          // secrets
+          clientId: "",
+          clientSecret: "",
+          refreshToken: "",
+          customerDetails: "",
         }),
       });
 
@@ -175,7 +206,7 @@ export default function PostCard({
       <CardContent className="p-0">
         <div className="relative flex flex-row">
           <div className="flex flex-col space-y-2 z-50">
-            {images.map((img, index) => (
+            {visuals.images.map((img, index) => (
               <button
                 key={index}
                 onClick={() => setMainImage(index)}
@@ -192,9 +223,9 @@ export default function PostCard({
               </button>
             ))}
           </div>
-          <div className="aspect-square">
+          <div className="aspect-square w-full h-80">
             <Image
-              src={`${url}/${images[mainImage]}`}
+              src={`${url}/${visuals.images[mainImage]}`}
               alt={`${title} - Image ${mainImage + 1}`}
               fill
               className="object-cover"
@@ -216,7 +247,9 @@ export default function PostCard({
               </button>
             )}
           </p>
-          <p className="text-sm text-blue-600 mt-1">{hashtags}</p>
+          <p className="text-sm text-blue-600 mt-1 overflow-hidden">
+            {hashtags}
+          </p>
           <div className="flex justify-start space-x-4 mt-4">
             <Button
               variant="ghost"
@@ -290,7 +323,7 @@ export default function PostCard({
                     />
                     <Button
                       type="submit"
-                      className="w-full bg-black text-white"
+                      className="w-full bg-black hover:bg-slate-600 text-white"
                     >
                       Submit Feedback
                     </Button>
@@ -309,7 +342,9 @@ export default function PostCard({
               />
             </Button>
             <Link href={`/checkout/${id}`}>
-              <Button className="bg-black text-white">Checkout</Button>
+              <Button className="bg-black hover:bg-slate-600 text-white">
+                Checkout
+              </Button>
             </Link>
           </div>
         </div>

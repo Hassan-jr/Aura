@@ -20,6 +20,14 @@ import Image from "next/image";
 
 import { useAppSelector } from "@/redux/hooks";
 import { selectProductId } from "@/redux/slices/productId";
+import { useSession } from "next-auth/react";
+import { selectcalenders } from "@/redux/slices/calender";
+
+interface UserDetails {
+  id: string;
+  name: string;
+  email: string;
+}
 
 export function AIChat({ prevmessages, users, products, bid }) {
   const [messages, setMessages] = useState(prevmessages);
@@ -28,11 +36,28 @@ export function AIChat({ prevmessages, users, products, bid }) {
   const [selectedUserId, setselectedUserId] = useState<string | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
+  const { data: session } = useSession();
+
+  const [selectedUserDetails, setSelectedUserDetails] =
+    useState<UserDetails | null>(null);
+  useEffect(() => {
+    if (selectedUserId) {
+      const user = users.find((user) => user._id == selectedUserId);
+      setSelectedUserDetails({
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      });
+    }
+  }, [selectedUserId]);
+
   const count = useAppSelector(selectProductId);
 
   const productId = useAppSelector(selectProductId);
   useEffect(() => {
-    const filteredPosts = prevmessages?.filter((mss) => mss.productId == productId);
+    const filteredPosts = prevmessages?.filter(
+      (mss) => mss.productId == productId
+    );
     setMessages(filteredPosts);
   }, [productId]);
 
@@ -46,6 +71,25 @@ export function AIChat({ prevmessages, users, products, bid }) {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
     }
   }, [messages, isLoading]);
+
+  // get credentials
+  const calenders = useAppSelector(selectcalenders);
+
+  const [credentials, setCredentials] = useState({
+    GOOGLE_CLIENT_ID: "",
+    GOOGLE_CLIENT_SECRET: "",
+    GOOGLE_REFRESH_TOKEN: "",
+  });
+
+  useEffect(() => {
+    if (calenders.length > 0) {
+      setCredentials({
+        GOOGLE_CLIENT_ID: calenders[0].GOOGLE_CLIENT_ID,
+        GOOGLE_CLIENT_SECRET: calenders[0].GOOGLE_CLIENT_SECRET,
+        GOOGLE_REFRESH_TOKEN: calenders[0].GOOGLE_REFRESH_TOKEN,
+      });
+    }
+  }, [calenders]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,6 +122,15 @@ export function AIChat({ prevmessages, users, products, bid }) {
           userId: selectedUserId,
           bId: bid,
           productDetails: productDetails,
+          // other
+          customerName: selectedUserDetails?.name,
+          userEmail: selectedUserDetails?.email,
+          myEmail: session?.user?.email,
+          // secrets
+          clientId: credentials.GOOGLE_CLIENT_ID,
+          clientSecret: credentials.GOOGLE_CLIENT_SECRET,
+          refreshToken: credentials.GOOGLE_REFRESH_TOKEN,
+          customerDetails: selectedUserDetails,
         }),
       });
 
@@ -134,14 +187,14 @@ export function AIChat({ prevmessages, users, products, bid }) {
             users={users}
             selectedUserId={selectedUserId}
             onSelectUser={setselectedUserId}
-            messages = {messages}
+            messages={messages}
           />
           <div className="flex-1 flex flex-col h-[500px]">
             <Card className="flex-1 m-0 bg-background/60 backdrop-blur-sm shadow-xl border-t border-l border-background/20">
               <CardContent className="flex-1 overflow-hidden">
                 <ScrollArea className=" h-[500px] mt-0 " ref={scrollAreaRef}>
-                  {filteredMessages?.map((message) => (
-                    <MessageBubble key={message?.userId} message={message} />
+                  {filteredMessages?.map((message, idx) => (
+                    <MessageBubble key={idx} message={message} />
                   ))}
                   {filteredMessages.length === 0 && (
                     <div className="w-full py-10">
@@ -184,7 +237,9 @@ export function AIChat({ prevmessages, users, products, bid }) {
           </div>
         </div>
       ) : (
-        <Card className="p-5 w-64 mx-auto">No customer engagement available for this product</Card>
+        <Card className="p-5 w-64 mx-auto">
+          No customer engagement available for this product
+        </Card>
       )}
     </div>
   );

@@ -18,6 +18,11 @@ const CampaignSchema = new mongoose.Schema(
       type: String,
       ref: "Run",
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+      require: false,
+    },
     frequency: {
       type: String,
       enum: ["daily", "weekly", "monthly", "now"],

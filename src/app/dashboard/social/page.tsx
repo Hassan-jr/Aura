@@ -2,6 +2,7 @@ import { getEmails } from "@/actions/fetch.actions";
 import { EmailConnect } from "./component/email-connect";
 import { Check } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import CalendarComponent from "./component/calender";
 
 const EmailCard = ({ email, pass }: { email: string; pass: string }) => (
   <Card className="w-full max-w-md mb-4">
@@ -21,17 +22,24 @@ const EmailCard = ({ email, pass }: { email: string; pass: string }) => (
 export default async function YourPage() {
   const emails = await getEmails();
   return (
-    <div className="p-2">
-      <h1>Your Page</h1>
-      <EmailConnect />
-      <div className="mt-2">
-        {emails.map((item, index) => (
-          <EmailCard
-            key={index}
-            email={item.EMAIL_SERVER_USER}
-            pass={item.EMAIL_SERVER_PASSWORD}
-          />
-        ))}
+    <div>
+      {/* email connet */}
+      <div className="p-2">
+        <EmailConnect />
+        <div className="mt-2">
+          {emails.map((item, index) => (
+            <EmailCard
+              key={index}
+              email={item.EMAIL_SERVER_USER}
+              pass={item.EMAIL_SERVER_PASSWORD}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* CalendarComponent */}
+      <div>
+        <CalendarComponent />
       </div>
     </div>
   );

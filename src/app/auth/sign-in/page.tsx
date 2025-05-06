@@ -49,7 +49,7 @@ export default function SignIn() {
           title: "Login successful",
           description: '',
         });
-        router.push('/home')
+        router.push('/products')
       } else {
         setError('An unexpected error occurred')
       }

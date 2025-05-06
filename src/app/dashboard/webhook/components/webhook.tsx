@@ -8,6 +8,8 @@ import { WebhookDialog } from "./webhook-dialog";
 import { DeliveryHistory } from "./delivery-history";
 import type { WebhookType, DeliveryType } from "@/lib/types";
 import { toast } from "react-toastify";
+import { useSession } from "next-auth/react";
+import { log } from "node:console";
 
 export function Webhook() {
   const [webhooks, setWebhooks] = useState<WebhookType[]>([]);
@@ -23,11 +25,14 @@ export function Webhook() {
     fetchDeliveries();
   }, []);
 
+  const { data: session } = useSession();
+
   const fetchWebhooks = async () => {
     try {
       const response = await fetch("/api/webhooks");
       const data = await response.json();
-      setWebhooks(data);
+      const webhookdata = data?.filter((dat) => dat.bId == session?.user?.id);
+      setWebhooks(webhookdata);
     } catch (error) {
       console.error("Error fetching webhooks:", error);
     }
@@ -45,6 +50,12 @@ export function Webhook() {
 
   const handleSaveWebhook = async (webhook: WebhookType) => {
     const id = toast.loading("Saving Webhook.. Please wait...");
+    setWebhooks((prev) => ({ ...prev, bId: session?.user?.id }));
+    const webhookData = {
+      ...webhook,
+      bId: session?.user?.id,
+    };
+
     try {
       const method = webhook._id ? "PUT" : "POST";
       const url = webhook._id
@@ -56,7 +67,7 @@ export function Webhook() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(webhook),
+        body: JSON.stringify(webhookData),
       });
 
       if (response.ok) {
@@ -116,6 +127,7 @@ export function Webhook() {
   };
 
   const handleResendDelivery = async (deliveryId: string) => {
+    const id = toast.loading("Resending Webhook...");
     try {
       const response = await fetch(`/api/deliveries/${deliveryId}/resend`, {
         method: "POST",
@@ -124,9 +136,21 @@ export function Webhook() {
       if (response.ok) {
         console.log("Webhook delivery resent:", deliveryId);
         fetchDeliveries();
+        toast.update(id, {
+          render: "Webhook Resent Successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000,
+        });
       }
     } catch (error) {
       console.error("Error resending webhook delivery:", error);
+      toast.update(id, {
+        render: "Error Resending Webhook",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
     }
   };
 
@@ -134,7 +158,7 @@ export function Webhook() {
     // addDelivery
     try {
       const webhook = {
-        webhookId: "680caaff2a97e3675d7ca41d",
+        webhookId: "6813279e0d6360bc6794fa4c",
         event: "discount_sent",
         payload: {
           user: {
@@ -179,6 +203,7 @@ export function Webhook() {
             setEditingWebhook(null);
             setIsDialogOpen(true);
           }}
+          disabled={webhooks?.length > 0 ? true : false}
         >
           <Plus className="mr-2 h-4 w-4" />
           Add Webhook

@@ -48,32 +48,60 @@
 //   )
 // }
 
-
+import React from "react"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Message } from "./types"
 
+function linkify(text: string) {
+  const urlRegex = /(https?:\/\/[^\s]+)/g
+  const parts = text?.split(urlRegex)
+
+  return parts.map((part, idx) =>
+    urlRegex.test(part) ? (
+      <a
+        key={idx}
+        href={part}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:underline"
+      >
+        {part}
+      </a>
+    ) : (
+      <span key={idx}>{part}</span>
+    )
+  )
+}
+
 export function MessageBubble({ message }: { message: Message }) {
-  const isUser = message.role === 'user'
+  const isUser = message.role === "user"
+
   return (
-    <div className={cn(
-      "flex items-end mb-4",
-      isUser ? "justify-end" : "justify-start"
-    )}>
-      <div className={cn(
-        "flex items-end max-w-[80%]",
-        isUser ? "flex-row-reverse" : "flex-row"
-      )}>
+    <div
+      className={cn(
+        "flex items-end mb-4",
+        isUser ? "justify-end" : "justify-start"
+      )}
+    >
+      <div
+        className={cn(
+          "flex items-end max-w-[80%]",
+          isUser ? "flex-row-reverse" : "flex-row"
+        )}
+      >
         <Avatar className="w-8 h-8">
-          <AvatarFallback>{isUser ? 'U' : 'AI'}</AvatarFallback>
+          <AvatarFallback>{isUser ? "U" : "AI"}</AvatarFallback>
         </Avatar>
-        <div className={cn(
-          "mx-2 p-3 rounded-lg",
-          isUser ? "bg-blue-600 text-white" : "bg-gray-200 dark:bg-gray-700",
-          "transition-all duration-300 ease-in-out",
-          "animate-fade-in"
-        )}>
-          {message.content}
+        <div
+          className={cn(
+            "mx-2 p-3 rounded-lg transition-all duration-300 ease-in-out animate-fade-in",
+            isUser
+              ? "bg-blue-600 text-white"
+              : "bg-gray-200 dark:bg-gray-700"
+          )}
+        >
+          {linkify(message.content)}
         </div>
       </div>
     </div>
@@ -98,4 +126,3 @@ export function LoadingBubble() {
     </div>
   )
 }
-

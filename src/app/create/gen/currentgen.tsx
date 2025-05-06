@@ -1,14 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  ArrowLeftIcon,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  ChevronUp,
-  X,
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

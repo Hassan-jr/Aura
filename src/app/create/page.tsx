@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Navheader from "@/customui/navheader";
 import CreateTabs from "./createTabs"
+import { PrevGen } from "./gen/gen";
 
 
 export default function Home() {
@@ -8,7 +9,8 @@ export default function Home() {
     <main>
       <Navheader>
         {/* TABS */}
-        <CreateTabs />
+        {/* <CreateTabs /> */}
+        <PrevGen />
       </Navheader>
     </main>
   );

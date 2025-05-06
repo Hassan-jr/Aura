@@ -57,7 +57,7 @@ export default function VerifyEmail() {
             <TextureButton
               variant="accent"
               className="w-full"
-              onClick={() => router.push('/home')}
+              onClick={() => router.push('/products')}
             >
               Proceed to Inprime AI
             </TextureButton>

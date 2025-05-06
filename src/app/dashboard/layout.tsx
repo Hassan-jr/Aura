@@ -1,85 +1,3 @@
-// "use client";
-// import { AppSidebar } from "@/components/app-sidebar";
-// import {
-//   Breadcrumb,
-//   BreadcrumbItem,
-//   BreadcrumbLink,
-//   BreadcrumbList,
-//   BreadcrumbPage,
-//   BreadcrumbSeparator,
-// } from "@/components/ui/breadcrumb";
-// import { Separator } from "@/components/ui/separator";
-// import {
-//   SidebarInset,
-//   SidebarProvider,
-//   SidebarTrigger,
-// } from "@/components/ui/sidebar";
-// import React from "react";
-// import { getProducts } from "@/actions/fetch.actions";
-// import { useDispatch } from "react-redux";
-// import { setProducts } from "@/redux/slices/product";
-// import { getLoras } from "@/actions/lora.action";
-// import { setloras } from "@/redux/slices/lora";
-
-// export default function Page({
-//   children,
-// }: Readonly<{
-//   children: React.ReactNode;
-// }>) {
-//   // fetch data here
-//   // const [products, setProducts] = React.useState([]);
-//   const [loading, setLoading] = React.useState(false);
-
-//   const dispatch = useDispatch();
-
-//   React.useEffect(() => {
-//     const fetchProductData = async () => {
-//       try {
-//         setLoading(true);
-//         const data = await getProducts();
-//         const loraData = await getLoras()
-//         // setProducts(data);
-//         dispatch(setProducts(data));
-//         dispatch(setloras(loraData))
-//         setLoading(false);
-//       } catch (error) {
-//         console.log("Error Fetching Products in sidebar", error);
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchProductData();
-//   }, []);
-
-
-//   return (
-//     <SidebarProvider>
-//       <AppSidebar />
-//       <SidebarInset>
-//         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-//           <div className="flex items-center gap-2 px-4">
-//             <SidebarTrigger className="-ml-1" />
-//             <Separator orientation="vertical" className="mr-2 h-4" />
-//             <Breadcrumb>
-//               <BreadcrumbList>
-//                 <BreadcrumbItem className="hidden md:block">
-//                   <BreadcrumbLink href="#">Dashboard</BreadcrumbLink>
-//                 </BreadcrumbItem>
-//                 <BreadcrumbSeparator className="hidden md:block" />
-//                 <BreadcrumbItem>
-//                   <BreadcrumbPage></BreadcrumbPage>
-//                 </BreadcrumbItem>
-//               </BreadcrumbList>
-//             </Breadcrumb>
-//           </div>
-//         </header>
-//         {children}
-//       </SidebarInset>
-//     </SidebarProvider>
-//   );
-// }
-
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -102,12 +20,25 @@ import {
 } from "@/components/ui/sidebar";
 
 // Your Actions and Redux slices
-import { getProducts } from "@/actions/fetch.actions";
+import {
+  fetchAgent,
+  getFeedbacks,
+  getPosts,
+  getProducts,
+  getUsers,
+} from "@/actions/fetch.actions";
 import { getLoras } from "@/actions/lora.action"; // Assuming correct path
 import { setProducts } from "@/redux/slices/product"; // Assuming correct path
 import { setloras } from "@/redux/slices/lora"; // Assuming correct path
 import { getGenerations } from "@/actions/generate.actions";
 import { setgenerations } from "@/redux/slices/generate";
+import { useSession } from "next-auth/react";
+import { getAllCalenders } from "@/actions/calender.action";
+import { setcalenders } from "@/redux/slices/calender";
+import { setfeedbacks } from "@/redux/slices/feeback";
+import { setagents } from "@/redux/slices/agent";
+import { setusers } from "@/redux/slices/user";
+import { setposts } from "@/redux/slices/post";
 
 // Placeholder for a Spinner component (you'll need to create or import one)
 const Spinner = () => (
@@ -144,15 +75,16 @@ const Spinner = () => (
   </div>
 );
 
-// --- Layout Component ---
-
-export default function AppLayout({ // Renamed from Page for clarity if this is a layout
+export default function AppLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [loading, setLoading] = useState(true); // Start loading initially
-  const [error, setError] = useState<string | null>(null); // State to hold potential errors
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -162,26 +94,44 @@ export default function AppLayout({ // Renamed from Page for clarity if this is 
     const fetchInitialData = async () => {
       // Ensure loading is true at the start of fetching attempt
       if (isMounted) {
-         setLoading(true);
-         setError(null); // Reset error on new fetch attempt
+        setLoading(true);
+        setError(null); // Reset error on new fetch attempt
       }
 
       try {
         // Fetch data concurrently
-        const [productsData, loraData, generationsData] = await Promise.all([
-          getProducts(),
-          getLoras(),
-          getGenerations()
+        const [
+          // productsData,
+          // loraData,
+          // generationsData,
+          calenderData,
+          // feedbackdata,
+          agentData,
+          usersData,
+          // postsData,
+        ] = await Promise.all([
+          // getProducts(),
+          // getLoras(),
+          // getGenerations(),
+          getAllCalenders(userId),
+          // getFeedbacks(),
+          fetchAgent(userId),
+          getUsers(),
+          // getPosts(),
           // Add other independent fetch calls here if needed
           // e.g., getSettings(), getUserProfile()
         ]);
 
         // Only dispatch if the component is still mounted
         if (isMounted) {
-          dispatch(setProducts(productsData));
-          dispatch(setloras(loraData));
-          // dispatch other setters here
-          dispatch(setgenerations(generationsData))
+          // dispatch(setProducts(productsData));
+          // dispatch(setloras(loraData));
+          // dispatch(setgenerations(generationsData));
+          dispatch(setcalenders(calenderData));
+          // dispatch(setfeedbacks(feedbackdata));
+          dispatch(setagents(agentData));
+          dispatch(setusers(usersData));
+          // dispatch(setposts(postsData));
         }
       } catch (err) {
         console.error("Error fetching initial layout data:", err);
@@ -203,7 +153,7 @@ export default function AppLayout({ // Renamed from Page for clarity if this is 
     return () => {
       isMounted = false;
     };
-  }, [dispatch]); // Include dispatch in dependency array (it's stable but good practice)
+  }, [dispatch, userId]);
 
   return (
     <SidebarProvider>
@@ -221,7 +171,10 @@ export default function AppLayout({ // Renamed from Page for clarity if this is 
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage> {/* Consider populating this based on route */} </BreadcrumbPage>
+                  <BreadcrumbPage>
+                    {" "}
+                    {/* Consider populating this based on route */}{" "}
+                  </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -229,7 +182,9 @@ export default function AppLayout({ // Renamed from Page for clarity if this is 
         </header>
 
         {/* Main Content Area with Loading/Error Handling */}
-        <main className="flex-1 relative p-4 md:p-6"> {/* Adjust padding as needed */}
+        <main className="flex-1 relative p-4 md:p-6">
+          {" "}
+          {/* Adjust padding as needed */}
           {loading ? (
             <div className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm z-10">
               {/* Use absolute positioning to overlay */}
@@ -240,11 +195,10 @@ export default function AppLayout({ // Renamed from Page for clarity if this is 
               <p>{error}</p> {/* Display error message */}
             </div>
           ) : (
-             // Render children only when not loading and no error
+            // Render children only when not loading and no error
             children
           )}
         </main>
-
       </SidebarInset>
     </SidebarProvider>
   );

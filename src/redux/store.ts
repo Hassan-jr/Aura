@@ -6,6 +6,11 @@ import productsSlice from "./slices/product";
 import productIdSlice  from "./slices/productId";
 import lorasSlice  from "./slices/lora";
 import generationsSlice from "./slices/generate";
+import calendersSlice  from "./slices/calender";
+import feedbacksSlice  from "./slices/feeback";
+import agentsSlice from "./slices/agent";
+import usersSlice from "./slices/user";
+import postsSlice  from "./slices/post";
 
 export const makeStore = () => {
   return configureStore({
@@ -17,6 +22,11 @@ export const makeStore = () => {
       productId: productIdSlice,
       loras: lorasSlice,
       generations: generationsSlice,
+      calenders: calendersSlice,
+      feedbacks: feedbacksSlice,
+      agents: agentsSlice,
+      users: usersSlice,
+      posts: postsSlice,
     },
     devTools: process.env.NODE_ENV !== "production",
   });

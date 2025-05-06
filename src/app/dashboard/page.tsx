@@ -1,3 +1,4 @@
+"use client"
 import { Metadata } from "next";
 import Image from "next/image";
 
@@ -9,28 +10,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CalendarDateRangePicker } from "./components/date-range-picker";
 import { MainNav } from "./components/main-nav";
 import { Overview } from "./components/overview";
 import { RecentSales } from "./components/recent-sales";
 import { Search } from "./components/search";
-import TeamSwitcher from "./components/team-switcher";
 import { UserNav } from "./components/user-nav";
-import { getFeedbacks } from "@/actions/fetch.actions";
 import PieChartComponent from "@/components/sentiment/chart/pie";
 import { BarChartComponent } from "@/components/sentiment/chart/bar";
+import { useAppSelector } from "@/redux/hooks";
+import { selectfeedbacks } from "@/redux/slices/feeback";
 
-export const metadata: Metadata = {
-  title: "Dashboard",
-  description: " ",
-};
-
-export default async function DashboardPage() {
-  const feedbacks = await getFeedbacks();
-
-  // console.log("feedbacks:", feedbacks);
-
+export default function DashboardPage() {
+   const feedbacks = useAppSelector(selectfeedbacks);
   return (
     <>
       <div className="md:hidden">

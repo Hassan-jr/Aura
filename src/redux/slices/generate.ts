@@ -8,6 +8,7 @@ interface generate {
   lora_url: string;
   lora_scale: number;
   productId: string;
+  isVideo: boolean;
   generations: any[];
   createdAt: string;
   updatedAt: string;

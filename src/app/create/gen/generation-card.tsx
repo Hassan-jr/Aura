@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -8,6 +8,7 @@ import { Loader2, X, AlertCircle, Clock } from "lucide-react";
 import Image from "next/image";
 import { useAppSelector } from "@/redux/hooks";
 import { selectgenerations } from "@/redux/slices/generate";
+import { selectProductId } from "@/redux/slices/productId";
 
 // TypeScript interfaces
 interface GenerationImage {
@@ -31,122 +32,6 @@ interface Generation {
   task_duration_seconds?: number;
   isProcessing?: boolean; // Added to handle loading state
 }
-
-// Sample data
-const sampleGenerations: Generation[] = [
-  // Processed generation with 1 image
-  {
-    error: null,
-    guidance_scale: 4,
-    height: 1024,
-    width: 1024,
-    images: [
-      {
-        seed: 2910494416,
-        url: "/placeholder.svg?height=512&width=512",
-      },
-    ],
-    lora_scale_requested: 0.8,
-    lora_url:
-      "https://r2.nomapos.com/CSC416Models/deployTest/my_first_flux_lora_v4_000002000.safetensors",
-    negative_prompt: "",
-    num_inference_steps: 30,
-    num_outputs: 1,
-    prompt: "GIA, A photo of GIA bicycle on top of a mountain",
-    seed: 2910494416,
-    task_duration_seconds: 21.5,
-  },
-  // Processed generation with 2 images
-  {
-    error: null,
-    guidance_scale: 4,
-    height: 1024,
-    width: 1024,
-    images: [
-      {
-        seed: 4067650714,
-        url: "/placeholder.svg?height=512&width=512",
-      },
-      {
-        seed: 4067650715,
-        url: "/placeholder.svg?height=512&width=512",
-      },
-    ],
-    lora_scale_requested: 0.8,
-    lora_url:
-      "https://r2.nomapos.com/CSC416Models/deployTest/my_first_flux_lora_v4_000002000.safetensors",
-    negative_prompt: "",
-    num_inference_steps: 30,
-    num_outputs: 2,
-    prompt:
-      "GIA, Design a sleek, modern poster featuring the GIA bicycle in a dynamic pose",
-    seed: 4067650714,
-    task_duration_seconds: 21.58,
-  },
-  // Processed generation with 4 images
-  {
-    error: null,
-    guidance_scale: 5,
-    height: 1024,
-    width: 1024,
-    images: [
-      {
-        seed: 1234567890,
-        url: "/placeholder.svg?height=512&width=512",
-      },
-      {
-        seed: 1234567891,
-        url: "/placeholder.svg?height=512&width=512",
-      },
-      {
-        seed: 1234567892,
-        url: "/placeholder.svg?height=512&width=512",
-      },
-      {
-        seed: 1234567893,
-        url: "/placeholder.svg?height=512&width=512",
-      },
-    ],
-    lora_scale_requested: 0.9,
-    lora_url:
-      "https://r2.nomapos.com/CSC416Models/deployTest/my_first_flux_lora_v4_000002000.safetensors",
-    negative_prompt: "blurry, low quality",
-    num_inference_steps: 40,
-    num_outputs: 4,
-    prompt:
-      "GIA, Multiple variations of GIA bicycle in different environments and lighting conditions",
-    seed: 1234567890,
-    task_duration_seconds: 45.2,
-  },
-  // Loading generation
-  {
-    error: null,
-    guidance_scale: 4,
-    height: 1920,
-    width: 1080,
-    images: [],
-    negative_prompt: "",
-    num_inference_steps: 30,
-    num_outputs: 2,
-    prompt:
-      "GIA, A GIA bicycle racing through a futuristic cityscape at night with neon lights",
-    seed: 0,
-    isProcessing: true,
-  },
-  // Error generation
-  {
-    error: "Failed to process request: Model not found",
-    guidance_scale: 4,
-    height: 1024,
-    width: 1024,
-    images: [],
-    negative_prompt: "",
-    num_inference_steps: 30,
-    num_outputs: 1,
-    prompt: "GIA, A GIA bicycle transforming into a robot",
-    seed: 9876543210,
-  },
-];
 
 export function GenerationCard({ generation }: { generation: Generation }) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -228,12 +113,12 @@ export function GenerationCard({ generation }: { generation: Generation }) {
           </div>
 
           {/* Right side - Details */}
-          <CardContent className="w-full md:w-1/2 p-5 flex flex-col overflow-y-auto">
-            <div className="mb-4">
+          <CardContent className="w-full md:w-1/2 p-2 flex flex-col overflow-y-auto">
+            <div className="mb-2">
               <h3 className="text-lg font-bold line-clamp-2 mb-1">
                 {generation.prompt}
               </h3>
-              <div className="flex items-center gap-2 mt-2">
+              <div className="flex items-center gap-2 mt-1">
                 {isProcessed ? (
                   <Badge className="bg-green-500 hover:bg-green-600">
                     Completed
@@ -254,7 +139,7 @@ export function GenerationCard({ generation }: { generation: Generation }) {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-x-4 gap-y-2 mt-2">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2 mt-1">
               <div>
                 <p className="text-xs text-muted-foreground">Dimensions</p>
                 <p className="font-medium">
@@ -288,7 +173,7 @@ export function GenerationCard({ generation }: { generation: Generation }) {
             </div>
 
             {generation.negative_prompt && (
-              <div className="mt-4">
+              <div className="mt-2">
                 <p className="text-xs text-muted-foreground">
                   Negative Prompt:
                 </p>
@@ -345,17 +230,33 @@ export function GenerationCard({ generation }: { generation: Generation }) {
 
 export default function GenerationCards() {
   const generationData = useAppSelector(selectgenerations);
-  console.log("Generations:", generationData);
+  const productId = useAppSelector(selectProductId);
+  const [currentProductGens, setCurrentProductGens] = useState(
+    generationData.filter((gen) => gen.productId == productId)
+  );
+
+  useEffect(() => {
+    if (productId && generationData?.length > 0) {
+      setCurrentProductGens(
+        generationData.filter((gen) => gen.productId == productId)
+      );
+    }
+  }, [productId, generationData]);
 
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="space-y-6">
-        {generationData?.length > 0 &&
-          generationData?.map((gens) => {
+        {currentProductGens?.length > 0 ?
+          currentProductGens?.map((gens) => {
             return gens.generations.map((generation, index) => (
               <GenerationCard key={index} generation={generation} />
             ));
-          })}
+          })
+        :
+        <div className="bg-slate-100 h-80 w-full text-center flex align-middle justify-center">
+          <p className="text-xl font-semibold text-gray-700 mx-auto my-auto">No Product Visuals Generated</p>
+        </div>
+        }
         {/* {sampleGenerations.map((generation, index) => (
           <GenerationCard key={index} generation={generation} />
         ))} */}

@@ -23,39 +23,26 @@ import { useAppSelector } from "@/redux/hooks";
 import { selectProductId } from "@/redux/slices/productId";
 import { Card } from "@/components/ui/card";
 import { selectProducts } from "@/redux/slices/product";
+import { selectagents } from "@/redux/slices/agent";
 
 export default function AnalysisComponent({ products }) {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const [queryType, setQueryType] = useState("product");
   const [customQuery, setCustomQuery] = useState("");
-  const [runs, setRuns] = useState([]);
+  const runs = useAppSelector(selectagents);
+  
   const { toast } = useToast();
 
   const userId = session?.user.id;
 
-  
-
   const productId = useAppSelector(selectProductId);
   // const products2 = useAppSelector(selectProducts);
-  const productTitle = products.find(product=>product._id == productId)?.title;
+  const productTitle = products.find(
+    (product) => product._id == productId
+  )?.title;
 
-  useEffect(() => {
-    const loadRuns = async () => {
-      try {
-        const fetchedRuns = await fetchAgent(userId);
-        setRuns(fetchedRuns);
-      } catch (error) {
-        console.error("Error loading runs:", error);
-        toast({
-          title: "Error",
-          description: "Failed to load previous runs",
-          variant: "destructive",
-        });
-      }
-    };
-    loadRuns();
-  }, [userId, toast]);
+  
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -77,8 +64,6 @@ export default function AnalysisComponent({ products }) {
       });
       setOpen(false);
       // Refresh the runs list
-      const updatedRuns = await fetchAgent(userId);
-      setRuns(updatedRuns);
     } catch (error) {
       toast({
         title: "Error",

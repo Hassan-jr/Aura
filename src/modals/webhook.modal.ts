@@ -15,6 +15,10 @@ const WebhookSchema = new mongoose.Schema(
       // Consider adding select: false if you don't want to fetch the secret by default
       // select: false,
     },
+    bId: {
+      type: String,
+      required: true,
+    },
     events: {
       // Nested object for event subscriptions
       type: {

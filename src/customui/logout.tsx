@@ -15,7 +15,7 @@ export function LogoutButton() {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = async () => {
-    await signOut({ redirect: true, callbackUrl: "/home" });
+    await signOut({ redirect: true, callbackUrl: "/products" });
   };
 
   return (

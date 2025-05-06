@@ -30,7 +30,7 @@ export function WebhookTable({ webhooks, onEdit, onDelete }: WebhookTableProps) 
               </TableCell>
             </TableRow>
           ) : (
-            webhooks.map((webhook) => (
+            webhooks?.length > 0 && webhooks?.map((webhook) => (
               <TableRow key={webhook._id}>
                 <TableCell className="font-medium">{webhook.url}</TableCell>
                 <TableCell>{countEvents(webhook)}</TableCell>

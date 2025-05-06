@@ -1,23 +1,29 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useState, useTransition } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   HomeIcon,
   BoxModelIcon,
   PlusCircledIcon,
   PersonIcon,
-  ImageIcon
+  ImageIcon,
+  ChatBubbleIcon,
 } from "@radix-ui/react-icons";
 import { Card } from "@/components/ui/card";
 
 const pages = [
   {
-    path: "/home",
-    name: "Home",
+    path: "/products",
+    name: "Products",
     icon: <HomeIcon className="h-5 w-5" />,
   },
 
@@ -39,7 +45,7 @@ const pages = [
   {
     path: "/chat",
     name: "Chats",
-    icon: <BoxModelIcon className="h-5 w-5" />,
+    icon: <ChatBubbleIcon className="h-5 w-5" />,
   },
   {
     path: "/profile",
@@ -57,11 +63,10 @@ export function OptimizedTabBar({ children }: { children: React.ReactNode }) {
     return pages.findIndex((page) => page.path === pathname);
   }, [pathname]);
 
-  const [dragDirection, setDragDirection] = useState<number>(0);
 
   useEffect(() => {
-    pages.forEach(page => router.prefetch(page.path))
-  }, [router])
+    pages.forEach((page) => router.prefetch(page.path));
+  }, [router]);
 
   const navigateToPage = useCallback(
     (index: number) => {
@@ -74,49 +79,6 @@ export function OptimizedTabBar({ children }: { children: React.ReactNode }) {
     },
     [router]
   );
-
-  const handleDragEnd = useCallback(
-    (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-      const swipeThreshold = 50;
-      if (Math.abs(info.offset.x) > swipeThreshold) {
-        if (info.offset.x > 0 && currentPageIndex > 0) {
-          navigateToPage(currentPageIndex - 1);
-        } else if (info.offset.x < 0 && currentPageIndex < pages.length - 1) {
-          navigateToPage(currentPageIndex + 1);
-        }
-      }
-      setDragDirection(0);
-    },
-    [currentPageIndex, navigateToPage]
-  );
-
-  const handleDrag = useCallback(
-    (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-      setDragDirection(info.offset.x < 0 ? 1 : -1);
-    },
-    []
-  );
-
-  const pageVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? "100%" : "-100%",
-      opacity: 0,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-    },
-    exit: (direction: number) => ({
-      x: direction < 0 ? "100%" : "-100%",
-      opacity: 0,
-    }),
-  };
-
-  const pageTransition = {
-    type: "spring",
-    stiffness: 300,
-    damping: 30,
-  };
 
   return (
     <div className="flex flex-col w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto py-2 px-1">
@@ -156,29 +118,7 @@ export function OptimizedTabBar({ children }: { children: React.ReactNode }) {
           </TabsList>
         </Tabs>
       </Card>
-      <motion.div
-        // className="flex-grow overflow-hidden"
-        drag="x"
-        dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0.2}
-        onDragEnd={handleDragEnd}
-        onDrag={handleDrag}
-      >
-        <AnimatePresence initial={false} mode="wait" custom={dragDirection}>
-          <motion.div
-            key={pathname}
-            custom={dragDirection}
-            variants={pageVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={pageTransition}
-            // className="w-full h-full"
-          >
-            {children}
-          </motion.div>
-        </AnimatePresence>
-      </motion.div>
+      <div>{children}</div>
     </div>
   );
 }

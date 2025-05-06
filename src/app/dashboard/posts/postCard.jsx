@@ -25,6 +25,7 @@ function PostsCardsComponent({ posts }) {
           images={post?.images}
           bid="" // test
           products={productPosts} //test
+          genId={post?.generationId ? post?.generationId : null}
 
         />
       ))}
