@@ -61,8 +61,8 @@ export async function getLoras(){
           product_lora.map((doc) => ({
             ...doc,
             _id: doc._id.toString(),
-            createdAt: doc.createdAt?.toISOString(),
-            updatedAt: doc.updatedAt?.toISOString(),
+            createdAt: doc.createdAt?.toLocaleString(),
+            updatedAt: doc.updatedAt?.toLocaleString(),
           }))
         )
       );

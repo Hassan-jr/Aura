@@ -176,7 +176,7 @@ export function CampaignSetupDialog({
               htmlFor="new-run"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              Make a new agentic run every time
+              Run a new  S.E.O & SM Analysis Agent Everytime
             </Label>
           </div>
 

@@ -11,7 +11,6 @@ import { AnalysisReport } from './AnalysisReport'
 
 
 export function RunDisplay({ run  }) {
-  const [isOpen, setIsOpen] = useState(false)
 
   return (
     <div className="border rounded-lg shadow-sm w-full">

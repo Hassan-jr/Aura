@@ -86,7 +86,7 @@ async function sendWebhook({
         : `${process.env.NEXT_PUBLIC_APP_URL}api/deliveries/send`;
 
     console.log("webhookDataToSend: ", webhookDataToSend);
-    
+
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -510,7 +510,7 @@ export async function POST(req: Request) {
         Maximum Discount: ${productDetails.maxDiscountRate}%
 
         Your bargaining power is ${productDetails.bargainingPower} (0-1). The higher this number, the more resistant you should be to giving discounts.
-        Never offer a discount higher than ${productDetails.maxDiscountRate}%.
+        Never offer a discount higher than ${productDetails.maxDiscountRate}%. But alway give a discount offer to the user on his first contact.
 
         When bargaining, use the following guidelines:
         - A lower bargaining power (e.g., 0.1) means you are easily convinced to offer higher discounts.
@@ -519,11 +519,13 @@ export async function POST(req: Request) {
 
         You can also issue invoices for users when requested using the 'issue_invoice' function.
         You can also schedule a Google Meet call if the user asks to talk to someone, requests a meeting, wants human help, or expresses a desire to speak with a representative. Use the 'schedule_meeting' function for this.
+        Always give the exact time and date the user request the meeting if the user specifies the date and time of the meeting.
 
         You also have the capability to generate a prompts for generating a promotional graphic card design and product ads photos for the product using the 'generate_images' function.
         When asked for a visual, images, pictures and the likes you should generate a detailed prompts for this function.
         The prompts should also specify the overall visual style (e.g., colorful, playful, professional, depending on the product), background details, and font style (e.g., eye-catching, whimsical).
         Aim for a descriptive prompts (around 75-100 words for each prompt) that will result in a compelling visual promotion. All the prompts should be different from each other.
+
 
         Ensure all interactions are professional and helpful, always use the first person plural point of view (e.g., "we").
         Do not reveal the bargaining power or the maximum discount rate to the user. Bargain intelligently based on the power level.
@@ -695,14 +697,26 @@ export async function POST(req: Request) {
               functionResultContent = `We've agreed on a ${agreedDiscountRate}% discount for ${
                 productDetails.title
               }. This offer is valid until ${discount.expiryDate.toLocaleDateString()}. You can apply it at checkout.`;
-              responseData = { result: functionResultContent };
+              responseData = {
+                result: functionResultContent,
+                discountFunc: true,
+                invoiceFunc: false,
+                meetingFunc: false,
+                imageFunc: false,
+              };
             } else {
               console.error(
                 `Invalid discount rate requested by LLM: ${agreedDiscountRate}. Max allowed: ${productDetails.maxDiscountRate}`
               );
               functionResultContent = `I apologize, but we can only offer a discount up to ${productDetails.maxDiscountRate}%. Would you like to proceed with that?`;
               // Respond with a message, not an error status, to continue conversation
-              responseData = { result: functionResultContent };
+              responseData = {
+                result: functionResultContent,
+                discountFunc: false,
+                invoiceFunc: false,
+                meetingFunc: false,
+                imageFunc: false,
+              };
             }
             break; // Added break
           }
@@ -720,7 +734,13 @@ export async function POST(req: Request) {
             functionResultContent = `We have prepared an invoice for ${qty} unit(s) of ${
               productDetails.title
             }. It's valid until ${invoice.expiryDate.toLocaleDateString()}. You should receive payment details via email shortly.`;
-            responseData = { result: functionResultContent };
+            responseData = {
+              result: functionResultContent,
+              discountFunc: false,
+              invoiceFunc: true,
+              meetingFunc: false,
+              imageFunc: false,
+            };
             break; // Added break
           }
           // --- NEW: Handle Schedule Meeting Case ---
@@ -732,7 +752,13 @@ export async function POST(req: Request) {
               );
               functionResultContent =
                 "I can help schedule a meeting, but it seems some configuration is missing on our end. Please contact support directly for assistance.";
-              responseData = { result: functionResultContent };
+              responseData = {
+                result: functionResultContent,
+                discountFunc: false,
+                invoiceFunc: false,
+                meetingFunc: false,
+                imageFunc: false,
+              };
             } else {
               const {
                 summary,
@@ -762,10 +788,20 @@ export async function POST(req: Request) {
                 responseData = {
                   result: functionResultContent,
                   meetingLink: meetingResult.hangoutLink,
+                  discountFunc: false,
+                  invoiceFunc: false,
+                  meetingFunc: true,
+                  imageFunc: false,
                 };
               } else {
                 // Keep the conversation going, inform user of the error
-                responseData = { result: functionResultContent };
+                responseData = {
+                  result: functionResultContent,
+                  discountFunc: false,
+                  invoiceFunc: false,
+                  meetingFunc: false,
+                  imageFunc: false,
+                };
               }
             }
             break; // Added break
@@ -789,10 +825,25 @@ export async function POST(req: Request) {
 
               isImage2 = isImage;
               generationId2 = generationId;
+              // discountFunc: true, invoiceFunc: false, meetingFunc: false, imageFunc:false
               functionResultContent = functionalContent;
+              responseData = {
+                result: functionResultContent,
+                discountFunc: false,
+                invoiceFunc: false,
+                meetingFunc: false,
+                imageFunc: true,
+              };
             } else {
               // At least one prompt is missing or falsy
               console.error("Missing one or more prompts");
+              responseData = {
+                result: "Error: Unable to generate Images",
+                discountFunc: false,
+                invoiceFunc: false,
+                meetingFunc: false,
+                imageFunc: false,
+              };
             }
             break;
           }
@@ -800,7 +851,13 @@ export async function POST(req: Request) {
             console.error("Unknown function call requested by LLM:", name);
             functionResultContent =
               "Sorry, I encountered an unexpected issue. Could you please rephrase your request?";
-            responseData = { result: functionResultContent };
+            responseData = {
+              result: functionResultContent,
+              discountFunc: false,
+              invoiceFunc: false,
+              meetingFunc: false,
+              imageFunc: false,
+            };
           // Consider sending an error response if this happens often
           // responseData = { error: "Unknown function call." };
         }
@@ -814,9 +871,6 @@ export async function POST(req: Request) {
           bId,
           isImage: isImage2,
           generationId: generationId2,
-          // Optionally store function call details if needed for debugging
-          // functionCall: { name, args },
-          // functionResult: responseData
         });
 
         return NextResponse.json(responseData);
@@ -848,7 +902,13 @@ export async function POST(req: Request) {
         userId,
         bId,
       });
-      return NextResponse.json({ result: aiResponse.content });
+      return NextResponse.json({
+        result: aiResponse.content,
+        discountFunc: false,
+        invoiceFunc: false,
+        meetingFunc: false,
+        imageFunc: false,
+      });
     }
 
     // Fallback if no content and no function call (should be rare)

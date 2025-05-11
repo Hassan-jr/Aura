@@ -2,11 +2,13 @@
 import { SentimentTable } from "@/components/sentiment/sentimentTable";
 import { useAppSelector } from "@/redux/hooks";
 import { selectfeedbacks } from "@/redux/slices/feeback";
+import { selectProductId } from "@/redux/slices/productId";
 import { selectusers } from "@/redux/slices/user";
 
 export default function Home() {
  const feedbacks = useAppSelector(selectfeedbacks);
  const users = useAppSelector(selectusers);
+ const productId = useAppSelector(selectProductId)
 
   return (
     <main className="p-2">
@@ -17,7 +19,7 @@ export default function Home() {
 
       <div className="">
         <SentimentTable
-          feedbacks={feedbacks}
+          feedbacks={feedbacks?.filter((feedback) => feedback.productId == productId)}
           // products={products}
           users={users}
         />

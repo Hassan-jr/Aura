@@ -32,7 +32,7 @@ function PostsCardsComponent({ posts }) {
 
       {/* no posts */}
       {productPosts.length == 0 && (<Card className="p-5">
-        no posts available for this product
+        no posts available
       </Card>)}
     </div>
   );

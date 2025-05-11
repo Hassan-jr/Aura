@@ -22,23 +22,26 @@ import {
 // Your Actions and Redux slices
 import {
   fetchAgent,
-  getFeedbacks,
-  getPosts,
-  getProducts,
+  getChats,
+  getDiscounts,
+  getInvoices,
+  getMeetings,
   getUsers,
 } from "@/actions/fetch.actions";
-import { getLoras } from "@/actions/lora.action"; // Assuming correct path
-import { setProducts } from "@/redux/slices/product"; // Assuming correct path
-import { setloras } from "@/redux/slices/lora"; // Assuming correct path
-import { getGenerations } from "@/actions/generate.actions";
-import { setgenerations } from "@/redux/slices/generate";
 import { useSession } from "next-auth/react";
 import { getAllCalenders } from "@/actions/calender.action";
 import { setcalenders } from "@/redux/slices/calender";
-import { setfeedbacks } from "@/redux/slices/feeback";
 import { setagents } from "@/redux/slices/agent";
 import { setusers } from "@/redux/slices/user";
-import { setposts } from "@/redux/slices/post";
+import { setdiscounts } from "@/redux/slices/discount";
+import { Invoice } from "../../modals/invoice.modal";
+import { setinvoices } from "@/redux/slices/invoice";
+import { setmeetings } from "@/redux/slices/meeting";
+import { setchats } from "@/redux/slices/chat";
+import { getCampaignResult } from "@/actions/campaginResult.action";
+import { setcampaignResults } from "@/redux/slices/campaginResult";
+import { fetchCampaigns } from "@/actions/campaign.action";
+import { setcampaigns } from "@/redux/slices/campagin";
 
 // Placeholder for a Spinner component (you'll need to create or import one)
 const Spinner = () => (
@@ -101,37 +104,38 @@ export default function AppLayout({
       try {
         // Fetch data concurrently
         const [
-          // productsData,
-          // loraData,
-          // generationsData,
           calenderData,
-          // feedbackdata,
           agentData,
           usersData,
-          // postsData,
+          discounts,
+          invoices,
+          meetings,
+          chats,
+          campaignsResults,
+          campaings
         ] = await Promise.all([
-          // getProducts(),
-          // getLoras(),
-          // getGenerations(),
           getAllCalenders(userId),
-          // getFeedbacks(),
           fetchAgent(userId),
           getUsers(),
-          // getPosts(),
-          // Add other independent fetch calls here if needed
-          // e.g., getSettings(), getUserProfile()
+          getDiscounts(),
+          getInvoices(userId),
+          getMeetings(userId),
+          getChats(userId),
+          getCampaignResult(userId),
+          fetchCampaigns(userId)
         ]);
 
         // Only dispatch if the component is still mounted
         if (isMounted) {
-          // dispatch(setProducts(productsData));
-          // dispatch(setloras(loraData));
-          // dispatch(setgenerations(generationsData));
           dispatch(setcalenders(calenderData));
-          // dispatch(setfeedbacks(feedbackdata));
           dispatch(setagents(agentData));
           dispatch(setusers(usersData));
-          // dispatch(setposts(postsData));
+          dispatch(setdiscounts(discounts));
+          dispatch(setinvoices(invoices));
+          dispatch(setmeetings(meetings));
+          dispatch(setchats(chats));
+          dispatch(setcampaignResults(campaignsResults))
+          dispatch(setcampaigns(campaings))
         }
       } catch (err) {
         console.error("Error fetching initial layout data:", err);

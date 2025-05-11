@@ -23,7 +23,7 @@ import { BarChartComponent } from "./chart/bar";
 import { useAppSelector } from "@/redux/hooks";
 import { selectProductId } from "@/redux/slices/productId";
 
-export function SentimentTable({ feedbacks, users }) {
+export function SentimentTable({ feedbacks, users, showFilter = true }) {
   const productId = useAppSelector(selectProductId);
   const [productSentiments, setproductSentiments] = useState(
     productId
@@ -50,13 +50,15 @@ export function SentimentTable({ feedbacks, users }) {
   }, [productId, feedbacks]);
   return (
     <div>
-      <Card className="container mx-auto p-4">
-        <FilterComponent
-          data={productSentiments}
-          setFilteredFeedbacks={setFilteredFeedbacks}
-          setSentimentClass={setSentimentClass}
-        />
-      </Card>
+      {showFilter && (
+        <Card className="container mx-auto p-4">
+          <FilterComponent
+            data={productSentiments}
+            setFilteredFeedbacks={setFilteredFeedbacks}
+            setSentimentClass={setSentimentClass}
+          />
+        </Card>
+      )}
 
       <Tabs defaultValue="sentiment" className="w-[400px] mt-2">
         <TabsList className="grid w-full grid-cols-3">

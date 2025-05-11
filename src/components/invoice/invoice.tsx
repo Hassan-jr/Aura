@@ -1,39 +1,63 @@
-'use client'
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { CalendarIcon, PackageIcon, UserIcon, DollarSignIcon, PercentIcon } from 'lucide-react'
-import { useAppSelector } from "@/redux/hooks"
-import { selectProductId } from "@/redux/slices/productId"
-import { useEffect, useState } from "react"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import {
+  CalendarIcon,
+  PackageIcon,
+  UserIcon,
+  DollarSignIcon,
+  PercentIcon,
+} from "lucide-react";
+import { useAppSelector } from "@/redux/hooks";
+import { selectProductId } from "@/redux/slices/productId";
+import { useEffect, useState } from "react";
+import { selectdiscounts } from "@/redux/slices/discount";
+import { selectusers } from "@/redux/slices/user";
+import { selectProducts } from "@/redux/slices/product";
+import { selectinvoices } from "@/redux/slices/invoice";
 
-
-export default function InvoiceCards({invoices, users, products, discounts}) {
+export default function InvoiceCards() {
   const currentDate = new Date();
 
-    const productId = useAppSelector(selectProductId);
-  
-    const [productInvoices, setproductInvoices] = useState([]);
-  
-    useEffect(() => {
-      const filteredPosts = invoices?.filter(
-        (inv) => inv.productId == productId
-      );
-      setproductInvoices(filteredPosts);
-    }, [productId]);
+  //  fetch data
+  const invoices = useAppSelector(selectinvoices);
+  const products = useAppSelector(selectProducts);
+  const discounts = useAppSelector(selectdiscounts);
+  const users = useAppSelector(selectusers);
+
+  const productId = useAppSelector(selectProductId);
+
+  const [productInvoices, setproductInvoices] = useState([]);
+
+  useEffect(() => {
+    const filteredPosts = invoices?.filter((inv) => inv.productId == productId);
+    setproductInvoices(filteredPosts);
+  }, [productId]);
 
   return (
     <div className="space-y-4">
       {productInvoices.map((invoice) => {
-        const user = users.find(u => u._id === invoice.userId)
-        const product = products.find(p => p._id === invoice.productId)
-        const discount = discounts.find(d => d.productId === invoice.productId && d.userId === invoice.userId)
+        const user = users.find((u) => u._id === invoice.userId);
+        const product = products.find((p) => p._id === invoice.productId);
+        const discount = discounts.find(
+          (d) =>
+            d.productId === invoice.productId && d.userId === invoice.userId
+        );
         const expiryDate = new Date(invoice.expiryDate);
         const isActive = expiryDate > currentDate;
 
         const totalCost = product ? product.price * invoice.qty : 0;
-        const discountedCost = discount ? totalCost * (1 - discount.agreedDiscountRate / 100) : totalCost;
+        const discountedCost = discount
+          ? totalCost * (1 - discount?.agreedDiscountRate / 100)
+          : totalCost;
 
         return (
           <Card key={invoice._id} className="w-full">
@@ -43,7 +67,14 @@ export default function InvoiceCards({invoices, users, products, discounts}) {
                   <CardTitle className="text-2xl">
                     Invoice #{invoice._id}
                   </CardTitle>
-                  <Badge variant={isActive ? "outline" : "destructive"} className={isActive ? "bg-green-600 text-white" : "bg-red-600 text-white"}>
+                  <Badge
+                    variant={isActive ? "outline" : "destructive"}
+                    className={
+                      isActive
+                        ? "bg-green-600 text-white"
+                        : "bg-red-600 text-white"
+                    }
+                  >
                     {isActive ? "Active" : "Expired"}
                   </Badge>
                 </div>
@@ -55,6 +86,11 @@ export default function InvoiceCards({invoices, users, products, discounts}) {
               <CardDescription>
                 Created on {new Date(invoice.createdAt).toLocaleString()}
               </CardDescription>
+              {invoice?.updatedAt && (
+                <CardDescription>
+                  Updated on {new Date(invoice?.updatedAt)?.toLocaleString()}
+                </CardDescription>
+              )}
             </CardHeader>
             <CardContent>
               <div className="flex items-center space-x-4 mb-4">
@@ -82,7 +118,9 @@ export default function InvoiceCards({invoices, users, products, discounts}) {
                 </div>
                 <div className="flex items-center">
                   <UserIcon className="mr-2 h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">Account Type: {user?.accountType}</span>
+                  <span className="text-sm">
+                    Account Type: {user?.accountType}
+                  </span>
                 </div>
               </div>
               <div className="bg-muted p-4 rounded-md">
@@ -90,13 +128,17 @@ export default function InvoiceCards({invoices, users, products, discounts}) {
                 <div className="grid grid-cols-2 gap-2">
                   <div className="flex items-center">
                     <DollarSignIcon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">Total Cost: ${totalCost.toFixed(2)}</span>
+                    <span className="text-sm">
+                      Total Cost: ${totalCost.toFixed(2)}
+                    </span>
                   </div>
                   {discount && (
                     <>
                       <div className="flex items-center">
                         <PercentIcon className="mr-2 h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">Discount: {discount.agreedDiscountRate}%</span>
+                        <span className="text-sm">
+                          Discount: {discount.agreedDiscountRate}%
+                        </span>
                       </div>
                       <div className="flex items-center col-span-2">
                         <DollarSignIcon className="mr-2 h-4 w-4 text-green-500" />
@@ -110,14 +152,15 @@ export default function InvoiceCards({invoices, users, products, discounts}) {
               </div>
             </CardContent>
           </Card>
-        )
+        );
       })}
 
-        {/* no posts */}
-        {productInvoices.length == 0 && (
-        <Card className="p-5 w-64 mx-auto">No Invoices available for this product</Card>
+      {/* no posts */}
+      {productInvoices.length == 0 && (
+        <Card className="p-5 w-64 mx-auto">
+          No Invoices available for this product
+        </Card>
       )}
     </div>
-  )
+  );
 }
-

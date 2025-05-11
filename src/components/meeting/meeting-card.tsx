@@ -28,43 +28,14 @@ import {
 import ReactMarkdown from "react-markdown";
 import { useAppSelector } from "@/redux/hooks";
 import { selectProductId } from "@/redux/slices/productId";
+import { selectmeetings } from "@/redux/slices/meeting";
+import { selectusers } from "@/redux/slices/user";
+import { selectProducts } from "@/redux/slices/product";
 
 // Define types
-interface Meeting {
-  _id: { $oid: string };
-  googleEventId: string;
-  meetLink: string;
-  summary: string;
-  description: string;
-  startTime: string;
-  endTime: string;
-  timeZone: string;
-  attendees: { email: string }[];
-  creator: { email: string; self: boolean };
-  organizer: { email: string; self: boolean };
-  htmlLink: string;
-  userId: string;
-  bid: string;
-  productId: string;
-  createdAt: { $date: { $numberLong: string } };
-  updatedAt: { $date: { $numberLong: string } };
-  __v: { $numberInt: string };
-}
 
-interface UserType {
-  _id: string;
-  name: string;
-  email: string;
-  username: string;
-  profileUrl?: string;
-}
 
-interface Product {
-  _id: string;
-  title: string;
-  description: string;
-  // Add other product fields as needed
-}
+
 
 interface MeetingCardProps {
   meetings: any[];
@@ -72,11 +43,13 @@ interface MeetingCardProps {
   products: any[];
 }
 
-export default function MeetingCard({
-  meetings,
-  users,
-  products,
-}: MeetingCardProps) {
+export default function MeetingCard() {
+
+  // get data
+  const meetings = useAppSelector(selectmeetings);
+  const users = useAppSelector(selectusers);
+  const products = useAppSelector(selectProducts);
+
   const productId = useAppSelector(selectProductId);
   const [meetingProducts, setmeetingProducts] = useState(
     meetings.filter((m) => m.productId == productId)
@@ -91,7 +64,7 @@ export default function MeetingCard({
     <div className="space-y-6">
       {meetingProducts?.map((meeting) => (
         <SingleMeetingCard
-          key={meeting._id.$oid}
+          key={meeting._id.toString()}
           meeting={meeting}
           users={users}
           products={products}
@@ -105,10 +78,6 @@ function SingleMeetingCard({
   meeting,
   users,
   products,
-}: {
-  meeting: Meeting;
-  users: UserType[];
-  products: Product[];
 }) {
   const [status, setStatus] = useState<"Upcoming" | "In Progress" | "Expired">(
     "Upcoming"

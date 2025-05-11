@@ -22,6 +22,20 @@ import { useAppSelector } from "@/redux/hooks";
 import { selectProductId } from "@/redux/slices/productId";
 import { useSession } from "next-auth/react";
 import { selectcalenders } from "@/redux/slices/calender";
+import {
+  getDiscounts,
+  getInvoices,
+  getMeetings,
+} from "@/actions/fetch.actions";
+import { setdiscounts } from "@/redux/slices/discount";
+import { useDispatch } from "react-redux";
+import { selectchats } from "@/redux/slices/chat";
+import { selectusers } from "@/redux/slices/user";
+import { selectProducts } from "@/redux/slices/product";
+import { setinvoices } from "@/redux/slices/invoice";
+import { getGenerations } from "@/actions/generate.actions";
+import { setgenerations } from "@/redux/slices/generate";
+import { setmeetings } from "@/redux/slices/meeting";
 
 interface UserDetails {
   id: string;
@@ -29,14 +43,20 @@ interface UserDetails {
   email: string;
 }
 
-export function AIChat({ prevmessages, users, products, bid }) {
-  const [messages, setMessages] = useState(prevmessages);
+export function AIChat() {
+  const { data: session } = useSession();
+  // select data
+  const prevmessages = useAppSelector(selectchats);
+  const users = useAppSelector(selectusers);
+  const products = useAppSelector(selectProducts);
+  const bid = session?.user?.id;
+
+  const [messages, setMessages] = useState<any>(prevmessages);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedUserId, setselectedUserId] = useState<string | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
-
-  const { data: session } = useSession();
+  const dispatch = useDispatch();
 
   const [selectedUserDetails, setSelectedUserDetails] =
     useState<UserDetails | null>(null);
@@ -90,6 +110,46 @@ export function AIChat({ prevmessages, users, products, bid }) {
       });
     }
   }, [calenders]);
+
+  // -------------------- Update Discount State ----------------------------
+  const updateDiscount = async () => {
+    try {
+      const discounts = await getDiscounts();
+      dispatch(setdiscounts(discounts));
+    } catch (error) {
+      console.log("An Error Occured");
+    }
+  };
+
+  // -------------------- Update Invoice State ----------------------------
+  const updateInvoice = async (id) => {
+    try {
+      const invoices = await getInvoices(id);
+      dispatch(setinvoices(invoices));
+    } catch (error) {
+      console.log("An Error Occured");
+    }
+  };
+
+  // -------------------- Update Meetings State ----------------------------
+  const updateMeeting = async (id) => {
+    try {
+      const meetings = await getMeetings(id);
+      dispatch(setmeetings(meetings));
+    } catch (error) {
+      console.log("An Error Occured");
+    }
+  };
+
+  // -------------------- Update Generation State ----------------------------
+  const updateGenerations = async () => {
+    try {
+      const generations = await getGenerations();
+      dispatch(setgenerations(generations));
+    } catch (error) {
+      console.log("An Error Occured");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -147,6 +207,21 @@ export function AIChat({ prevmessages, users, products, bid }) {
         bId: bid,
       };
       setMessages((prev) => [...prev, aiMessage]);
+
+      // check reloading:
+      // discountFunc: true, invoiceFunc: false, meetingFunc: false, imageFunc:false
+      if (data.hasOwnProperty("discountFunc") && data.discountFunc === true) {
+        await updateDiscount();
+      }
+      if (data.hasOwnProperty("invoiceFunc") && data.invoiceFunc === true) {
+        await updateInvoice(bid);
+      }
+      if (data.hasOwnProperty("meetingFunc") && data.meetingFunc === true) {
+        await updateMeeting(bid);
+      }
+      if (data.hasOwnProperty("imageFunc") && data.imageFunc === true) {
+        await updateGenerations();
+      }
     } catch (error) {
       console.error("Error:", error);
       // Handle error (e.g., show an error message to the user)
@@ -226,7 +301,7 @@ export function AIChat({ prevmessages, users, products, bid }) {
                     type="submit"
                     disabled={isLoading || !selectedUserId}
                     size="icon"
-                    className="bg-black text-white"
+                    className="bg-black hover:bg-slate-700 text-white"
                   >
                     <SendHorizontal className="h-4 w-4" />
                     <span className="sr-only">Send</span>

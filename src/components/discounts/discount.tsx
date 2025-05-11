@@ -18,13 +18,21 @@ import {
 import { useAppSelector } from "@/redux/hooks";
 import { selectProductId } from "@/redux/slices/productId";
 import { useEffect, useState } from "react";
+import { getDiscounts } from "@/actions/fetch.actions";
+import { toast } from "react-toastify";
+import { selectdiscounts } from "@/redux/slices/discount";
+import { selectusers } from "@/redux/slices/user";
 
-export default function DiscountCards({ discounts, users }) {
+export default function DiscountCards() {
   const currentDate = new Date();
 
   const productId = useAppSelector(selectProductId);
+  const discounts = useAppSelector(selectdiscounts);
+  const users = useAppSelector(selectusers);
 
-  const [productDiscounts, setproductDiscounts] = useState([]);
+  const [productDiscounts, setproductDiscounts] = useState(
+    discounts?.filter((dis) => dis.productId == productId)
+  );
 
   useEffect(() => {
     const filteredPosts = discounts?.filter(
@@ -46,7 +54,7 @@ export default function DiscountCards({ discounts, users }) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <CardTitle className="text-2xl">
-                    {discount.agreedDiscountRate}% Discount
+                    {discount?.agreedDiscountRate.toString()}% Discount
                   </CardTitle>
                   <Badge
                     variant={isActive ? "outline" : "destructive"}
@@ -93,7 +101,7 @@ export default function DiscountCards({ discounts, users }) {
                 <div className="flex items-center">
                   <PercentIcon className="mr-2 h-4 w-4 text-muted-foreground" />
                   <span className="text-sm">
-                    Discount Rate: {discount.agreedDiscountRate}%
+                    Discount Rate: {discount?.agreedDiscountRate.toString()}%
                   </span>
                 </div>
               </div>
@@ -104,7 +112,9 @@ export default function DiscountCards({ discounts, users }) {
 
       {/* no posts */}
       {productDiscounts.length == 0 && (
-        <Card className="p-5 w-64 mx-auto">No discounts available for this product</Card>
+        <Card className="p-5 w-64 mx-auto">
+          No discounts available for this product
+        </Card>
       )}
     </div>
   );

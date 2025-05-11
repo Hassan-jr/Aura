@@ -25,8 +25,10 @@ import { Card } from "@/components/ui/card";
 import { selectProducts } from "@/redux/slices/product";
 import { selectagents } from "@/redux/slices/agent";
 
-export default function AnalysisComponent({ products }) {
+export default function AnalysisComponent() {
   const { data: session } = useSession();
+  const products = useAppSelector(selectProducts);
+
   const [open, setOpen] = useState(false);
   const [queryType, setQueryType] = useState("product");
   const [customQuery, setCustomQuery] = useState("");
@@ -37,7 +39,6 @@ export default function AnalysisComponent({ products }) {
   const userId = session?.user.id;
 
   const productId = useAppSelector(selectProductId);
-  // const products2 = useAppSelector(selectProducts);
   const productTitle = products.find(
     (product) => product._id == productId
   )?.title;

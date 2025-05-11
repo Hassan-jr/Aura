@@ -28,8 +28,8 @@ export async function fetchCampaigns(userId: string) {
         campaigns.map((doc) => ({
           ...doc,
           _id: doc._id.toString(),
-          createdAt: doc.createdAt?.toISOString(),
-          updatedAt: doc.updatedAt?.toISOString(),
+          createdAt: doc.createdAt?.toLocaleString(),
+          updatedAt: doc.updatedAt?.toLocaleString(),
         }))
       )
     );

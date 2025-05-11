@@ -1,27 +1,8 @@
 // import { cookies } from "next/headers";
 import Image from "next/image";
-
 import { Mail } from "./components/mail";
-// import { mails } from "./data"
-import FetchEmails from "@/lib/fetchEmail";
-// import { auth } from "@/app/auth";
-// import { findChatsForEmail, getProducts } from "@/actions/fetch.actions";
-// import { Button } from "@/components/ui/button";
-// import { toast } from "@/components/ui/use-toast";
 
-export default async function MailPage() {
-  // const session = await auth();
-  // const cookieStore = await cookies();
-  // const layout = cookieStore.get("react-resizable-panels:layout:mail");
-  // const collapsed = cookieStore.get("react-resizable-panels:collapsed");
-
-  // const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
-  // const defaultCollapsed = collapsed ? JSON.parse(collapsed.value) : undefined;
-
-  const data = await FetchEmails();
-  // const products = await getProducts();
-
-
+export default function MailPage() {
   return (
     <>
       <div className="md:hidden">
@@ -41,21 +22,7 @@ export default async function MailPage() {
         />
       </div>
       <div className="hidden flex-col md:flex">
-        {/* <Button className="bg-black text-white" onClick={refresh}>
-          Refresh
-        </Button> */}
-        <Mail
-          // accounts={[]}
-          mails={data}
-          // defaultLayout={defaultLayout}
-          // defaultCollapsed={defaultCollapsed}
-          data={data}
-          // products = {products}
-          // bid = { session?.user?.id}
-          // bidEmail = {session?.user.email}
-
-          // navCollapsedSize={4}
-        />
+        <Mail />
       </div>
     </>
   );

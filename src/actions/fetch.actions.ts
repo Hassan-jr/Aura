@@ -9,6 +9,8 @@ import { EmailCredentialsModel } from "@/modals/email.modal";
 import { auth } from "@/app/auth";
 import { Post } from "@/modals/post.modal";
 import { Discount } from "@/modals/discount.modal";
+import { Invoice } from "@/modals/invoice.modal";
+import MeetEvent from "@/modals/meet.modal";
 
 export async function getFeedbacks() {
   await connect();
@@ -18,8 +20,8 @@ export async function getFeedbacks() {
       feedback.map((doc) => ({
         ...doc,
         _id: doc._id.toString(),
-        createdAt: doc.createdAt?.toISOString(),
-        updatedAt: doc.updatedAt?.toISOString(),
+        createdAt: doc.createdAt?.toLocaleString(),
+        updatedAt: doc.updatedAt?.toLocaleString(),
       }))
     )
   );
@@ -28,16 +30,14 @@ export async function getFeedbacks() {
 export async function getProducts() {
   await connect();
   // const user = await auth();
-  const products = await Product.find()
-    .lean()
-    .sort({ createdAt: +1 });
+  const products = await Product.find().lean().sort({ createdAt: +1 });
   return JSON.parse(
     JSON.stringify(
       products.map((doc) => ({
         ...doc,
         _id: doc._id.toString(),
-        createdAt: doc.createdAt?.toISOString(),
-        updatedAt: doc.updatedAt?.toISOString(),
+        createdAt: doc.createdAt?.toLocaleString(),
+        updatedAt: doc.updatedAt?.toLocaleString(),
       }))
     )
   );
@@ -50,8 +50,8 @@ export async function getSingleProducts(id) {
     JSON.stringify({
       ...product,
       _id: id,
-      // createdAt: product?.createdAt?.toISOString(),
-      // updatedAt: product?.updatedAt?.toISOString(),
+      // createdAt: product?.createdAt?.toLocaleString(),
+      // updatedAt: product?.updatedAt?.toLocaleString(),
     })
   );
 }
@@ -59,16 +59,14 @@ export async function getSingleProducts(id) {
 export async function getPosts() {
   await connect();
   // const user = await auth();
-  const products = await Post.find()
-    .lean()
-    .sort({ createdAt: +1 });
+  const products = await Post.find().lean().sort({ createdAt: +1 });
   return JSON.parse(
     JSON.stringify(
       products.map((doc) => ({
         ...doc,
         _id: doc._id.toString(),
-        createdAt: doc.createdAt?.toISOString(),
-        updatedAt: doc.updatedAt?.toISOString(),
+        createdAt: doc.createdAt?.toLocaleString(),
+        updatedAt: doc.updatedAt?.toLocaleString(),
       }))
     )
   );
@@ -84,8 +82,8 @@ export async function getEmails() {
       products.map((doc) => ({
         ...doc,
         _id: doc._id.toString(),
-        createdAt: doc.createdAt?.toISOString(),
-        updatedAt: doc.updatedAt?.toISOString(),
+        createdAt: doc.createdAt?.toLocaleString(),
+        updatedAt: doc.updatedAt?.toLocaleString(),
       }))
     )
   );
@@ -99,8 +97,8 @@ export async function getUsers() {
       users.map((doc) => ({
         ...doc,
         _id: doc._id.toString(),
-        createdAt: doc.createdAt?.toISOString(),
-        updatedAt: doc.updatedAt?.toISOString(),
+        createdAt: doc.createdAt?.toLocaleString(),
+        updatedAt: doc.updatedAt?.toLocaleString(),
       }))
     )
   );
@@ -114,8 +112,8 @@ export async function getSingleUsers(id) {
     JSON.stringify({
       ...user,
       _id: id,
-      // createdAt: product?.createdAt?.toISOString(),
-      // updatedAt: product?.updatedAt?.toISOString(),
+      // createdAt: product?.createdAt?.toLocaleString(),
+      // updatedAt: product?.updatedAt?.toLocaleString(),
     })
   );
 }
@@ -132,8 +130,8 @@ export async function fetchAgent(userId: string) {
         agent.map((doc) => ({
           ...doc,
           _id: doc._id.toString(),
-          createdAt: doc.createdAt?.toISOString(),
-          updatedAt: doc.updatedAt?.toISOString(),
+          createdAt: doc.createdAt?.toLocaleString(),
+          updatedAt: doc.updatedAt?.toLocaleString(),
         }))
       )
     );
@@ -160,8 +158,8 @@ export async function findChatsForEmail(from: string, bid: string) {
       rawmessages.map((doc) => ({
         ...doc,
         _id: doc._id.toString(),
-        createdAt: doc.createdAt?.toISOString(),
-        updatedAt: doc.updatedAt?.toISOString(),
+        createdAt: doc.createdAt?.toLocaleString(),
+        updatedAt: doc.updatedAt?.toLocaleString(),
       }))
     )
   );
@@ -170,24 +168,6 @@ export async function findChatsForEmail(from: string, bid: string) {
 
   return { messages, userId, productId };
 }
-
-// discount
-// export async function getUserDiscount(userId, productId) {
-//   await connect();
-//   const discount = await Discount.find({userId, productId})
-//     .lean()
-//     .sort({ createdAt: +1 });
-//   return JSON.parse(
-//     JSON.stringify(
-//      {
-//         ...discount,
-//         _id: discount?._id?.toString(),
-//         createdAt: discount?.createdAt?.toISOString(),
-//         updatedAt: discount?.updatedAt?.toISOString(),
-//       })
-//     )
-
-// }
 
 // discount
 export async function getUserDiscount(userId, productId) {
@@ -210,11 +190,78 @@ export async function getUserDiscount(userId, productId) {
     return {
       ...discount,
       // _id: discount?._id.toString(),
-      // createdAt: discount?.createdAt.toISOString(),
-      // updatedAt: discount?.updatedAt.toISOString(),
+      // createdAt: discount?.createdAt.toLocaleString(),
+      // updatedAt: discount?.updatedAt.toLocaleString(),
     };
   }
 
   // Return null if no active discount is found
   return null;
+}
+
+// get discounts
+export async function getDiscounts() {
+  await connect();
+  const products = await Discount.find().lean().sort({ createdAt: -1 });
+  return JSON.parse(
+    JSON.stringify(
+      products.map((doc) => ({
+        ...doc,
+        _id: doc._id.toString(),
+        createdAt: doc.createdAt?.toLocaleString(),
+        updatedAt: doc.updatedAt?.toLocaleString(),
+      }))
+    )
+  );
+}
+
+export async function getInvoices(id) {
+  await connect();
+  const products = await Invoice.find({ bId: id })
+    .sort({ createdAt: -1 })
+    .lean();
+  return JSON.parse(
+    JSON.stringify(
+      products.map((doc) => ({
+        ...doc,
+        _id: doc._id.toString(),
+        createdAt: doc.createdAt?.toLocaleString(),
+        updatedAt: doc.updatedAt?.toLocaleString(),
+      }))
+    )
+  );
+}
+
+export async function getMeetings(id) {
+  await connect();
+  const products = await MeetEvent.find({ bid: id })
+    .sort({ createdAt: -1 })
+    .lean();
+  return JSON.parse(
+    JSON.stringify(
+      products.map((doc) => ({
+        ...doc,
+        _id: doc._id.toString(),
+        createdAt: doc.createdAt?.toLocaleString(),
+        updatedAt: doc.updatedAt?.toLocaleString(),
+      }))
+    )
+  );
+}
+
+export async function getChats(id) {
+  await connect();
+  const products = await ChatMessage.find({ bId: id })
+    .sort({ createdAt: +1 })
+    .lean();
+  return JSON.parse(
+    JSON.stringify(
+      products.map((doc) => ({
+        ...doc,
+        _id: doc._id.toString(),
+        createdAt: doc.createdAt?.toLocaleString(),
+        updatedAt: doc.updatedAt?.toLocaleString(),
+      }))
+    )
+  );
 }

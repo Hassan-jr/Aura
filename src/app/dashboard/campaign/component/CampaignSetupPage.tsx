@@ -9,19 +9,23 @@ import AnalysisComponent from "@/app/dashboard/agent/components/AnalysisComponen
 import { useAppSelector } from "@/redux/hooks";
 import { selectProductId } from "@/redux/slices/productId";
 import { Card } from "@/components/ui/card";
+import { selectcampaigns, setcampaigns } from "@/redux/slices/campagin";
+import { useDispatch } from "react-redux";
+import Link from "next/link";
 
 export function CampaignSetupPage({ userId, feedbacks, runs }) {
   const productId = useAppSelector(selectProductId);
-
+  const campaigns = useAppSelector(selectcampaigns);
   const [productCampagins, setproductCampagins] = useState([]);
-  const [campaigns, setCampaigns] = useState([]);
+  // const [campaigns, setCampaigns] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
+  const dispatch = useDispatch();
 
   const loadCampaigns = async () => {
     try {
       const fetchedCampaigns = await fetchCampaigns(userId);
-      setCampaigns(fetchedCampaigns);
+      dispatch(setcampaigns(fetchedCampaigns));
     } catch (error) {
       toast({
         title: "Error",
@@ -30,10 +34,6 @@ export function CampaignSetupPage({ userId, feedbacks, runs }) {
       });
     }
   };
-
-  useEffect(() => {
-    loadCampaigns();
-  }, []);
 
   useEffect(() => {
     const filteredPosts = campaigns?.filter(
@@ -72,6 +72,12 @@ export function CampaignSetupPage({ userId, feedbacks, runs }) {
                 <Button className="bg-red-500 text-white hover:bg-slate-500">
                   Delete Campagin
                 </Button>
+
+                <Link href={`campaign/${campaign._id}`}>
+                  <Button className="bg-green-500 text-white hover:bg-slate-500">
+                    View Campagin Results
+                  </Button>
+                </Link>
               </div>
             </div>
 
@@ -114,11 +120,6 @@ export function CampaignSetupPage({ userId, feedbacks, runs }) {
                   </td>
                   <td className="py-2 px-4">
                     <pre className="inline">
-                      {/* {JSON.stringify(
-                        campaign.sentimentClass.polarity,
-                        null,
-                        2
-                      )} */}
                       {campaign?.sentimentClass?.polarity
                         ?.map(
                           (star) =>
@@ -140,7 +141,7 @@ export function CampaignSetupPage({ userId, feedbacks, runs }) {
                   </td>
                   <td className="py-2 px-4">
                     <pre className="inline">
-                      {/* {JSON.stringify(campaign.sentimentClass.emotion, null, 2)} */}
+                      
                       {campaign?.sentimentClass?.emotion
                         ?.map(
                           (label) =>

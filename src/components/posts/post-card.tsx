@@ -78,7 +78,7 @@ export default function PostCard({
       });
     } else {
       setVisuals({
-        images: images,
+        images: images?.length > 0 ? images: ["CSC416/loadingImage.svg"],
         isVideos: false,
       });
     }
@@ -88,7 +88,7 @@ export default function PostCard({
 
   const { data: session } = useSession();
 
-  const truncatedDescription = description.slice(0, 100);
+  const truncatedDescription = description?.slice(0, 100);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -238,7 +238,7 @@ export default function PostCard({
           </div>
           <p className="text-sm text-gray-600">
             {showFullDescription ? description : truncatedDescription}
-            {!showFullDescription && description.length > 100 && (
+            {!showFullDescription && description?.length > 100 && (
               <button
                 onClick={() => setShowFullDescription(true)}
                 className="text-blue-500 hover:underline ml-1"

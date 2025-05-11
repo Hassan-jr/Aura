@@ -11,6 +11,12 @@ import feedbacksSlice  from "./slices/feeback";
 import agentsSlice from "./slices/agent";
 import usersSlice from "./slices/user";
 import postsSlice  from "./slices/post";
+import discountsSlice  from "./slices/discount";
+import invoicesSlice from "./slices/invoice";
+import meetingsSlice  from "./slices/meeting";
+import chatsSlice  from "./slices/chat";
+import campaignResultsSlice from "./slices/campaginResult";
+import campaignsSlice  from "./slices/campagin";
 
 export const makeStore = () => {
   return configureStore({
@@ -27,6 +33,12 @@ export const makeStore = () => {
       agents: agentsSlice,
       users: usersSlice,
       posts: postsSlice,
+      discounts: discountsSlice,
+      invoices: invoicesSlice,
+      meetings: meetingsSlice,
+      chats: chatsSlice,
+      campaignResults: campaignResultsSlice,
+      campaigns: campaignsSlice
     },
     devTools: process.env.NODE_ENV !== "production",
   });
