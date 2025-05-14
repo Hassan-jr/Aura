@@ -74,12 +74,12 @@ export default function ProductCard({
           />
         </div>
         <div className="flex justify-between p-2">
-          <div className="flex space-x-1 overflow-y-auto whitespace-nowrap">
+          <div className="flex w-full space-x-1 overflow-x-auto whitespace-nowrap">
             {images.map((img, index) => (
               <button
                 key={index}
                 onClick={() => setMainImage(index)}
-                className={`w-16 h-16 relative ${
+                className={`flex-shrink-0 w-16 h-16 relative ${
                   index === mainImage ? "ring-2 ring-primary" : ""
                 }`}
               >
