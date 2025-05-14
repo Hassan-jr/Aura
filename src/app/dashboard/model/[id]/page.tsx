@@ -86,9 +86,9 @@ function Home() {
 
   useEffect(() => {
     if (currentProductGens?.length > 0) {
-      const nested = currentProductGens.map((gen) =>
-        gen.generations.map((gen2) =>
-          gen2.images.map((image) => `https://r2.nomapos.com/${image.url}`)
+      const nested = currentProductGens?.map((gen) =>
+        gen.generations?.map((gen2) =>
+          gen2.images?.map((image) => `https://r2.nomapos.com/${image.url}`)
         )
       );
 

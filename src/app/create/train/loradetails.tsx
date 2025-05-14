@@ -30,7 +30,7 @@ export default function LoraDetails() {
     steps: 2000,
     optimizer: "adamw",
     lr: 1e-4,
-    quantize: true,
+    quantize: false,
   });
 
   const dispatch = useAppDispatch();

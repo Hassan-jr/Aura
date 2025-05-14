@@ -115,7 +115,7 @@ const Stepper = ({ setOpen }) => {
         },
         webhook: `https://inprimeai.vercel.app/api/webhooks/lora/${mongoDbId}`,
         policy: {
-          executionTimeout: 1000 * 60 * 3,
+          executionTimeout: 1000 * 60 * 60 * 3,
         },
       });
       console.log(result);

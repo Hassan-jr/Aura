@@ -215,7 +215,7 @@ export default function LoraCards() {
         <TabsTrigger value="training">
           Training ({trainingLoras.length})
         </TabsTrigger>
-        <TabsTrigger value="other">Other ({otherLoras.length})</TabsTrigger>
+        <TabsTrigger value="other">Completed ({otherLoras.length})</TabsTrigger>
       </TabsList>
 
       <TabsContent value="training" className="space-y-4">

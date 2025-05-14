@@ -65,12 +65,12 @@ async function GenerateVisuals({
       },
       webhook: `https://inprimeai.vercel.app/api/webhooks/gen/${instanceId}`,
       policy: {
-        executionTimeout: 1000 * 60 * 3,
+        executionTimeout: 1000 * 60 * 60 * 1,
       },
     });
 
     // Return the ID of the saved document
-    return {result, id: instanceId};
+    return { result, id: instanceId };
   } catch (error) {
     console.error("Error creating Generation document:", error);
     return null; // Return null or throw the error, depending on desired error handling
