@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import mongoose, { Types } from "mongoose"; // Import mongoose and Types
 import { connect } from "@/db";
@@ -37,13 +37,11 @@ interface IWebhook {
 }
 
 // Define the structure for the route parameters
-interface RouteParams {
-  id: string;
-}
+
 
 export async function POST(
-  request: Request,
-  { params }: { params: RouteParams }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   // Ensure connection is established
   await connect();
@@ -56,7 +54,7 @@ export async function POST(
     // Apply type to webhook query as well
     const webhook = await Webhook.findById(
       deliveryData.webhookId
-    ).lean<IWebhook>();
+    );
 
     if (!webhook) {
       // This might indicate a data integrity issue if a delivery exists but its webhook doesn't

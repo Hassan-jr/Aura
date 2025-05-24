@@ -35,6 +35,7 @@ interface Generation {
 
 export function GenerationCard({ generation }: { generation: Generation }) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  
   const isProcessed = generation?.images?.length > 0 ? true : false;
   const hasError = generation.error != null;
   const isLoading = !isProcessed && !hasError;

@@ -16,6 +16,41 @@ export async function createCampaign(campaignData: any) {
   }
 }
 
+export async function editCampaign(id: string, campaignData: any) {
+  try {
+    await connect();
+    const campaign = await Campaign.findByIdAndUpdate(
+      id,
+      { $set: { ...campaignData } },
+      { new: true }
+    );
+    await campaign.save();
+    return { success: true, campaignId: campaign._id };
+  } catch (error) {
+    console.error("Error creating campaign:", error);
+    return { success: false, error: "Failed to create campaign" };
+  }
+}
+
+export async function deleteCampaign(campaignId: string) {
+  try {
+    await connect();
+
+    // Find by ID and remove
+    const result = await Campaign.findByIdAndDelete(campaignId).exec();
+
+    if (!result) {
+      // nothing was deleted because the ID didn’t exist
+      return { success: false, error: "Campaign not found" };
+    }
+
+    return { success: true, deletedId: campaignId };
+  } catch (error) {
+    console.error("Error deleting campaign:", error);
+    return { success: false, error: "Failed to delete campaign" };
+  }
+}
+
 export async function fetchCampaigns(userId: string) {
   try {
     await connect();

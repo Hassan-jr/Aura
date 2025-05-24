@@ -21,7 +21,7 @@ export default function BlurFadeDemo({ images }) {
         {images.map((imageUrl, idx) => {
           return (
             // <BlurFade key={idx} delay={0.25 + idx * 0.05} inView>
-              <div className="h-auto cursor-pointer" onClick={() => handleImageClick(imageUrl)}>
+              <div key={idx} className="h-auto cursor-pointer" onClick={() => handleImageClick(imageUrl)}>
                 <Image
                   src={imageUrl || "/placeholder.svg"}
                   width={500}

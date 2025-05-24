@@ -9,7 +9,7 @@ import { SessionProvider } from "next-auth/react";
 
 import { ToastContainer } from "react-toastify";
 
-import { getFeedbacks, getPosts, getProducts } from "@/actions/fetch.actions";
+import { getFeedbacks, getPosts, getProducts, getUsers } from "@/actions/fetch.actions";
 import { getLoras } from "@/actions/lora.action"; // Assuming correct path
 import { setProducts } from "@/redux/slices/product"; // Assuming correct path
 import { setloras } from "@/redux/slices/lora"; // Assuming correct path
@@ -19,6 +19,7 @@ import { setfeedbacks } from "@/redux/slices/feeback";
 import { setposts } from "@/redux/slices/post";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { setusers } from "@/redux/slices/user";
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
@@ -98,12 +99,13 @@ function FetchInitialData({ children }: { children: React.ReactNode }) {
 
     const fetchInitialData = async () => {
       try {
-        const [prd, lora, gen, fb, pst] = await Promise.all([
+        const [prd, lora, gen, fb, pst, usersData] = await Promise.all([
           getProducts(),
           getLoras(),
           getGenerations(),
           getFeedbacks(),
           getPosts(),
+          getUsers(),
         ]);
         if (isMounted) {
           dispatch(setProducts(prd));
@@ -111,6 +113,7 @@ function FetchInitialData({ children }: { children: React.ReactNode }) {
           dispatch(setgenerations(gen));
           dispatch(setfeedbacks(fb));
           dispatch(setposts(pst));
+          dispatch(setusers(usersData));
         }
       } catch (err) {
         console.error(err);

@@ -20,15 +20,14 @@ import {
 import * as Select2 from "@radix-ui/react-select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
-import { createCampaign } from "@/actions/campaign.action";
+import { createCampaign, editCampaign } from "@/actions/campaign.action";
 import { Card } from "@/components/ui/card";
 import { FilterComponent } from "@/components/sentiment/component/FilterComponent";
-import { RunDisplay } from "../../agent/components/RunDisplay";
-import { Check, ChevronDown, ChevronUp } from "lucide-react";
 import { useAppSelector } from "@/redux/hooks";
-import { selectProductId } from "@/redux/slices/productId";
+import { selectcampaigns } from "@/redux/slices/campagin";
 
-export function CampaignSetupDialog({
+export function CampaignEditDialog({
+  CampaignId,
   open,
   onOpenChange,
   userId,
@@ -36,41 +35,47 @@ export function CampaignSetupDialog({
   feedbacks,
   runs,
 }) {
-  const getCurrentDateTime = () => {
-    const now = new Date();
-    now.setHours(now.getHours() + 1);
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
-    const day = String(now.getDate()).padStart(2, "0");
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
-  };
 
-  const productId = useAppSelector(selectProductId);
+function formatToYYYYMMDDHHmm(isoString) {
+  const d = new Date(isoString);
+  const year    = d.getFullYear();
+  const month   = String(d.getMonth() + 1).padStart(2, "0");
+  const day     = String(d.getDate()).padStart(2, "0");
+  const hours   = String(d.getHours()).padStart(2, "0");
+  const minutes = String(d.getMinutes()).padStart(2, "0");
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+  const campaigns = useAppSelector(selectcampaigns);
+  const [Campaigndata, setCampaigndata] = useState(
+    campaigns?.find((camp) => camp._id == CampaignId)
+  );
+
+  useEffect(() => {
+    setCampaigndata(campaigns?.find((camp) => camp._id == CampaignId));
+  }, [CampaignId]);
+
+  const productId = Campaigndata?.productId;
   const [productSentiments, setproductSentiments] = useState([]);
 
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(Campaigndata?.title);
   const [runId, setRunId] = useState("");
-  const [frequency, setFrequency] = useState("daily");
-  const [scheduledTime, setScheduledTime] = useState(getCurrentDateTime());
-  const [outputType, setOutputType] = useState("photos");
-  const [numberOfPhotos, setNumberOfPhotos] = useState(4);
-  const [publishSites, setPublishSites] = useState({
-    facebook: false,
-    instagram: false,
-    twitter: false,
-    emailMarketing: false,
-  });
+  const [frequency, setFrequency] = useState(Campaigndata?.frequency);
+  const [scheduledTime, setScheduledTime] = useState(
+    formatToYYYYMMDDHHmm(Campaigndata?.scheduledTime)
+  );
+  const [outputType, setOutputType] = useState(Campaigndata?.outputType);
+  const [numberOfPhotos, setNumberOfPhotos] = useState(
+   Campaigndata?.numberOfPhotos
+  );
+  const [publishSites, setPublishSites] = useState(Campaigndata?.publishSites);
   const { toast } = useToast();
 
-  const [sentimentClass, setSentimentClass] = useState({
-    polarity: [],
-    emotion: [],
-    rating: [],
-  });
+  const [sentimentClass, setSentimentClass] = useState(
+    Campaigndata?.sentimentClass
+  );
 
-  const [checked, setChecked] = useState(true);
+  const [checked, setChecked] = useState(Campaigndata?.newRun);
 
   const handleTitleChange = (e) => {
     e.preventDefault();
@@ -84,7 +89,7 @@ export function CampaignSetupDialog({
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const campaignData = {
+    const campaignData2 = {
       title,
       sentimentClass,
       newRun: checked,
@@ -97,11 +102,11 @@ export function CampaignSetupDialog({
       numberOfPhotos,
       publishSites,
     };
-    const result = await createCampaign(campaignData);
+    const result = await editCampaign(Campaigndata._id, campaignData2);
     if (result.success) {
       toast({
         title: "Success",
-        description: "Campaign created successfully",
+        description: "Campaign Edit successfully",
       });
       onCampaignCreated();
       onOpenChange(false);
@@ -128,7 +133,7 @@ export function CampaignSetupDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[700px] p-2 max-h-[100vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle>Setup a New Campaign</DialogTitle>
+          <DialogTitle>Edit Campaign</DialogTitle>
         </DialogHeader>
 
         <form
@@ -173,7 +178,7 @@ export function CampaignSetupDialog({
               htmlFor="new-run"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              Run a new  S.E.O & SM Analysis Agent Everytime
+              Run a new S.E.O & SM Analysis Agent Everytime
             </Label>
           </div>
 
@@ -240,20 +245,21 @@ export function CampaignSetupDialog({
           <div>
             <Label>Publish Sites</Label>
             <div className="space-y-2">
-              {Object.entries(publishSites).map(([site, checked]) => (
-                <div key={site} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={site}
-                    checked={checked}
-                    onCheckedChange={(value) =>
-                      setPublishSites((prev) => ({ ...prev, [site]: value }))
-                    }
-                  />
-                  <Label htmlFor={site}>
-                    {site.charAt(0).toUpperCase() + site.slice(1)}
-                  </Label>
-                </div>
-              ))}
+              {publishSites &&
+                Object.entries(publishSites)?.map(([site, checked]) => (
+                  <div key={site} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={site}
+                      checked={Boolean(checked)}
+                      onCheckedChange={(value) =>
+                        setPublishSites((prev) => ({ ...prev, [site]: value }))
+                      }
+                    />
+                    <Label htmlFor={site}>
+                      {site.charAt(0).toUpperCase() + site.slice(1)}
+                    </Label>
+                  </div>
+                ))}
             </div>
           </div>
 
@@ -261,7 +267,7 @@ export function CampaignSetupDialog({
             className="bg-black text-white hover:bg-slate-500 w-full"
             type="submit"
           >
-            Create Campaign
+            Save Campaign
           </Button>
         </form>
       </DialogContent>

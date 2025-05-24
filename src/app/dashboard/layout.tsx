@@ -106,7 +106,7 @@ export default function AppLayout({
         const [
           calenderData,
           agentData,
-          usersData,
+          // usersData,
           discounts,
           invoices,
           meetings,
@@ -116,7 +116,7 @@ export default function AppLayout({
         ] = await Promise.all([
           getAllCalenders(userId),
           fetchAgent(userId),
-          getUsers(),
+          // getUsers(),
           getDiscounts(),
           getInvoices(userId),
           getMeetings(userId),
@@ -129,7 +129,7 @@ export default function AppLayout({
         if (isMounted) {
           dispatch(setcalenders(calenderData));
           dispatch(setagents(agentData));
-          dispatch(setusers(usersData));
+          // dispatch(setusers(usersData));
           dispatch(setdiscounts(discounts));
           dispatch(setinvoices(invoices));
           dispatch(setmeetings(meetings));

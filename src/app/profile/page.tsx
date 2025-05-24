@@ -1,56 +1,77 @@
-import ProfileCard from "./profileCard";
+"use client";
 
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import BlurFadeDemo from "../products/images";
-import TopStories from "../products/stories";
+import ProfileForm from "../dashboard/account/components/profile-form";
+import PasswordForm from "../dashboard/account/components/password-form";
+import { useAppSelector } from "@/redux/hooks";
+import { selectusers } from "@/redux/slices/user";
+import { useSession } from "next-auth/react";
 import Navheader from "@/customui/navheader";
 
-export default function Home() {
+export default function ProfilePage() {
+  const users = useAppSelector(selectusers);
+  const { data: session } = useSession();
+  const user_id = session?.user.id;
+
+  const [user, setUser] = useState(users.find((user) => user._id == user_id));
+
+  useEffect(() => {
+    setUser(users.find((user) => user._id == user_id));
+  }, [users, user_id]);
+
   return (
-    <main>
-      <Navheader>
-        <Card className="w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto ">
-          {/* Profile */}
-          <ProfileCard />
-          {/* tabls */}
-          <div className="mx-auto">
-            <Tabs
-              defaultValue="shots"
-              className="w-full md:w-1/2  my-1 mx-auto z-20"
-            >
-              <TabsList className="w-full rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold">
-                <TabsTrigger value="shots">Shots</TabsTrigger>
-                <TabsTrigger value="characters">Ai Characters</TabsTrigger>
-                <TabsTrigger value="billing">Billing</TabsTrigger>
-                <TabsTrigger value="account">Account</TabsTrigger>
-              </TabsList>
-              <TabsContent value="shots">
-                <BlurFadeDemo />
-              </TabsContent>
-              <TabsContent value="characters">
-                <TopStories />
-              </TabsContent>
-              <TabsContent value="billing">
-                <BlurFadeDemo />
-              </TabsContent>
-              <TabsContent value="account">
-                <TopStories />
-              </TabsContent>
-            </Tabs>
-          </div>
-        </Card>
-      </Navheader>
-    </main>
+    <Navheader>
+      <div className="container mx-auto py-8 px-4 max-w-4xl">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold">Profile Settings</h1>
+          <p className="text-muted-foreground mt-2">
+            Manage your account settings and preferences
+          </p>
+        </div>
+
+        <Tabs defaultValue="profile" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="profile">Profile Information</TabsTrigger>
+            <TabsTrigger value="security">Security</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="profile">
+            <Card>
+              <CardHeader>
+                <CardTitle>Profile Information</CardTitle>
+                <CardDescription>
+                  Update your personal information and profile settings
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {user && <ProfileForm user={user} onUserUpdate={setUser} />}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="security">
+            <Card>
+              <CardHeader>
+                <CardTitle>Password & Security</CardTitle>
+                <CardDescription>
+                  Update your password and security settings
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {user && <PasswordForm userId={user?._id} />}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </Navheader>
   );
 }

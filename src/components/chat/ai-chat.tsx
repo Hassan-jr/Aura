@@ -36,6 +36,7 @@ import { setinvoices } from "@/redux/slices/invoice";
 import { getGenerations } from "@/actions/generate.actions";
 import { setgenerations } from "@/redux/slices/generate";
 import { setmeetings } from "@/redux/slices/meeting";
+import { MessageImageBubble } from "./image-chat";
 
 interface UserDetails {
   id: string;
@@ -268,9 +269,13 @@ export function AIChat() {
             <Card className="flex-1 m-0 bg-background/60 backdrop-blur-sm shadow-xl border-t border-l border-background/20">
               <CardContent className="flex-1 overflow-hidden">
                 <ScrollArea className=" h-[500px] mt-0 " ref={scrollAreaRef}>
-                  {filteredMessages?.map((message, idx) => (
-                    <MessageBubble key={idx} message={message} />
-                  ))}
+                  {filteredMessages?.map((message, idx) =>
+                    message?.isImage == true ? (
+                      <MessageImageBubble key={idx} message={message} />
+                    ) : (
+                      <MessageBubble key={idx} message={message} />
+                    )
+                  )}
                   {filteredMessages.length === 0 && (
                     <div className="w-full py-10">
                       <p className="mx-auto text-center italic">

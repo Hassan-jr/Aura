@@ -19,7 +19,7 @@ interface WebhookDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   webhook: WebhookType | null
-  onSave: (webhook: WebhookType) => void
+  onSave: (webhook) => void
 }
 
 export function WebhookDialog({ open, onOpenChange, webhook, onSave }: WebhookDialogProps) {
@@ -50,7 +50,7 @@ export function WebhookDialog({ open, onOpenChange, webhook, onSave }: WebhookDi
   }, [webhook, open])
 
   const handleSave = () => {
-    const newWebhook: WebhookType = {
+    const newWebhook = {
       _id: webhook?._id || undefined,
       url,
       secret,

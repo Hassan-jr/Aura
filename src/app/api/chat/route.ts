@@ -408,18 +408,15 @@ async function generateImages({
 
   const allPrompts = [
     prompt1Result,
-    prompt2Result,
-    prompt3Result,
+    // prompt2Result,
+    // prompt3Result,
     prompt4Result,
   ];
 
-  console.log("All Prompts:", allPrompts);
-
-  return { isImage, generationId, functionalContent };
   const generations = allPrompts.map((promptText) => ({
     prompt: promptText,
     negative_prompt: "",
-    num_outputs: 1,
+    num_outputs: 2,
     width: 1024,
     height: 1024,
     num_inference_steps: 30,
@@ -442,7 +439,7 @@ async function generateImages({
   if (visualGenerationResult.id) {
     isImage = true;
     generationId = visualGenerationResult.id;
-    functionalContent = "Generating Images...";
+    functionalContent = "Product Images Request Success.";
     return { isImage, generationId, functionalContent };
   } else {
     isImage = false;

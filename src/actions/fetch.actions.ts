@@ -59,7 +59,7 @@ export async function getSingleProducts(id) {
 export async function getPosts() {
   await connect();
   // const user = await auth();
-  const products = await Post.find().lean().sort({ createdAt: +1 });
+  const products = await Post.find().lean().sort({ createdAt: -1 });
   return JSON.parse(
     JSON.stringify(
       products.map((doc) => ({

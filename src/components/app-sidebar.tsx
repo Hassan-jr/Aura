@@ -137,19 +137,15 @@ const data = {
       icon: Settings2,
       items: [
         {
-          title: "General Setting",
-          url: "#",
-        },
-        {
           title: "Webhook Integration",
           url: "/dashboard/webhook",
         },
         {
-          title: "Billing",
-          url: "#",
+          title: "Account Setting",
+          url: "/dashboard/account",
         },
         {
-          title: "Limits",
+          title: "Billing",
           url: "#",
         },
       ],
@@ -174,7 +170,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       name: pro?.title,
       logo: GalleryVerticalEnd,
       plan: pro?.description,
-      id: pro?._id
+      id: pro?._id,
     }));
 
     setproductTeam(team);
@@ -196,7 +192,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton isActive={item.isActive}>
                       {item.icon && <item.icon />}
-                      <Link href={item.url} prefetch={true}>{item.title}</Link>
+                      <Link href={item.url} prefetch={true}>
+                        {item.title}
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}

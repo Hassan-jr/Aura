@@ -11,27 +11,33 @@ import { selectcampaignResults } from "@/redux/slices/campaginResult";
 import { selectfeedbacks } from "@/redux/slices/feeback";
 import { selectagents } from "@/redux/slices/agent";
 import CampaignResultCard from "./campaign-results-card";
+import { selectProductId } from "@/redux/slices/productId";
 
 function Home() {
   const params = useParams();
- 
-  const campaignResults = useAppSelector(selectcampaignResults);
 
+  const campaignResults = useAppSelector(selectcampaignResults);
   const id = params?.id;
+
+  const [productCampagin, setproductCampagin] = useState(
+    campaignResults.filter((camp) => camp.campaignId == id)
+  );
+
+  useEffect(() => {
+    setproductCampagin(campaignResults.filter((camp) => camp.campaignId == id));
+  }, [campaignResults, id]);
 
   return (
     <div>
       <Card className="mb-4 overflow-hidden">
         <div className="flex">
           <CardContent className="w-full p-2 flex flex-col">
-            {campaignResults.map((result) => (
+            {productCampagin?.map((result) => (
               <CampaignResultCard key={result._id} result={result} />
             ))}
           </CardContent>
         </div>
       </Card>
-
-    
     </div>
   );
 }
