@@ -58,7 +58,9 @@ export async function POST(request: NextRequest) {
       });
       // users
 
-      const feedbacks = await Feedback.find();
+      const feedbacks = await Feedback.find({
+        productId: campaginResult.productId,
+      });
       const filteredFeedback = feedbacks.filter((item) => {
         const polarityMatch = campaginResult.sentimentClass.polarity?.map(
           (selectedPolarity) =>
@@ -97,7 +99,7 @@ export async function POST(request: NextRequest) {
 
     if (generations.clientId != "auto") {
       const images = getImageUrls(data.output.generations);
-      sendPostEmail(generations.clientId, images);
+      sendPostEmail(generations.clientId, images, "", "");
     }
     //
     // Return a 200 status to acknowledge successful receipt

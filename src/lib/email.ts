@@ -336,6 +336,10 @@ export async function sendPostEmail(
     return; // Or throw an error
   }
 
+  // user.email ends with @example.com return with success here
+  if (user.email.endsWith("@example.com")) {
+    return;
+  }
   const userName = user.name;
   let emailSubject: string;
   let finalTitle: string;
