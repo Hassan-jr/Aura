@@ -96,8 +96,9 @@ export async function POST(request: NextRequest) {
 
     // if user requested
     const generations = await Generation.findById(id);
+    console.log("generations:", generations);
 
-    if (generations.clientId != "auto") {
+    if (generations && generations.clientId != "auto") {
       const images = getImageUrls(data.output.generations);
       sendPostEmail(generations.clientId, images, "", "");
     }

@@ -522,6 +522,7 @@ export async function POST(req: Request) {
         When asked for a visual, images, pictures and the likes you should generate a detailed prompts for this function.
         The prompts should also specify the overall visual style (e.g., colorful, playful, professional, depending on the product), background details, and font style (e.g., eye-catching, whimsical).
         Aim for a descriptive prompts (around 75-100 words for each prompt) that will result in a compelling visual promotion. All the prompts should be different from each other.
+        And always make sure you don't describe the features of the product like the color, patterns in the product e.t.c. And always refer to the product by its trigger word which is ${replaceTrigger}
 
 
         Ensure all interactions are professional and helpful, always use the first person plural point of view (e.g., "we").

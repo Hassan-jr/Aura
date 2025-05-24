@@ -116,7 +116,7 @@ export function GenerationCard({ generation }: { generation: Generation }) {
           {/* Right side - Details */}
           <CardContent className="w-full md:w-1/2 p-2 flex flex-col overflow-y-auto">
             <div className="mb-2">
-              <h3 className="text-lg font-bold line-clamp-2 mb-1">
+              <h3 className="text-xs font-bold mb-1">
                 {generation.prompt}
               </h3>
               <div className="flex items-center gap-2 mt-1">
