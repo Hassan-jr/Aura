@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     });
 
     // 2 get capmapgn since post exits
-    if (post._id) {
+    if (post?._id) {
       const campaginResult = await CampaignResult.findOne({
         generationId: id,
       });
