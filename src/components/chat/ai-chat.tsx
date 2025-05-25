@@ -83,7 +83,6 @@ export function AIChat() {
   }, [productId]);
 
   const selectedProductId = useAppSelector(selectProductId);
-  
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -170,13 +169,16 @@ export function AIChat() {
     );
 
     try {
+      const filteredMessages = messages.filter(
+        (m) => m.productId == selectedProductId && m.userId == selectedUserId
+      );
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          messages: [...messages, userMessage],
+          messages: [...filteredMessages, userMessage],
           productId: selectedProductId,
           userId: selectedUserId,
           bId: bid,

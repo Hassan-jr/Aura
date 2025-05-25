@@ -149,13 +149,16 @@ export function AIChat({ prevmessages, users, products }) {
     );
 
     try {
+      const filteredMessages = messages.filter(
+        (m) => m.productId == selectedProductId && m.bId == bid
+      );
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          messages: [...messages, userMessage],
+          messages: [...filteredMessages, userMessage],
           productId: selectedProductId,
           userId: session.user.id,
           bId: bid,

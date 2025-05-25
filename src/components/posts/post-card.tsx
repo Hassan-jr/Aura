@@ -33,6 +33,7 @@ import Link from "next/link";
 import { useAppSelector } from "@/redux/hooks";
 import { selectgenerations } from "@/redux/slices/generate";
 import { classifySentiment } from "@/actions/emotion.action";
+import { toast as toast2 } from "react-toastify";
 
 const formSchema = z.object({
   feedback: z.string().min(1, "Feedback is required"),
@@ -160,60 +161,72 @@ export default function PostCard({
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // insert emotion
-    const emotionsTypes = [
-      "Sad", // LABEL_0
-      "Happy", // LABEL_1
-      "Love", // LABEL_2
-      "Angry", // LABEL_3
-      "Fearful", // LABEL_4
-      "Surprised", // LABEL_5
-    ];
-    const openresult = await classifySentiment(values.feedback);
-    const formatedResult = emotionsTypes.map((emotion, i) => ({
-      label: `LABEL_${i}`,
-      score: openresult[emotion] ?? 0,
-    }));
-    const savedFeedback = await submitFeedback({
-      feedback: values.feedback,
-      productId: id,
-      rating: values.rating,
-      userId: session.user.id,
-      polarity: [],
-      emotion: formatedResult,
-    });
-    setDialogOpen(false);
-    form.reset();
-    console.log("savedFeedback id:", savedFeedback);
-    // send to sentiment analysis
-    const result = await endpoint.run({
-      input: {
-        sentiments: [values.feedback],
-      },
-      webhook: `https://inprimeai.vercel.app/api/webhooks/feedback/${savedFeedback.id}`,
-      policy: {
-        executionTimeout: 1000 * 60 * 5,
-      },
-    });
-    console.log(result);
+    const toastId = toast2.loading("Submitting Feedback.. Please wait...");
+    try {
+      // insert emotion
+      const emotionsTypes = [
+        "Sad", // LABEL_0
+        "Happy", // LABEL_1
+        "Love", // LABEL_2
+        "Angry", // LABEL_3
+        "Fearful", // LABEL_4
+        "Surprised", // LABEL_5
+      ];
+      const openresult = await classifySentiment(values.feedback);
+      const formatedResult = emotionsTypes.map((emotion, i) => ({
+        label: `LABEL_${i}`,
+        score: openresult[emotion] ?? 0,
+      }));
+      const savedFeedback = await submitFeedback({
+        feedback: values.feedback,
+        productId: id,
+        rating: values.rating,
+        userId: session.user.id,
+        polarity: [],
+        emotion: formatedResult,
+      });
+      setDialogOpen(false);
+      form.reset();
+      console.log("savedFeedback id:", savedFeedback);
+      // send to sentiment analysis
+      const result = await endpoint.run({
+        input: {
+          sentiments: [values.feedback],
+        },
+        webhook: `https://inprimeai.vercel.app/api/webhooks/feedback/${savedFeedback.id}`,
+        policy: {
+          executionTimeout: 1000 * 60 * 5,
+        },
+      });
+      console.log(result);
 
-    // start a chat
+      // start a chat
 
-    const userMessage = {
-      userId: session.user.id,
-      bId: bid,
-      productId: id,
-      role: "user",
-      content: values.feedback,
-    };
-    const messages = [userMessage];
-    const productDetails = products.find((product) => product._id === id);
-    await sendMessage(messages, id, session.user.id, bid, productDetails);
-    toast({
-      variant: "default",
-      title: "Feedback Submitted Successful",
-      description: "",
-    });
+      const userMessage = {
+        userId: session.user.id,
+        bId: bid,
+        productId: id,
+        role: "user",
+        content: values.feedback,
+      };
+      const messages = [userMessage];
+      const productDetails = products.find((product) => product._id === id);
+      await sendMessage(messages, id, session.user.id, bid, productDetails);
+      toast2.update(toastId, {
+        render: "Feedback Submitted Successful",
+        type: "success",
+        isLoading: false,
+        autoClose: 5000,
+      });
+    } catch (error) {
+      toast2.update(toastId, {
+        render: "An Error Occured",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
+      console.log("Feedback Error:", error);
+    }
   }
 
   return (

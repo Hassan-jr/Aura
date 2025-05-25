@@ -477,6 +477,8 @@ export async function POST(req: Request) {
     customerDetails,
   } = await req.json();
 
+  console.log("messages:", messages);
+
   // --- Basic validation for meeting credentials (optional but recommended) ---
   const requiredMeetingCreds = {
     userEmail,
@@ -718,7 +720,7 @@ export async function POST(req: Request) {
                 customerDetails,
                 productDetails
               );
-              functionResultContent = `We've agreed on a ${agreedDiscountRate}% discount for ${
+              functionResultContent = `Ok I give you a ${agreedDiscountRate}% discount for ${
                 productDetails.title
               }. This offer is valid until ${discount.expiryDate.toLocaleDateString()}. You can apply it at checkout.`;
               responseData = {
