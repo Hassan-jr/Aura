@@ -410,13 +410,13 @@ async function generateImages({
     prompt1Result,
     // prompt2Result,
     // prompt3Result,
-    prompt4Result,
+    // prompt4Result,
   ];
 
   const generations = allPrompts.map((promptText) => ({
     prompt: promptText,
     negative_prompt: "",
-    num_outputs: 1,
+    num_outputs: 2,
     width: 1024,
     height: 1024,
     num_inference_steps: 30,

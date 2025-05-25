@@ -250,7 +250,10 @@ export default function GenerationCards() {
         {currentProductGens?.length > 0 ?
           currentProductGens?.map((gens) => {
             return gens.generations.map((generation, index) => (
-              <GenerationCard key={index} generation={generation} />
+              <div key={index}>
+              
+              <GenerationCard  generation={generation} />
+              </div>
             ));
           })
         :

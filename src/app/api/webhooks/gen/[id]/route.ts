@@ -26,42 +26,10 @@ export async function POST(request: NextRequest) {
     // Parse the request body
     const data = await request.json();
 
-    /**
-     * Strips any leading "https://…/test1/" (or without trailing slash),
-     * then removes the leading slash so the URLs start with "CSC416GENS/…"
-     */
-    function normalizeImageUrls(data) {
-      // matches e.g. "https://.../test1/" or "http://.../test1"
-      const prefixRegex = /^https?:\/\/[^/]+\/test1\/?/;
-
-      return {
-        ...data,
-        output: {
-          ...data.output,
-          generations: data.output.generations.map((gen) => ({
-            ...gen,
-            images: gen.images.map((img) => {
-              // first remove the https://…/test1 part
-              let stripped = img.url.replace(prefixRegex, "");
-              // then, if there’s a leading slash, drop it
-              if (stripped.startsWith("/")) {
-                stripped = stripped.slice(1);
-              }
-              return {
-                ...img,
-                url: stripped,
-              };
-            }),
-          })),
-        },
-      };
-    }
-
     // Update the Generation document
     if (data.status === "COMPLETED") {
-      const result = normalizeImageUrls(data);
       await Generation.findByIdAndUpdate(id, {
-        generations: result.output.generations,
+        generations: data.output.generations,
       });
     }
 

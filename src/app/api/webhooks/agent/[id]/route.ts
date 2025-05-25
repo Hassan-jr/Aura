@@ -201,9 +201,9 @@ export async function POST(request: NextRequest) {
     // 8. Generate Visuals
     const allPrompts = [
       generatedContent.Prompt1,
-      generatedContent.Prompt2,
-      generatedContent.Prompt3,
-      generatedContent.Prompt4,
+      // generatedContent.Prompt2,
+      // generatedContent.Prompt3,
+      // generatedContent.Prompt4,
     ];
 
     // 2. Figure out how many you actually want (default to 4 if missing or >4)
