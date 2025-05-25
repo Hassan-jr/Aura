@@ -82,10 +82,8 @@ export function AIChat() {
     setMessages(filteredPosts);
   }, [productId]);
 
-  const [selectedProductId, setselectedProductId] = useState(count);
-  useEffect(() => {
-    setselectedProductId(count);
-  }, [count]);
+  const selectedProductId = useAppSelector(selectProductId);
+  
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -247,13 +245,6 @@ export function AIChat() {
       )
     );
   }, [messages, selectedUserId, selectedProductId]);
-
-  // auto select product for the first time
-  useEffect(() => {
-    if (selectedUserId && products.length > 0 && selectedProductId === null) {
-      setselectedProductId(products[0]._id);
-    }
-  }, [selectedUserId, products]);
 
   return (
     <div>

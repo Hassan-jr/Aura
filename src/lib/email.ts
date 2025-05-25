@@ -331,6 +331,7 @@ export async function sendPostEmail(
   }
 
   const user = await User.findById(userId);
+
   if (!user) {
     console.error(`User not found with ID: ${userId} for post email.`);
     return; // Or throw an error
@@ -350,7 +351,7 @@ export async function sendPostEmail(
     finalTitle = postTitle;
     finalDescription = postDescription;
   } else {
-    emailSubject = `Your Requested Images | CSC416 AI`;
+    emailSubject = `Your Custom Product Images | CSC416 AI`;
     finalTitle = `Hello ${userName}, Your Requested Images Are Here`;
     finalDescription = `<p>Here are the images you requested from CSC416 AI:</p>`;
   }

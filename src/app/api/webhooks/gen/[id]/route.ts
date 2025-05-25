@@ -96,11 +96,10 @@ export async function POST(request: NextRequest) {
 
     // if user requested
     const generations = await Generation.findById(id);
-    console.log("generations:", generations);
 
     if (generations && generations.clientId != "auto") {
       const images = getImageUrls(data.output.generations);
-      sendPostEmail(generations.clientId, images, "", "");
+      await sendPostEmail(generations.clientId, images);
     }
     //
     // Return a 200 status to acknowledge successful receipt
