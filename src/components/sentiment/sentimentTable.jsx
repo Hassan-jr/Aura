@@ -90,10 +90,24 @@ export function SentimentTable({ feedbacks, users, showFilter = true }) {
                   </TableCell>
                   {/* <TableCell className="h-80">{feedback.feedback}</TableCell> */}
                   <TableCell className="w-96">
-                    <PolarityChart polarity={feedback.polarity} />
+                    {/* <PolarityChart polarity={feedback.polarity} /> */}
+                    {feedback.polarity?.length > 0 ? (
+                      <PolarityChart polarity={feedback.polarity} />
+                    ) : (
+                      <div className="flex justify-center py-4">
+                        <div className="animate-spin rounded-full h-6 w-6 border-4 border-gray-200 border-t-gray-500"></div>
+                      </div>
+                    )}
                   </TableCell>
                   <TableCell className="w-96">
-                    <EmotionChart emotion={feedback.emotion} />
+                    {/* <EmotionChart emotion={feedback.emotion} /> */}
+                    {feedback.polarity?.length > 0 ? (
+                      <EmotionChart emotion={feedback.emotion} />
+                    ) : (
+                      <div className="flex justify-center py-4">
+                        <div className="animate-spin rounded-full h-6 w-6 border-4 border-gray-200 border-t-gray-500"></div>
+                      </div>
+                    )}
                   </TableCell>
                   <TableCell className="text-right">
                     {feedback.rating}/5

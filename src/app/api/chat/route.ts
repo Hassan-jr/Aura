@@ -410,7 +410,7 @@ async function generateImages({
     prompt1Result,
     // prompt2Result,
     // prompt3Result,
-    // prompt4Result,
+    prompt4Result,
   ];
 
   const generations = allPrompts.map((promptText) => ({
@@ -521,9 +521,29 @@ export async function POST(req: Request) {
         You also have the capability to generate a prompts for generating a promotional graphic card design and product ads photos for the product using the 'generate_images' function.
         When asked for a visual, images, pictures and the likes you should generate a detailed prompts for this function.
         The prompts should also specify the overall visual style (e.g., colorful, playful, professional, depending on the product), background details, and font style (e.g., eye-catching, whimsical).
-        Aim for a descriptive prompts (around 75-100 words for each prompt) that will result in a compelling visual promotion. All the prompts should be different from each other.
-        And always make sure you don't describe the product features like color or patterns in the product. 
-        And always refer to the product as ${replaceTrigger}
+        Aim for a descriptive prompts (around 75-100 words for each prompt) that will result in a compelling visual promotion. 
+        All the prompts should be different from each other. And all the prompt should contain the product trigger word which is ${replaceTrigger}
+        use as many '${replaceTrigger}' as possible in the prompt sice it is the product trigger word.
+        Here are 3 good example of a prompts that works perfectly for generating a promotional graphic card design and product ads photos. So use them as an inspiration or template
+                Example 1: Prompt for sneakers:
+                ${replaceTrigger}, a photo of ${replaceTrigger}, create a bold, vibrant graphic card design featuring Limitless Stride™ Personalized Athletic 
+                Sneakers in the foreground with a colorful, dynamic background. Present the sneaker in a prominent, eye-catching 
+                angle, surrounded by artistic splashes of color, digital brush strokes, and energy lines. Overlay with playful, 
+                modern font text: "15% OFF Just For Ali! Ends May 8, 2025" to make the promotion personal and urgent. 
+                Ensure the style is youthful, energetic, and cutting-edge to reflect customization and sportiness.
+
+                Example 2: Prompt for hoodie:
+                ${replaceTrigger}, a photo of ${replaceTrigger} styled as a dynamic sportswear ad. Hoodie shown on a virtual athlete in an action pose with 
+                swirling blue graphics. Background features a transparent overlay of University of Nairobi landmarks. Bold, impactful 
+                font announces: "Special 10% Discount For Abdiladif – Ends 25/5/2025!" Color palette is energetic, mixing blues and blacks
+
+                Example 3: Prompt for kids by bicycle
+                ${replaceTrigger}, A vibrant illustration of a ${replaceTrigger} kids bicycle seamlessly integrated into a colorful graphic card design, with a 
+                backdrop of stunning gradient colors. A young child, brimming with joy, is shown riding the bicycle, radiating a 
+                sense of youthful energy. The scene is bursting with vibrant colors, creating a fun and playful atmosphere. 
+                Text overlays in a whimsical, eye-catching font exclaim 'Summer Fun Starts Here!' and '30% OFF Kids' Bikes', 
+                further emphasizing the promotional aspect of the image. This whimsical, detailed illustration, uses vivid colors, 
+                sharp lines, and a sense of childlike wonder
 
 
         Ensure all interactions are professional and helpful, always use the first person plural point of view (e.g., "we").
@@ -632,12 +652,14 @@ export async function POST(req: Request) {
               prompt1: {
                 type: "string",
                 description: `
-                A detailed image generation prompt (around 75-100 words) starting.EXACTLY with '${replaceTrigger}, a photo of ${replaceTrigger}', This prompt should describe a vibrant graphic card design style featuring the product in the foreground and promotional messages in the background
+                A detailed image generation prompt (around 75-100 words) starting.EXACTLY with '${replaceTrigger}, a photo of ${replaceTrigger}', This prompt should describe a vibrant graphic advertisement card design style featuring the product in the foreground and promotional messages in the background
                 Crucially, the prompt MUST instruct the image generator to include personalized promotional text. This text should incorporate:
                   - The user's name ${firstName}.
                   - The specific, agreed-upon discount percentage(if known from the conversation history, and always choose the latest discount given ).
                   - Any relevant expiry date for the offer (if applicable and known).
-                For example, if the user 'Sarah' agreed to a 15% discount expiring June 1st, the prompt should specify text like '15% OFF Just For Sarah! Ends June 1st'`,
+                  - use as many '${replaceTrigger}' as possible in the prompt sice it is the product trigger word.
+                For example, if the user 'Sarah' agreed to a 15% discount expiring June 1st, the prompt should specify text like '15% OFF Just For Sarah! Ends June 1st'
+                `,
               },
               prompt2: {
                 type: "string",
@@ -655,7 +677,10 @@ export async function POST(req: Request) {
               },
               prompt4: {
                 type: "string",
-                description: `A fourth detailed image prompt (around 75-100 words), starting EXACTLY with '${replaceTrigger}, a photo of ${replaceTrigger}'. Explore and Offer a final unique and distinct visual concept and angle.`,
+                description: `A fourth detailed image prompt (around 75-100 words), starting EXACTLY with '${replaceTrigger}, a photo of ${replaceTrigger}'. Explore and Offer a final unique and distinct visual concept and angle. 
+                First, conceptualize an exciting product for ${replaceTrigger} product, 
+                then describe its ideal showcase: a specific, compelling visual environment, for a top-tier product promo advertisement
+                use as many '${replaceTrigger}' as possible in the prompt sice it is the product trigger word.`,
               },
             },
             required: [], // qty and expiresIn have defaults
@@ -809,6 +834,8 @@ export async function POST(req: Request) {
           // --- GENERATE IMAGES
           case "generate_images": {
             const { prompt1, prompt2, prompt3, prompt4 } = JSON.parse(args);
+            console.log("Product Id:", productId);
+
             if (prompt1 && prompt2 && prompt3 && prompt4) {
               const { isImage, generationId, functionalContent } =
                 await generateImages({

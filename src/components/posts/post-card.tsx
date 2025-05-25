@@ -32,6 +32,7 @@ import runpodSdk from "runpod-sdk";
 import Link from "next/link";
 import { useAppSelector } from "@/redux/hooks";
 import { selectgenerations } from "@/redux/slices/generate";
+import { classifySentiment } from "@/actions/emotion.action";
 
 const formSchema = z.object({
   feedback: z.string().min(1, "Feedback is required"),
@@ -78,7 +79,7 @@ export default function PostCard({
       });
     } else {
       setVisuals({
-        images: images?.length > 0 ? images: ["CSC416/loadingImage.svg"],
+        images: images?.length > 0 ? images : ["CSC416/loadingImage.svg"],
         isVideos: false,
       });
     }
@@ -159,13 +160,27 @@ export default function PostCard({
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    // insert emotion
+    const emotionsTypes = [
+      "Sad", // LABEL_0
+      "Happy", // LABEL_1
+      "Love", // LABEL_2
+      "Angry", // LABEL_3
+      "Fearful", // LABEL_4
+      "Surprised", // LABEL_5
+    ];
+    const openresult = await classifySentiment(values.feedback);
+    const formatedResult = emotionsTypes.map((emotion, i) => ({
+      label: `LABEL_${i}`,
+      score: openresult[emotion] ?? 0,
+    }));
     const savedFeedback = await submitFeedback({
       feedback: values.feedback,
       productId: id,
       rating: values.rating,
       userId: session.user.id,
       polarity: [],
-      emotion: [],
+      emotion: formatedResult,
     });
     setDialogOpen(false);
     form.reset();

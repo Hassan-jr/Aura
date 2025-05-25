@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Metadata } from "next";
 import Image from "next/image";
 
@@ -20,9 +20,34 @@ import PieChartComponent from "@/components/sentiment/chart/pie";
 import { BarChartComponent } from "@/components/sentiment/chart/bar";
 import { useAppSelector } from "@/redux/hooks";
 import { selectfeedbacks } from "@/redux/slices/feeback";
+import { classifySentiment } from "@/actions/emotion.action";
 
 export default function DashboardPage() {
-   const feedbacks = useAppSelector(selectfeedbacks);
+  const feedbacks = useAppSelector(selectfeedbacks);
+
+  const sentiment = async () => {
+    const emotions = [
+      "Sad", // LABEL_0
+      "Happy", // LABEL_1
+      "Love", // LABEL_2
+      "Angry", // LABEL_3
+      "Fearful", // LABEL_4
+      "Surprised", // LABEL_5
+    ];
+    try {
+      const sent =
+        "Performance is decent, but I found the battery life disappointing—it barely lasted a few hours on a full charge. If they improve power management or include a spare battery, it’d be a much stronger offering";
+      const result = await classifySentiment(sent);
+      const formatedResult = emotions.map((emotion, i) => ({
+        label: `LABEL_${i}`,
+        score: result[emotion] ?? 0,
+      }));
+      console.log("Sentiment Result:", result);
+      console.log("Sentiment Formated:", formatedResult);
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
   return (
     <>
       <div className="md:hidden">
@@ -59,6 +84,9 @@ export default function DashboardPage() {
             <div className="flex items-center space-x-2">
               <CalendarDateRangePicker />
               <Button>Download</Button>
+              <Button className="bg-blue-600" onClick={sentiment}>
+                RUN SENTIMENT
+              </Button>
             </div>
           </div>
           {/* second section */}
