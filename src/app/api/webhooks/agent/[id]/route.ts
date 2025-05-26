@@ -213,10 +213,10 @@ export async function POST(request: NextRequest) {
       : 4;
 
     // 3. Slice and map to the desired shape
-    const generations = allPrompts.slice(0, count).map((promptText) => ({
+    const generations = allPrompts.map((promptText) => ({
       prompt: promptText,
       negative_prompt: "",
-      num_outputs: campaignResult.outputType == "videos" ? 4 : 1,
+      num_outputs: campaignResult.outputType == "videos" ? 4 : campaignResult?.numberOfPhotos,
       width: 1024,
       height: 1024,
       num_inference_steps: 30,

@@ -21,9 +21,35 @@ import { BarChartComponent } from "@/components/sentiment/chart/bar";
 import { useAppSelector } from "@/redux/hooks";
 import { selectfeedbacks } from "@/redux/slices/feeback";
 import { classifySentiment } from "@/actions/emotion.action";
+import { selectdiscounts } from "@/redux/slices/discount";
+import { selectinvoices } from "@/redux/slices/invoice";
+import { selectProducts } from "@/redux/slices/product";
+import { selectProductId } from "@/redux/slices/productId";
+import { selectusers } from "@/redux/slices/user";
+import { selectcampaigns } from "@/redux/slices/campagin";
+import { selectposts } from "@/redux/slices/post";
 
 export default function DashboardPage() {
   const feedbacks = useAppSelector(selectfeedbacks);
+  const invoices = useAppSelector(selectinvoices);
+  const products = useAppSelector(selectProducts);
+  const discounts = useAppSelector(selectdiscounts);
+  const users = useAppSelector(selectusers);
+  const campaigns = useAppSelector(selectcampaigns);
+  const posts = useAppSelector(selectposts)
+
+  const calculateTotalInvoices = (invoices: any[], products: any[]) => {
+    return invoices.reduce((total, invoice) => {
+      const product = products.find((p) => p._id === invoice.productId);
+      if (product) {
+        return total + product.price * invoice.qty;
+      }
+      return total;
+    }, 0);
+  };
+
+  const totalInvoicesValue = calculateTotalInvoices(invoices, products);
+
   return (
     <>
       <div className="md:hidden">
@@ -49,7 +75,7 @@ export default function DashboardPage() {
             <MainNav className="mx-6" />
             <div className="ml-auto flex items-center space-x-4">
               <Search />
-              <UserNav />
+              {/* <UserNav /> */}
             </div>
           </div>
         </div>
@@ -68,7 +94,7 @@ export default function DashboardPage() {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Total Revenue
+                    Total Sales
                   </CardTitle>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +110,12 @@ export default function DashboardPage() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">$45,231.89</div>
+                  <div className="text-2xl font-bold">
+                    {totalInvoicesValue.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "KSH",
+                    })}
+                  </div>
                   <p className="text-xs text-muted-foreground">
                     +20.1% from last month
                   </p>
@@ -93,7 +124,7 @@ export default function DashboardPage() {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Subscriptions
+                    Product Models
                   </CardTitle>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -111,15 +142,15 @@ export default function DashboardPage() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">+2350</div>
+                  <div className="text-2xl font-bold">{products?.length}</div>
                   <p className="text-xs text-muted-foreground">
-                    +180.1% from last month
+                    {products?.length} total product model trained since last year
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Sales</CardTitle>
+                  <CardTitle className="text-sm font-medium">Total Posts Generated</CardTitle>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -135,9 +166,9 @@ export default function DashboardPage() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">+12,234</div>
+                  <div className="text-2xl font-bold">+{posts?.length}</div>
                   <p className="text-xs text-muted-foreground">
-                    +19% from last month
+                    +69% from last month
                   </p>
                 </CardContent>
               </Card>
@@ -160,7 +191,7 @@ export default function DashboardPage() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">+15</div>
+                  <div className="text-2xl font-bold">+{campaigns?.length}</div>
                   <p className="text-xs text-muted-foreground">
                     +3 since yesterday
                   </p>
