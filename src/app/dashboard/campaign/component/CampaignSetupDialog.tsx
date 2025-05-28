@@ -57,9 +57,9 @@ export function CampaignSetupDialog({
   const [outputType, setOutputType] = useState("photos");
   const [numberOfPhotos, setNumberOfPhotos] = useState(4);
   const [publishSites, setPublishSites] = useState({
-    facebook: false,
-    instagram: false,
-    twitter: false,
+    // facebook: false,
+    // instagram: false,
+    // twitter: false,
     emailMarketing: false,
   });
   const { toast } = useToast();
@@ -238,7 +238,7 @@ export function CampaignSetupDialog({
           )}
 
           <div>
-            <Label>Publish Sites</Label>
+            <Label>Enable Email Notification</Label>
             <div className="space-y-2">
               {Object.entries(publishSites).map(([site, checked]) => (
                 <div key={site} className="flex items-center space-x-2">

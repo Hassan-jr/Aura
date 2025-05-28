@@ -518,7 +518,6 @@ export async function POST(req: Request) {
 
         You can also issue invoices for users when requested using the 'issue_invoice' function.
         You can also schedule a Google Meet call if the user asks to talk to someone, requests a meeting, wants human help, or expresses a desire to speak with a representative. Use the 'schedule_meeting' function for this.
-        Always give the exact time and date the user request the meeting if the user specifies the date and time of the meeting.
 
         You also have the capability to generate a prompts for generating a promotional graphic card design and product ads photos for the product using the 'generate_images' function.
         When asked for a visual, images, pictures and the likes you should generate a detailed prompts for this function.
@@ -562,6 +561,29 @@ export async function POST(req: Request) {
       userId,
       bId,
     });
+
+    function constructRequestedTime(hour, dayOffset) {
+      // Create a new Date object to work with (initialized to current date and time)
+      const targetDate = new Date();
+
+      // Set the date by adding the dayOffset to the current date
+      // It's good practice to set the date part before the time part
+      targetDate.setDate(targetDate.getDate() + dayOffset);
+
+      // Set the hour, and reset minutes, seconds, and milliseconds to 0
+      targetDate.setHours(hour, 0, 0, 0);
+
+      // Format the date into YYYY-MM-DDTHH:MM:SS string
+      const year = targetDate.getFullYear();
+      // getMonth() is 0-indexed (0 for January, 11 for December), so add 1
+      const month = (targetDate.getMonth() + 1).toString().padStart(2, "0");
+      const day = targetDate.getDate().toString().padStart(2, "0");
+      const hours = targetDate.getHours().toString().padStart(2, "0");
+      const minutes = targetDate.getMinutes().toString().padStart(2, "0");
+      const seconds = targetDate.getSeconds().toString().padStart(2, "0");
+
+      return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+    }
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4.1", // Or your preferred model supporting function calling
@@ -633,11 +655,17 @@ export async function POST(req: Request) {
                 type: "string",
                 description: `A short description for the meeting agenda, based on the conversation context and product description. Max 150 chars. Product Desc: ${productDetails.description}`,
               },
-              // Make startTime optional for the LLM. The backend will default if not provided.
-              startTime: {
-                type: "string",
+              time: {
+                type: "number",
                 description:
-                  "The requested start time for the meeting in ISO 8601 format (YYYY-MM-DDTHH:mm:ss.sssZ). Only include this if the user specifies a particular date and time. Otherwise, omit this property.",
+                  "the time(hour) in 24 hour clock system when the meeting will be scheduled. this should be between 0 to 23. which should be the hour of the day when the meeting will be scheduled. for example 2.pm will 14",
+                default: 1,
+              },
+              day: {
+                type: "number",
+                description:
+                  "The number of days from now when the meeting will be scheduled. Default is 0 day when the meeting has to be sheduled the sam day.",
+                default: 0,
               },
             },
             required: ["summary", "description"], // startTime is now optional here
@@ -789,9 +817,14 @@ export async function POST(req: Request) {
               const {
                 summary,
                 description,
-                startTime: requestedStartTime,
+                // startTime: requestedStartTime,
+                time,
+                day,
               } = JSON.parse(args);
-              console.log("startTime: ", requestedStartTime);
+              console.log("Time: ", time);
+              console.log("Day: ", day);
+              const requestedTime = constructRequestedTime(time, day);
+              console.log("requestedTime:", requestedTime);
 
               const meetingResult = await handleScheduleMeeting({
                 userId,
@@ -801,7 +834,7 @@ export async function POST(req: Request) {
                 myEmail,
                 summary,
                 description,
-                requestedStartTime, // Pass the optional start time
+                requestedStartTime: requestedTime, // Pass the optional start time
                 clientId,
                 clientSecret,
                 refreshToken,

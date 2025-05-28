@@ -9,42 +9,9 @@ import { Separator } from "@/components/ui/separator";
 import ReactMarkdown from "react-markdown";
 import { getSingleProducts, getUserDiscount } from "@/actions/fetch.actions";
 import { useSession } from "next-auth/react";
+import { useAppSelector } from "@/redux/hooks";
+import { selectloras } from "@/redux/slices/lora";
 // import { useRouter } from "next/router";
-
-// Sample product data
-const product = {
-  title: "Premium Wireless Headphones",
-  description: `
-# Premium Wireless Headphones
-
-These premium wireless headphones deliver exceptional sound quality with deep bass and crystal-clear highs. Perfect for music enthusiasts and professionals alike.
-
-## Key Features
-
-- **Active Noise Cancellation**: Block out external noise for immersive listening
-- **40-Hour Battery Life**: Extended playtime on a single charge
-- **Premium Materials**: Memory foam ear cushions and stainless steel frame
-- **Bluetooth 5.2**: Stable connection with minimal latency
-- **Built-in Microphone**: Crystal clear calls with noise reduction
-
-## Technical Specifications
-
-- Frequency Response: 20Hz - 20kHz
-- Impedance: 32 Ohm
-- Driver Size: 40mm
-- Weight: 250g
-
-These headphones are designed for comfort during extended listening sessions. The adjustable headband and rotating ear cups ensure a perfect fit for any head size.
-  `,
-  price: 299.99,
-  discount: 15, // percentage
-  images: [
-    "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2hvZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1539185441755-769473a23570?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHNob2VzfGVufDB8fDB8fHww",
-    "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHNob2VzfGVufDB8fDB8fHww",
-    "https://images.unsplash.com/photo-1570464197285-9949814674a7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHNob2VzfGVufDB8fDB8fHww",
-  ],
-};
 
 export default function CheckoutPage({
   params,
@@ -61,6 +28,47 @@ export default function CheckoutPage({
   const { data: session } = useSession();
   const userId = session?.user?.id;
   const [discount, setDiscount] = useState<any>({}); //useState({})
+  // @@@@@@@@@@
+  const lorasData = useAppSelector(selectloras);
+  const [trainUrls, setTrainUrls] = useState([]);
+  const [images, setImages] = useState(
+    trainUrls?.length > 0
+      ? trainUrls
+      : ["https://r2.nomapos.com/CSC416/loadingImage.svg"]
+  );
+
+  const [currentLora, setCurrentLora] = useState(
+    lorasData.find((lora) => lora.productId == unwrappedParams?.id)
+  );
+
+  // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+  useEffect(() => {
+    if (unwrappedParams?.id && lorasData) {
+      const lora = lorasData.find(
+        (lora) => lora.productId == unwrappedParams?.id
+      );
+      setCurrentLora(lora);
+    }
+  }, [lorasData, unwrappedParams?.id]);
+
+  useEffect(() => {
+    if (currentLora) {
+      const urls = currentLora?.trainImgs?.map((lora) => lora.imgUrl);
+      setTrainUrls(urls);
+    }
+  }, [currentLora]);
+
+  useEffect(() => {
+    setImages(
+      trainUrls?.length > 0
+        ? trainUrls
+        : ["https://r2.nomapos.com/CSC416/loadingImage.svg"]
+    );
+  }, [trainUrls]);
+
+  // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  // @@@@@@@@@@@@@@@@@@
 
   // Unwrap the params Promise and update state
   useEffect(() => {
@@ -140,24 +148,22 @@ export default function CheckoutPage({
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">
-        {productData?.title} {userId}
-      </h1>
+      <h1 className="text-3xl font-bold mb-6">{productData?.title}</h1>
 
       <div className="grid md:grid-cols-2 gap-8">
         {/* Product Images - Left Column */}
         <div className="space-y-4">
           <div className="relative aspect-square rounded-lg overflow-hidden border">
             <Image
-              src={product.images[selectedImageIndex] || "/placeholder.svg"}
-              alt={`${product.title} - View ${selectedImageIndex + 1}`}
+              src={images[selectedImageIndex] || "/placeholder.svg"}
+              alt={`${productData.title} - View ${selectedImageIndex + 1}`}
               fill
               className="object-cover"
             />
           </div>
 
           <div className="flex gap-2 overflow-x-auto pb-2">
-            {product.images.map((image, index) => (
+            {images?.map((image, index) => (
               <button
                 key={index}
                 onClick={() => setSelectedImageIndex(index)}
@@ -188,7 +194,7 @@ export default function CheckoutPage({
                 <div className="md:hidden">
                   <ReactMarkdown>
                     {showFullDescription
-                      ? product.description
+                      ? productData?.description
                       : shortDescription}
                   </ReactMarkdown>
                   {!showFullDescription && (
@@ -204,7 +210,7 @@ export default function CheckoutPage({
 
                 {/* On desktop: Always show full description */}
                 <div className="hidden md:block">
-                  <ReactMarkdown>{product.description}</ReactMarkdown>
+                  <ReactMarkdown>{productData?.description}</ReactMarkdown>
                 </div>
               </div>
             </div>

@@ -82,11 +82,10 @@ export function WebhookDialog({ open, onOpenChange, webhook, onSave }: WebhookDi
             </p>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="secret">Signing Secret</Label>
+            <Label htmlFor="secret">Signing Secret Key</Label>
             <Input id="secret" value={secret} onChange={(e) => setSecret(e.target.value)} placeholder="whsec_..." />
             <p className="text-sm text-muted-foreground">
-              A secret that will be used to sign each request. Used to verify the webhook is sent from the app via the
-              X-Signature header
+              A secret that will be used to encrypt each request. Used to verify the webhook request is sent from the app. You can use SHA256 Algorithm and the key to decrypt the payload on the request
             </p>
           </div>
           <div className="grid gap-2">

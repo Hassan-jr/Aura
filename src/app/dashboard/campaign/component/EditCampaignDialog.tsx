@@ -35,16 +35,15 @@ export function CampaignEditDialog({
   feedbacks,
   runs,
 }) {
-
-function formatToYYYYMMDDHHmm(isoString) {
-  const d = new Date(isoString);
-  const year    = d.getFullYear();
-  const month   = String(d.getMonth() + 1).padStart(2, "0");
-  const day     = String(d.getDate()).padStart(2, "0");
-  const hours   = String(d.getHours()).padStart(2, "0");
-  const minutes = String(d.getMinutes()).padStart(2, "0");
-  return `${year}-${month}-${day}T${hours}:${minutes}`;
-}
+  function formatToYYYYMMDDHHmm(isoString) {
+    const d = new Date(isoString);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    const hours = String(d.getHours()).padStart(2, "0");
+    const minutes = String(d.getMinutes()).padStart(2, "0");
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
 
   const campaigns = useAppSelector(selectcampaigns);
   const [Campaigndata, setCampaigndata] = useState(
@@ -66,9 +65,13 @@ function formatToYYYYMMDDHHmm(isoString) {
   );
   const [outputType, setOutputType] = useState(Campaigndata?.outputType);
   const [numberOfPhotos, setNumberOfPhotos] = useState(
-   Campaigndata?.numberOfPhotos
+    Campaigndata?.numberOfPhotos
   );
-  const [publishSites, setPublishSites] = useState(Campaigndata?.publishSites);
+  const [publishSites, setPublishSites] = useState({
+    emailMarketing: Campaigndata?.publishSites.emailMarketing
+      ? Campaigndata?.publishSites?.emailMarketing
+      : false,
+  });
   const { toast } = useToast();
 
   const [sentimentClass, setSentimentClass] = useState(
@@ -243,7 +246,7 @@ function formatToYYYYMMDDHHmm(isoString) {
           )}
 
           <div>
-            <Label>Publish Sites</Label>
+            <Label>Enable Email Notification</Label>
             <div className="space-y-2">
               {publishSites &&
                 Object.entries(publishSites)?.map(([site, checked]) => (
