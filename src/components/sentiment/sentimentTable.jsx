@@ -99,7 +99,7 @@ export function SentimentTable({ feedbacks, users, showFilter = true }) {
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="sentiment">Sentiment</TabsTrigger>
           <TabsTrigger value="chart">Visual Sentiment Chart</TabsTrigger>
-          <TabsTrigger value="analysis">Analysis</TabsTrigger>
+          {/* <TabsTrigger value="analysis">Analysis</TabsTrigger> */}
         </TabsList>
         <TabsContent value="sentiment">
           <Table className="w-full">

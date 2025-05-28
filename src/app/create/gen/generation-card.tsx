@@ -9,6 +9,7 @@ import Image from "next/image";
 import { useAppSelector } from "@/redux/hooks";
 import { selectgenerations } from "@/redux/slices/generate";
 import { selectProductId } from "@/redux/slices/productId";
+import ImageVideoPlayer from "@/components/video/image-video-player";
 
 // TypeScript interfaces
 interface GenerationImage {
@@ -33,13 +34,20 @@ interface Generation {
   isProcessing?: boolean; // Added to handle loading state
 }
 
-export function GenerationCard({ generation }: { generation: Generation }) {
+export function GenerationCard({
+  generation,
+  isVideo,
+}: {
+  generation: Generation;
+  isVideo: boolean;
+}) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  
+
   const isProcessed = generation?.images?.length > 0 ? true : false;
   const hasError = generation.error != null;
   const isLoading = !isProcessed && !hasError;
-
+  // {[...Array(10)].flatMap(() => images.map(img => img.url))}
+  // generation.images.map((img) => `https://r2.nomapos.com/${img.url}`)
   return (
     <>
       <Card className="mb-6 overflow-hidden">
@@ -47,44 +55,58 @@ export function GenerationCard({ generation }: { generation: Generation }) {
           {/* Left side - Images or Loading State */}
           <div className="w-full md:w-1/2 h-full bg-gray-50 dark:bg-gray-900 relative">
             {isProcessed ? (
-              <div
-                className={`grid h-full ${
-                  generation.images?.length === 1
-                    ? "grid-cols-1"
-                    : generation.images?.length === 2
-                    ? "grid-cols-2"
-                    : generation.images?.length === 3
-                    ? "grid-cols-2 grid-rows-2"
-                    : "grid-cols-2 grid-rows-2"
-                } gap-1`}
-              >
-                {generation.images.map((image, index) => (
-                  <div
-                    key={image.seed}
-                    className={`relative cursor-pointer ${
-                      generation.images.length === 3 && index === 0
-                        ? "row-span-2"
-                        : ""
-                    }`}
-                    onClick={() => setSelectedImage(image.url)}
-                  >
-                    <Image
-                      src={
-                        `https://r2.nomapos.com/${image.url}` ||
-                        "/placeholder.svg"
-                      }
-                      alt={`Generated image ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                    <div className="absolute bottom-1 right-1">
-                      <Badge variant="secondary" className="text-xs opacity-80">
-                        Seed: {image.seed}
-                      </Badge>
+              isVideo ? (
+                <div className="h-full w-full bg-gray-100 overflow-y-scroll">
+                  <ImageVideoPlayer
+                    images={[...Array(5)].flatMap(() => generation.images.map((img) => `https://r2.nomapos.com/${img.url}`))}
+                    fps={4}
+                    // width={500}
+                    // height={500}
+                  />
+                </div>
+              ) : (
+                <div
+                  className={`grid h-full ${
+                    generation.images?.length === 1
+                      ? "grid-cols-1"
+                      : generation.images?.length === 2
+                      ? "grid-cols-2"
+                      : generation.images?.length === 3
+                      ? "grid-cols-2 grid-rows-2"
+                      : "grid-cols-2 grid-rows-2"
+                  } gap-1`}
+                >
+                  {generation.images.map((image, index) => (
+                    <div
+                      key={image.seed}
+                      className={`relative cursor-pointer ${
+                        generation.images.length === 3 && index === 0
+                          ? "row-span-2"
+                          : ""
+                      }`}
+                      onClick={() => setSelectedImage(image.url)}
+                    >
+                      <Image
+                        src={
+                          `https://r2.nomapos.com/${image.url}` ||
+                          "/placeholder.svg"
+                        }
+                        alt={`Generated image ${index + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute bottom-1 right-1">
+                        <Badge
+                          variant="secondary"
+                          className="text-xs opacity-80"
+                        >
+                          Seed: {image.seed}
+                        </Badge>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )
             ) : isLoading ? (
               <div className="flex flex-col items-center justify-center h-full">
                 <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
@@ -116,9 +138,7 @@ export function GenerationCard({ generation }: { generation: Generation }) {
           {/* Right side - Details */}
           <CardContent className="w-full md:w-1/2 p-2 flex flex-col overflow-y-auto">
             <div className="mb-2">
-              <h3 className="text-xs font-bold mb-1">
-                {generation.prompt}
-              </h3>
+              <h3 className="text-xs font-bold mb-1">{generation.prompt}</h3>
               <div className="flex items-center gap-2 mt-1">
                 {isProcessed ? (
                   <Badge className="bg-green-500 hover:bg-green-600">
@@ -247,20 +267,24 @@ export default function GenerationCards() {
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="space-y-6">
-        {currentProductGens?.length > 0 ?
+        {currentProductGens?.length > 0 ? (
           currentProductGens?.map((gens) => {
             return gens.generations.map((generation, index) => (
               <div key={index}>
-              
-              <GenerationCard  generation={generation} />
+                <GenerationCard
+                  generation={generation}
+                  isVideo={gens.isVideo}
+                />
               </div>
             ));
           })
-        :
-        <div className="bg-slate-100 h-80 w-full text-center flex align-middle justify-center">
-          <p className="text-xl font-semibold text-gray-700 mx-auto my-auto">No Product Visuals Generated</p>
-        </div>
-        }
+        ) : (
+          <div className="bg-slate-100 h-80 w-full text-center flex align-middle justify-center">
+            <p className="text-xl font-semibold text-gray-700 mx-auto my-auto">
+              No Product Visuals Generated
+            </p>
+          </div>
+        )}
         {/* {sampleGenerations.map((generation, index) => (
           <GenerationCard key={index} generation={generation} />
         ))} */}

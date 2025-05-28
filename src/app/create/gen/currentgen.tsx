@@ -20,6 +20,7 @@ import { useSession } from "next-auth/react";
 import { SkeletonSpinner } from "@/customui/skeletonspinner";
 import { toast } from "@/components/ui/use-toast";
 import GenerateVisuals from "@/actions/generate.actions";
+import { Switch } from "@/components/ui/switch";
 
 export default function CurrentGen({ cancel }) {
   const [prompt, setPrompt] = useState("");
@@ -31,6 +32,7 @@ export default function CurrentGen({ cancel }) {
   const [steps, setSteps] = useState(30);
   const [scale, setScale] = useState(4);
   const [seed, setSeed] = useState(0);
+  const [isVideo, setIsVideo] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -92,6 +94,7 @@ export default function CurrentGen({ cancel }) {
         lora_url,
         lora_scale,
         productId,
+        isVideo,
         generations,
       });
 
@@ -260,6 +263,16 @@ export default function CurrentGen({ cancel }) {
               value={seed}
               onChange={(e) => setSeed(Number(e.target.value))}
               min={0}
+            />
+          </div>
+          <div>
+            <Label htmlFor="isVideo">Generate As a Video</Label>
+
+            <Switch
+              id="isVideo"
+              checked={isVideo}
+              onCheckedChange={() => setIsVideo(!isVideo)}
+              className="bg-blue-600"
             />
           </div>
         </div>
