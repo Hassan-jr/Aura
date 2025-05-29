@@ -147,7 +147,7 @@ export default function PostCard({
 
       toast({
         variant: "default",
-        title: "Email Reply Sent Successfuly",
+        title: "Reply Sent Successfuly",
         description: "",
       });
     } catch (error) {

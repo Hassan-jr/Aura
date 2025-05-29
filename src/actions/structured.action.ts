@@ -133,9 +133,37 @@ export async function generateStructuredContent(
 
     Instructions:
     Generate ONLY a valid JSON object matching the requested schema.
-    Use the provided token name "${tokenName}" EXACTLY where specified (prefixed like "${tokenName}, a photo of ${tokenName}") in the image prompts (Prompt1, Prompt2, Prompt3, Prompt4).
+    For the Image generation Prompts use the provided token name "${tokenName}" EXACTLY where specified (prefixed like "${tokenName}, a photo of ${tokenName}") in the image prompts (Prompt1, Prompt2, Prompt3, Prompt4).
     Make the prompts creative, visually descriptive, and distinct from each other for an AI image generator. Ensure the prompts are around 75-100 words each.
+    The prompts will be used for generating a promotional graphic card design and product ads photos for the product. 
+    The prompts should also specify the overall visual style (e.g., colorful, playful, professional, depending on the product), background details, and font style (e.g., eye-catching, whimsical).
+    Aim for a descriptive prompts (around 75-100 words for each prompt) that will result in a compelling visual promotion. 
+    All the prompts should be different from each other. And all the prompt should contain the product trigger word which is ${tokenName}
+    use as many '${tokenName}' as possible in the prompt since it is the product trigger word.
+    Here are 3 good example of a prompts for 3 different products that works perfectly for generating a promotional graphic card design and product ads photos. So use them as an inspiration or template
+                Example 1: Prompt for sneakers:
+                ${tokenName}, a photo of ${tokenName}, create a bold, vibrant graphic card design featuring ${tokenName} 
+                Sneakers in the foreground with a colorful, dynamic background. Present the ${tokenName} sneaker in a prominent, eye-catching 
+                angle, surrounded by artistic splashes of color, digital brush strokes, and energy lines. Overlay with playful, 
+                modern font text: "BUY NOW AND ENJOY" to make the promotion personal and urgent. 
+                Ensure the style is youthful, energetic, and cutting-edge to reflect customization and sportiness.
+
+                Example 2: Prompt for hoodie:
+                ${tokenName}, a photo of ${tokenName} styled as a dynamic sportswear ad. ${tokenName} Hoodie shown on a virtual athlete in an action pose with 
+                swirling blue graphics. Background features a transparent overlay of University of Nairobi landmarks. Bold, impactful 
+                font announces: "Special Sales! Get Them Today" Color palette is energetic, mixing blues and blacks
+
+                Example 3: Prompt for kids by bicycle
+                ${tokenName}, A vibrant illustration of a ${tokenName} kids bicycle seamlessly integrated into a colorful graphic card design, with a 
+                backdrop of stunning gradient colors. A young child, brimming with joy, is shown riding the ${tokenName} bicycle, radiating a 
+                sense of youthful energy. The scene is bursting with vibrant colors, creating a fun and playful atmosphere. 
+                Text overlays in a whimsical, eye-catching font exclaim 'Summer Fun Starts Here!', 
+                further emphasizing the promotional aspect of the image. This whimsical, detailed illustration, uses vivid colors, 
+                sharp lines, and a sense of childlike wonder
+
     Ensure PostTitle is max 100 chars and PostDescription is max 500 chars.
+
+
     `;
 
   // 5. Call OpenAI API with Structured Output Formatting

@@ -524,17 +524,17 @@ export async function POST(req: Request) {
         The prompts should also specify the overall visual style (e.g., colorful, playful, professional, depending on the product), background details, and font style (e.g., eye-catching, whimsical).
         Aim for a descriptive prompts (around 75-100 words for each prompt) that will result in a compelling visual promotion. 
         All the prompts should be different from each other. And all the prompt should contain the product trigger word which is ${replaceTrigger}
-        use as many '${replaceTrigger}' as possible in the prompt sice it is the product trigger word.
-        Here are 3 good example of a prompts that works perfectly for generating a promotional graphic card design and product ads photos. So use them as an inspiration or template
+        use as many '${replaceTrigger}' as possible in the prompt since it is the product trigger word.
+        Here are 3 good example of a prompts for 3 different products that works perfectly for generating a promotional graphic card design and product ads photos. So use them as an inspiration or template
                 Example 1: Prompt for sneakers:
-                ${replaceTrigger}, a photo of ${replaceTrigger}, create a bold, vibrant graphic card design featuring Limitless Stride™ Personalized Athletic 
-                Sneakers in the foreground with a colorful, dynamic background. Present the sneaker in a prominent, eye-catching 
+                ${replaceTrigger}, a photo of ${replaceTrigger}, create a bold, vibrant graphic card design featuring ${replaceTrigger}
+                Sneakers in the foreground with a colorful, dynamic background. Present the ${replaceTrigger} sneaker in a prominent, eye-catching 
                 angle, surrounded by artistic splashes of color, digital brush strokes, and energy lines. Overlay with playful, 
                 modern font text: "15% OFF Just For Ali! Ends May 8, 2025" to make the promotion personal and urgent. 
                 Ensure the style is youthful, energetic, and cutting-edge to reflect customization and sportiness.
 
                 Example 2: Prompt for hoodie:
-                ${replaceTrigger}, a photo of ${replaceTrigger} styled as a dynamic sportswear ad. Hoodie shown on a virtual athlete in an action pose with 
+                ${replaceTrigger}, a photo of ${replaceTrigger} styled as a dynamic sportswear ad. ${replaceTrigger} Hoodie shown on a virtual athlete in an action pose with 
                 swirling blue graphics. Background features a transparent overlay of University of Nairobi landmarks. Bold, impactful 
                 font announces: "Special 10% Discount For Abdiladif – Ends 25/5/2025!" Color palette is energetic, mixing blues and blacks
 
