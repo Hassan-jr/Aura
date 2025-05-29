@@ -15,11 +15,12 @@ const ContentStructure = z.object({
     .describe(
       "A compelling caption for the social media post (max 500 characters). Incorporate key selling points, address the target audience, and subtly reflect insights from the user feedback if applicable. Include relevant hashtags naturally or at the end."
     ),
-  Prompt1: z
-    .string()
-    .describe(
-      "A detailed image generation prompt (around 75-100 words) starting EXACTLY with '[TOKEN], a photo of [TOKEN]'. Describe a scene showcasing the product in a compelling environment relevant to its use or target audience. Be specific about lighting, style, and mood."
-    ),
+  Prompt1: z.string().describe(
+    `An  image generation prompt around 75-100 words starting EXACTLY with '[TOKEN], a photo of [TOKEN]'.
+     This prompt should describe a vibrant graphic advertisement card design style featuring the product in the foreground and promotional messages in the background. 
+     You can describe the style but don't describe product features like product color. 
+     Use as many [TOKEN] to refer to the product as possible since the [TOKEN] is the product trigger word.`
+  ),
   Prompt2: z
     .string()
     .describe(
@@ -115,7 +116,10 @@ export async function generateStructuredContent(
 
   // 4. Construct the System Prompt using Parameter Data
   const systemPrompt = `
-    Generate promotional content in a valid JSON format based on the provided product details, market analysis, and feedback.
+  You are an expert product marketing content creator specializing in social media promotion.
+  Generate compelling promotional content structured as a JSON object based on the details provided below.
+
+  Generate promotional content in a valid JSON format based on the provided product details, market analysis, and feedback.
 
     Product Information:
     - Title: ${titleString}
@@ -168,20 +172,16 @@ export async function generateStructuredContent(
 
   // 5. Call OpenAI API with Structured Output Formatting
   try {
-    console.log(
-      "[generateStructuredContent] Calling OpenAI API (model: gpt-4o) with provided parameters..."
-    );
     const chatResponse = await openai.responses.parse({
-      model: "gpt-4.1", // Or specify a version like "gpt-4o-2024-08-06"
+      model: "gpt-4.1",
       input: [
         {
           role: "system",
-          content:
-            "You are an expert product marketing content creator specializing in social media promotion. Generate compelling promotional content structured as a JSON object based on the details provided by the user.",
+          content: systemPrompt,
         },
         {
           role: "user",
-          content: systemPrompt,
+          content: "Generate the JSON content now",
         },
       ],
       text: {
