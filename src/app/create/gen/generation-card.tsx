@@ -93,6 +93,7 @@ export function GenerationCard({
                         }
                         alt={`Generated image ${index + 1}`}
                         fill
+                        unoptimized
                         className="object-cover"
                       />
                       <div className="absolute bottom-1 right-1">
@@ -237,8 +238,8 @@ export function GenerationCard({
                   }
                   alt="Generated image"
                   fill
+                  unoptimized
                   className="object-contain"
-                  priority
                 />
               </div>
             )}

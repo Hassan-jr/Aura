@@ -6,18 +6,14 @@ const nextConfig = {
     },
   },
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "r2.nomapos.com",
-        pathname: "**",
-      },
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-        pathname: "**",
-      },
-    ],
+    // remotePatterns: [
+    //   {
+    //     protocol: "https",
+    //     hostname: "r2.nomapos.com",
+    //     pathname: "/**",
+    //   }
+    // ],
+     domains: ['r2.nomapos.com'],
   },
   async redirects() {
     return [

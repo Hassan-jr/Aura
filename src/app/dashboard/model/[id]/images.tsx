@@ -28,6 +28,7 @@ export default function BlurFadeDemo({ images }) {
                   height={100}
                   loading="lazy"
                   decoding="async"
+                  unoptimized 
                   blurDataURL={typeof imageUrl === "string" ? imageUrl : undefined}
                   alt={`visual ${idx + 1}`}
                   className="w-full h-auto rounded-md cover"

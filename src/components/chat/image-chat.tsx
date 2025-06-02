@@ -269,6 +269,7 @@ export function MessageImageBubble({ message }) {
                     src={`https://r2.nomapos.com/${image.url}`}
                     alt={`Generated image ${idx + 1}`}
                     fill
+                    unoptimized
                     className="object-cover"
                   />
                 </div>
