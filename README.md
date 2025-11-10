@@ -190,6 +190,3 @@ This project is licensed under the MIT License. See the [LICENSE](https://www.go
 ## 👤 Author
 
 **Abdiladif Hassan Adan**
-
-  * [GitHub](https://www.google.com/search?q=https.github.com/Hassan-jr)
-  * [LinkedIn](https://www.google.com/search?q=https://www.linkedin.com/in/your-linkedin-profile/) \`\`\`
