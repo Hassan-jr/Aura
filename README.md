@@ -1,192 +1,166 @@
 # Aura: The Autonomous AI-Driven Product Persona
 
-[![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-black?style=for-the-badge&logo=vercel)](https://aura-project-link.vercel.app) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-black?style=for-the-badge&logo=vercel)](https://aura-project-link.vercel.app) 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
 [![Runpod](https://img.shields.io/badge/Runpod-GPU%20Serverless-6600FF?style=for-the-badge)](https://runpod.io/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
 
-Aura is a full-stack, AI-driven platform that transforms static products into autonomous digital personas. It empowers Small and Medium Enterprises (SMEs) by equipping their products with the intelligence to manage their own sales and marketing lifecycle, from autonomous promotion and content creation to direct client engagement and analysis.
+> **Transforming static products into autonomous intelligent digital entities that can market, sell, and engage.**
 
-**This is the main web application (built with Next.js) that serves as the central dashboard and user interface for the entire Aura ecosystem.**
+Aura is an end-to-end **Autonomous AI Platform** designed to empower Small and Medium Enterprises (SMEs). It gives products a "digital life," allowing them to autonomously manage their own sales and marketing lifecycle—from generating their own promotional content to negotiating discounts with customers and more.
 
-
-## 🎯 The Problem
-
-In today's competitive digital landscape, Small and Medium Enterprises (SMEs) struggle to keep pace with larger corporations. They often lack the resources, technical expertise, and budget to implement modern, data-driven sales and marketing strategies.
-
-* **Manual Processes:** Marketing tasks are time-consuming, manual, and don't scale.
-* **Lack of Insights:** SMEs can't easily analyze customer sentiment or track real-time market trends.
-* **Resource Drain:** Creating engaging multimedia content and managing customer interactions (invoicing, scheduling, support) requires significant manual effort.
-
-## 🖼️ Project Showcase
-
-Here is a visual overview of Aura's core functionality.
-
-
-
-![Aura Dashboard UI](public/8.png)
-
-
-|  |  |
-| :---: | :---: |
-| ![Aura Dashboard UI](public/1.png) | ![Aura AI Chat Agent UI](public/2.png) |
-|  | |
-| ![Aura Sentiment Analysis UI](public/3.png) | ![Aura Product Image Generation UI](public/4.png) |
-|  | |
-| ![Aura Sentiment Analysis UI](public/9.png) | ![Aura Product Image Generation UI](public/12.png) |
-
-| |  |
-| :---: | :---: |
-| ![Aura Feature 5](public/5.png) | ![Aura Feature 6](public/6.png) |
-
-| |  |
-| :---: | :---: |
-| ![Aura Feature 5](public/7.png) | ![Aura Feature 6](public/11.png) |
+**This repository houses the main Next.js web application, which serves as the central command center for the Aura ecosystem.**
 
 ---
 
+## 🖼️ Project Showcase
+
+Aura integrates complex AI workflows into a seamless UI.
+
+<div align="center">
+  <img src="public/8.png" alt="Aura Main Dashboard" width="100%" />
+</div>
+<br/>
+
+| **Dashboard & Analytics** | **Autonomous Sales Agent** |
+| :---: | :---: |
+| <img src="public/1.png" alt="Dashboard" width="100%"> | <img src="public/2.png" alt="Chat Agent" width="100%"> |
+| **Real-Time Sentiment Analysis** | **Generative AI (LoRA) Studio** |
+| <img src="public/3.png" alt="Sentiment" width="100%"> | <img src="public/4.png" alt="Image Gen" width="100%"> |
+
+---
+
+## 🎯 The Problem
+
+In the modern digital economy, SMEs are at a disadvantage. While large corporations deploy massive teams for data-driven marketing, SMEs struggle with:
+* **Resource Constraints:** High-quality content creation and 24/7 customer engagement require budgets SMEs don't have.
+* **Data Blindness:** They lack the tools to analyze real-time customer sentiment or emerging SEO trends.
+* **Manual Bottlenecks:** Marketing remains a manual, unscalable process.
+
 ## ✨ The Solution: Aura
 
-Aura solves this by providing a single, autonomous platform that integrates a suite of powerful AI modules. It acts as an AI co-pilot for the SME, automating the entire marketing and sales process.
+Aura acts as an **AI Co-Pilot**, automating the entire pipeline. It doesn't just assist; it acts.
 
-### Core Features
+### 🧠 Core Capabilities
 
-* **Product Persona Creation:** Users can "onboard" a product, giving it the ability to learn.
-* **Dynamic Visual Content:** Autonomously trains a custom LoRA model for each product (`AuraTrain`)  and uses it to generate unique, context-aware marketing images and videos (`Auragen`).
-* **AI-Powered Market Analysis:** Deploys an autonomous AI agent (`social_media_seo_agent`) that continuously scans social media and Google for real-time trends, high-impact keywords, and relevant hashtags to target.
-* **Real-Time Sentiment Analysis:** A custom-trained sentiment model (`sentiment`) analyzes customer feedback to identify not just **polarity** (positive/negative) but also **emotion** (happy, sad, angry), providing deep insights.
-* **Autonomous Sales & Engagement:** A customized LLM with function-calling capabilities (`Content-Planning-Module` / Function Calling) engages with customers 24/7. It can autonomously:
-    * Offer targeted discounts.
-    * Issue invoices.
-    * Schedule meetings.
-    * Generate product images on request.
-* **Full Automation:** Uses cron jobs to trigger end-to-end campaigns, from market analysis and content generation to posting and engagement, all without human intervention.
+* **🤖 Product Persona Onboarding:** The system "learns" the product, creating a unique digital identity.
+* **🎨 Autonomous Content Generation:** Aura autonomously trains a custom **LoRA (Low-Rank Adaptation)** model on your product images. It then uses this model to generate infinite, hyper-realistic marketing visuals in any context (`Auragen`).
+* **📈 Real-Time Market Intelligence:** An autonomous AI agent continuously scrapes social media and Google Search to identify trending topics, hashtags, and high-impact keywords (`social_media_seo_agent`).
+* **❤️ Deep Sentiment Analysis:** A custom fine-tuned **BERT model** analyzes customer reviews to detect not just polarity (Positive/Negative) but specific emotions (Happy, Sad, Angry, Love), enabling empathetic responses (`sentiment`).
+* **💬 Autonomous Sales Agent:** A customized **LLM with Function Calling** handles the entire sales conversation. It can:
+    * Negotiate and issue targeted discounts.
+    * Generate and send invoices instantly.
+    * Schedule meetings with human staff.
+    * Generate custom product images on user request.
+* **⚡ End-to-End Automation:** Cron jobs orchestrate the entire flow: scan trends -> generate content based on trends -> publish -> engage with comments.
 
 ---
 
 ## 🛠️ System Architecture
 
-Aura is built on a **decoupled microservices architecture**. The main Next.js application (this repository) acts as the "brain" or control center. It communicates with a series of specialized AI/ML models deployed as independent, serverless GPU endpoints on **Runpod**.
+Aura utilizes a **Decoupled Microservices Architecture** to ensure scalability and cost-efficiency.
 
-This architecture ensures:
-* **Scalability:** GPU-intensive tasks (like image generation) run on dedicated, scalable infrastructure and don't block the main application.
-* **Modularity:** Each AI function is its own service, making it easy to update, test, or replace modules.
-* **Cost-Effectiveness:** We leverage Runpod's serverless GPUs, paying only for the compute time we use during inference.
+* **The Brain:** This Next.js application handles the UI, business logic, and orchestration.
+* **The Muscle:** Heavy AI workloads (Training, Inference, LLMs) are offloaded to independent **Serverless GPU Endpoints** on Runpod.
 
-### Architecture Diagram
-![Aura Dashboard UI](public/architecture.png)
+### High-Level Architecture
+![Architecture Diagram](public/architecture.png)
 
+---
+
+## 📦 The Aura Ecosystem (Microservices)
+
+Aura is not a monolith. It is a suite of specialized AI services working in concert.
+
+| Service | Repository | Tech Stack | Role |
+| :--- | :--- | :--- | :--- |
+| **Aura (Core)** | [Hassan-jr/Aura](https://github.com/Hassan-jr/Aura) | **Next.js, TypeScript, MongoDB** | The central dashboard, API gateway, and user interface. |
+| **Auragen** | [Hassan-jr/Auragen](https://github.com/Hassan-jr/Auragen) | **Python, PyTorch, Diffusers** | Inference API for generating product images using LoRA. |
+| **AuraTrain** | [Hassan-jr/AuraTrain](https://github.com/Hassan-jr/AuraTrain) | **Python, Diffusers** | Automated pipeline to fine-tune Stable Diffusion LoRAs on product images. |
+| **SEO Agent** | [Hassan-jr/social_media_seo_agent](https://github.com/Hassan-jr/social_media_seo_agent) | **Phidata, Langchain** | Autonomous agent for scraping and analyzing market trends. |
+| **Sentiment** | [Hassan-jr/sentiment](https://github.com/Hassan-jr/sentiment) | **Transformers (BERT), PyTorch** | NLP service for emotion and polarity classification. |
+| **Feature Extractor** | [Hassan-jr/feature_extraction_model](https://github.com/Hassan-jr/feature_extraction_model) | **Transformers (KBIR)** | Token classification model to extract keyphrases from text. |
+| **Sales Agent** | [Hassan-jr/Content-Planning-Module](https://github.com/Hassan-jr/Content-Planning-Module) | **Langchain, OpenAI** | LLM with function calling for sales, invoicing, and scheduling. |
+
+---
 
 ## 💻 Technology Stack
 
-[cite_start]This project showcases a modern, end-to-end tech stack, from frontend development to MLOps [cite: 1202-1248].
+Aura represents a modern, full-stack approach to AI engineering.
 
-| Category | Technologies |
+| Domain | Technologies |
 | :--- | :--- |
-| **Web App (Frontend/Backend)** | Next.js 14, React, TypeScript, Tailwind CSS, Node.js |
-| **Database** | MongoDB (with Mongoose), hosted on MongoDB Atlas |
-| **AI / Machine Learning** | PyTorch, Hugging Face (Transformers, Diffusers), Langchain, Scikit-learn, NLTK |
-| **Cloud & Deployment** | **Vercel:** Web App Hosting & Cron Jobs <br> **Runpod:** Serverless GPU Endpoints for AI Models <br> **OnRender:** Hosting for persistent agents (SEO) <br> **Docker:** Containerization of AI services |
-| **Object Storage** | Cloudflare R2 (for storing trained LoRA models and images) |
-| **Development Tools** | VSCode, Git, GitHub |
+| **Frontend & Backend** | Next.js 14, React, TypeScript, Tailwind CSS, Node.js |
+| **Database** | MongoDB (Mongoose), hosted on Atlas |
+| **AI & ML** | PyTorch, Hugging Face, Diffusers, Langchain, Scikit-learn, NLTK |
+| **Infrastructure** | **Vercel** (Web), **Runpod Serverless** (GPU Inference), **Docker** (Containerization) |
+| **Storage** | **Cloudflare R2** (Object Storage for Models & Images) |
 
 ---
 
 ## 🚀 Getting Started
 
-This repository contains the main Next.js web application. To run this project, you must first deploy all the AI microservices (listed in the [Project Modules](#project-modules-the-microservices) section) to Runpod Serverless.
-
 ### Prerequisites
+* Node.js v18+
+* MongoDB Atlas Account
+* Runpod Account (for GPU endpoints)
+* Cloudflare R2 Bucket
 
-* [Node.js](https://nodejs.org/) (v18 or later)
-* [Git](https://git-scm.com/)
-* [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) account (for `DATABASE_URL`)
-* [Runpod](https://runpod.io/) account (for `RUNPOD_API_KEY` and deploying models)
-* [Cloudflare R2](https://www.cloudflare.com/developer-platform/r2/) bucket (or any S3-compatible storage)
+### Installation
 
-### 1. Clone the Repository
+1.  **Clone the Repository**
+    ```bash
+    git clone [https://github.com/Hassan-jr/Aura.git](https://github.com/Hassan-jr/Aura.git)
+    cd Aura
+    ```
 
-```bash
-git clone [https://github.com/Hassan-jr/Aura.git](https://github.com/Hassan-jr/Aura.git)
-cd Aura
-````
+2.  **Install Dependencies**
+    ```bash
+    npm install
+    ```
 
-### 2\. Install Dependencies
+3.  **Configure Environment**
+    Create a `.env.local` file. This connects the "Brain" (Next.js) to the "Muscle" (AI Endpoints).
+    
+    ```env
+    # Database
+    DATABASE_URL="mongodb+srv://..."
 
-```bash
-npm install
-```
+    # Cloud Storage (Cloudflare R2)
+    R2_ACCESS_KEY_ID="key"
+    R2_SECRET_ACCESS_KEY="secret"
+    R2_ENDPOINT_URL="url"
+    R2_BUCKET_NAME="aura-bucket"
 
-### 3\. Set Up Environment Variables
+    # AI Infrastructure (Runpod)
+    RUNPOD_API_KEY="rp_..."
+    
+    # AI Microservice IDs (Deployed on Runpod)
+    AURA_TRAIN_ENDPOINT="xxxxxxxx"
+    AURA_GEN_ENDPOINT="xxxxxxxx"
+    SENTIMENT_ENDPOINT="xxxxxxxx"
+    SEO_AGENT_ENDPOINT="xxxxxxxx"
+    CONTENT_PLANNING_ENDPOINT="xxxxxxxx"
+    ```
 
-Create a `.env.local` file in the root of the project and fill it with the necessary keys. This is the **most important step** as it connects the frontend to your database and deployed AI modules.
+4.  **Run Development Server**
+    ```bash
+    npm run dev
+    ```
 
-```.env.example
-# MongoDB Connection
-DATABASE_URL="mongodb+srv://..."
-
-# Runpod API Key (for making calls to endpoints)
-RUNPOD_API_KEY="YOUR_RUNPOD_API_KEY"
-
-# Cloudflare R2 (or S3) Storage Credentials
-# Used for uploading training images and storing models
-R2_ACCESS_KEY_ID="YOUR_R2_ACCESS_KEY"
-R2_SECRET_ACCESS_KEY="YOUR_R2_SECRET_KEY"
-R2_ENDPOINT_URL="YOUR_R2_ENDPOINT"
-R2_BUCKET_NAME="YOUR_R2_BUCKET_NAME"
-
-# --- Runpod Serverless Endpoint IDs ---
-# These are the unique IDs for each of your deployed AI modules
-
-# AuraTrain (Product LoRA Trainer)
-AURA_TRAIN_ENDPOINT="YOUR_AURATRAIN_ENDPOINT_ID"
-
-# Auragen (Image/Video Generator)
-AURA_GEN_ENDPOINT="YOUR_AURAGEN_ENDPOINT_ID"
-
-# Sentiment Analysis
-SENTIMENT_ENDPOINT="YOUR_SENTIMENT_ENDPOINT_ID"
-
-# Social Media & SEO Agent
-SEO_AGENT_ENDPOINT="YOUR_SEO_AGENT_ENDPOINT_ID"
-
-# Feature Extraction Model
-FEATURE_EXTRACTION_ENDPOINT="YOUR_FEATURE_EXTRACTION_ENDPOINT_ID"
-
-# Content Planning LLM (Function Calling)
-CONTENT_PLANNING_ENDPOINT="YOUR_CONTENT_PLANNING_ENDPOINT_ID"
-```
-
-### 4\. Run the Development Server
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](https://www.google.com/search?q=http://localhost:3000) in your browser to see the application.
-
------
-
-## 📦 Project Modules (The Microservices)
-
-The Aura ecosystem is composed of several repositories. The AI models are designed to be deployed as serverless endpoints on Runpod.
-
-| Module | GitHub Repository | Purpose | Key Tech |
-| :--- | :--- | :--- | :--- |
-| **Aura (Main App)** | [Hassan-jr/Aura](https://github.com/Hassan-jr/Aura) | The main Next.js web application, dashboard, and API layer. | **Next.js, TypeScript** |
-| **Auragen** | [Hassan-jr/Auragen](https://github.com/Hassan-jr/Auragen) | Inference-optimized API to generate product images & videos using a trained LoRA model. | **Python, PyTorch, Diffusers** |
-| **AuraTrain** | [Hassan-jr/AuraTrain](https://github.com/Hassan-jr/AuraTrain) | Takes 10-20 product images, trains a custom LoRA model, and saves it to R2 storage. | **Python, Diffusers, PyTorch** |
-| **SEO/Social Agent**| [Hassan-jr/social\_media\_seo\_agent](https://github.com/Hassan-jr/social_media_seo_agent) | Autonomous agent that scrapes Google & social media for trends, keywords, and hashtags. | **Python, Phidata, Langchain** |
-| **Sentiment Model**| [Hassan-jr/sentiment](https://github.com/Hassan-jr/sentiment) | Fine-tuned BERT model to classify text for both polarity (5-star) and emotion (6 classes). | **Python, Transformers, PyTorch** |
-| **Feature Extractor**| [Hassan-jr/feature\_extraction\_model](https://github.com/Hassan-jr/feature_extraction_model) | A fine-tuned KBIR model for token classification to extract keyphrases from text. | **Python, Transformers** |
-| **Content Planner**| [Hassan-jr/Content-Planning-Module](https://github.com/Hassan-jr/Content-Planning-Module) | LLM with function-calling to handle customer engagement (invoices, discounts, etc.). | **Python, Langchain** |
-
------
-
-## 📜 License
-
-This project is licensed under the MIT License. See the [LICENSE](https://www.google.com/search?q=LICENSE) file for details.
+---
 
 ## 👤 Author
 
-**Abdiladif Hassan Adan**
+**Abdiladif Hassan**
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hassanjr) 
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Hassan-jr)
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License.
