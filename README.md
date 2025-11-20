@@ -24,10 +24,10 @@ Aura integrates complex AI workflows into a seamless UI.
 </div>
 <br/>
 
-| **Dashboard & Analytics** | **Autonomous Sales Agent** |
+|  |  |
 | :---: | :---: |
 | <img src="public/1.png" alt="Dashboard" width="100%"> | <img src="public/2.png" alt="Chat Agent" width="100%"> |
-| **Real-Time Sentiment Analysis** | **Generative AI (LoRA) Studio** |
+|  |  |
 | <img src="public/3.png" alt="Sentiment" width="100%"> | <img src="public/4.png" alt="Image Gen" width="100%"> |
 
 ---
